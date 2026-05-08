@@ -72,7 +72,7 @@ def import_and_evaluate(
         "official_native_controlled": bool(manifest.get("official_native_controlled", False)),
         "official_fidelity_audit_required": bool(manifest.get("official_fidelity_audit_required", True)),
         "base_model_policy": manifest.get("base_model_policy", "shared_qwen3_8b_base_model"),
-        "adapter_training_policy": manifest.get("adapter_training_policy", "baseline_official_algorithm_specific_adapter"),
+        "adapter_training_policy": manifest.get("adapter_training_policy", "baseline_official_lora_with_project_modules"),
         "provenance": manifest.get("provenance", {}),
         "paper_table_policy": manifest.get(
             "paper_table_policy",

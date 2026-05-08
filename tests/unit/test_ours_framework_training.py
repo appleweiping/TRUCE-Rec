@@ -64,9 +64,16 @@ def test_prepare_ours_adapter_training_contract(tmp_path: Path) -> None:
     assert Path(manifest["files"]["test_examples"]).exists() or manifest["files"]["test_examples"].endswith("examples.jsonl")
     train_first = json.loads((out / "train_sft.jsonl").read_text(encoding="utf-8").splitlines()[0])
     assert "TRUCE uncertainty-aware recommendation task" in train_first["messages"][0]["content"]
+    answer = json.loads(train_first["messages"][1]["content"])
+    assert "grounding_risk" in answer
+    assert "popularity_bias_risk" in answer
+    assert "history_repetition_risk" in answer
+    assert "feature_targets" in train_first["metadata"]
     score_first = json.loads((out / "test_score_plan.jsonl").read_text(encoding="utf-8").splitlines()[0])
     assert score_first["metadata"]["source_event_id"] == "s_test"
     assert (out / "ours_adapter_manifest.json").exists()
+    assert manifest["objective_family"] == "truce_uncertainty_structured_sft"
+    assert manifest["negative_sampling_policy"] == "stratified_head_tail_echo_stable_negatives"
 
 
 def test_prepare_ours_adapter_training_from_week8_root(tmp_path: Path) -> None:

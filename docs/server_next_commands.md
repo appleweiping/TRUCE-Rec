@@ -10,6 +10,25 @@ cd ~/projects/TRUCE-Rec
 git pull --ff-only
 ```
 
+## Recommended Server Entrypoints
+
+For Week8 four-domain conversion plus Ours adapter prep:
+
+```bash
+cd ~/projects/TRUCE-Rec
+bash scripts/server/run_week8_four_domain_pipeline.sh
+```
+
+For current Beauty controlled-adapter pilots with logs:
+
+```bash
+cd ~/projects/TRUCE-Rec
+bash scripts/server/run_controlled_baseline_queue.sh smoke
+bash scripts/server/run_controlled_baseline_queue.sh full
+```
+
+The full queue intentionally excludes slow OpenP5 for now.
+
 ## Full Run Fast Controlled Baselines
 
 Use the Qwen/torch/peft environment:
@@ -85,12 +104,13 @@ packet paths:
 Only imported `predictions.jsonl` and TRUCE `metrics.json`/`metrics.csv` are
 paper-eligible. Smoke metrics and raw project-side logs are not paper results.
 
-The current TRUCE-side Qwen3 adapter runs are controlled-adapter pilots unless
-their fidelity to the official baseline repository has been audited. Final
-main-table baselines should be official-native controlled runs: official
-project implementation with only the shared TRUCE split/candidates/evaluator
-and Qwen3-8B base-model substitutions. LoRA/adapter training should follow the
-baseline's official algorithm, not a single shared LoRA recipe.
+The current TRUCE-side Qwen3-LoRA adapter runs are controlled-adapter pilots
+unless their fidelity to the official baseline repository has been audited.
+Final main-table baselines should be official-native controlled runs: official
+project implementation with shared TRUCE split/candidates/evaluator, Qwen3-8B
+base-model substitution, LoRA adaptation, and official default or reported
+optimal baseline hyperparameters. Ours may tune hyperparameters only on the
+declared validation protocol.
 
 ## Status Summary
 

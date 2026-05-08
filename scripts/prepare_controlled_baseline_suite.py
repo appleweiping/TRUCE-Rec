@@ -33,8 +33,8 @@ ADDED_OFFICIAL_CANDIDATE_PACKET_CONFIGS = [
 ]
 
 ADDED_OFFICIAL_CANDIDATE_CONTROL_CONFIGS = [
-    "configs/server/controlled_baselines/llara_qwen3_adapter_amazon_beauty.yaml",
-    "configs/server/controlled_baselines/llmesr_qwen3_adapter_amazon_beauty.yaml",
+    "configs/server/controlled_baselines/llara_qwen3_lora_amazon_beauty.yaml",
+    "configs/server/controlled_baselines/llmesr_qwen3_lora_amazon_beauty.yaml",
 ]
 
 
@@ -58,9 +58,14 @@ def main() -> int:
     suite_dir.mkdir(parents=True, exist_ok=True)
     suite_manifest = {
         "suite_name": args.suite_name,
-        "purpose": "Controlled comparison suite with shared Qwen3-8B base model; LoRA/adapters follow each baseline's official algorithm when promoted beyond adapter-pilot status.",
+        "purpose": "Controlled comparison suite with shared Qwen3-8B base model and LoRA adaptation; baselines use official source/default-or-reported-optimal hyperparameters when promoted beyond adapter-pilot status.",
         "base_model_policy": "shared_qwen3_8b_base_model",
-        "adapter_training_policy": "baseline_official_algorithm_specific_adapter",
+        "adaptation": "lora",
+        "lora_required": True,
+        "adapter_training_policy": "baseline_official_lora_with_project_modules",
+        "hyperparameter_policy": "official_default_or_reported_optimal_for_baselines",
+        "baseline_hparam_tuning_allowed": False,
+        "ours_hparam_policy": "validation_tunable_no_test_tuning",
         "baseline_count": len(manifests),
         "baselines": manifests,
         "is_experiment_result": False,

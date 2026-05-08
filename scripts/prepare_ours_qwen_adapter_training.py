@@ -137,6 +137,19 @@ def prepare(
         "base_model": base_model,
         "base_model_policy": "shared_qwen3_8b_base_model",
         "adapter_training_policy": "ours_uncertainty_aware_pairwise_and_listwise_adapter",
+        "objective_family": "truce_uncertainty_structured_sft",
+        "uses_grounding_risk_targets": True,
+        "uses_popularity_residual_targets": True,
+        "uses_echo_risk_targets": True,
+        "negative_sampling_policy": "stratified_head_tail_echo_stable_negatives",
+        "target_label_policy": "deterministic_train_evidence_targets_no_test_outcome_tuning",
+        "feature_sources": [
+            "train_interactions_popularity",
+            "catalog_title_category_brand",
+            "user_history_overlap",
+            "fixed_same_candidate_panel",
+        ],
+        "hyperparameter_policy": "ours_validation_tunable_no_test_tuning",
         "domain": domain,
         "seed": seed,
         "files": {
@@ -182,6 +195,10 @@ def prepare(
             "import candidate_scores.csv with TRUCE import_external_predictions.py",
             "evaluate with TRUCE evaluator",
         ],
+        "claim_boundary": (
+            "Prepared adapter data is not a result. Ours may tune hyperparameters on the declared validation "
+            "protocol, but paper claims require completed candidate scoring, TRUCE import/evaluation, and ablations."
+        ),
         "is_experiment_result": False,
         "is_paper_result": False,
     }
@@ -293,8 +310,11 @@ def _write_server_plan(path: Path, *, manifest: dict[str, Any]) -> None:
     test_examples = manifest["files"]["test_examples"]
     text = f"""# Ours Qwen Adapter Server Plan
 
-This plan prepares Ours/TRUCE adapter data only. Training and scoring must run
-on the server and then be imported through the TRUCE evaluator.
+This plan prepares Ours/TRUCE adapter data only. The objective is
+`truce_uncertainty_structured_sft`: pairwise/listwise recommendation
+supervision with deterministic grounding, popularity, and history-repetition
+targets derived from train/catalog evidence. Training and scoring must run on
+the server and then be imported through the TRUCE evaluator.
 
 ```bash
 cd ~/projects/TRUCE-Rec

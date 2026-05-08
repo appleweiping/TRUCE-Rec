@@ -3,7 +3,12 @@ controlled_baseline_name: dealrec_qwen3_lora_amazon_beauty
 seed: 13
 base_model: /home/ajifang/models/Qwen/Qwen3-8B
 base_model_policy: shared_qwen3_8b_base_model
-adapter_training_policy: baseline_official_algorithm_specific_adapter
+adaptation: lora
+lora_required: true
+adapter_training_policy: baseline_official_lora_with_project_modules
+hyperparameter_policy: official_default_or_reported_optimal_for_baselines
+official_hparam_source: pending_official_fidelity_audit
+baseline_hparam_tuning_allowed: false
 implementation_fidelity: controlled_adapter_pilot
 official_repo: https://github.com/Linxyhaha/DEALRec
 packet_dir: outputs/server_packets/dealrec_amazon_beauty
@@ -31,14 +36,23 @@ scoring:
   output: candidate_scores.csv
 paper_policy:
   shared_base_model: Qwen3-8B
-  adapter_policy: baseline_official_algorithm_specific_adapter
+  adaptation: lora
+  adapter_policy: baseline_official_lora_with_project_modules
+  hyperparameter_policy: official_default_or_reported_optimal_for_baselines
+  baseline_hparam_tuning_allowed: false
   current_claim_label: controlled_adapter_pilot
   official_project_checkpoint: false
   main_table_after_real_training_only: true
 provenance:
   official_algorithm_reused: false
+  official_hyperparameters_reused: false
   official_native_upgrade_required: true
   backbone_control: shared_across_controlled_baselines
+  adaptation: lora
+  lora_required: true
+  baseline_hparam_tuning_allowed: false
+  hyperparameter_policy: official_default_or_reported_optimal_for_baselines
+  official_hparam_source: pending_official_fidelity_audit
   adapter_scope: per_baseline_independent
   adapter_retention_required: true
   score_schema: candidate_scores_csv_v1

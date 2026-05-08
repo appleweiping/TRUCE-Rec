@@ -318,7 +318,18 @@ def _manifest(
         "official_native_controlled": official_native,
         "official_fidelity_audit_required": not official_native,
         "base_model_policy": str(config.get("base_model_policy") or "shared_qwen3_8b_base_model"),
-        "adapter_training_policy": str(config.get("adapter_training_policy") or "baseline_official_algorithm_specific_adapter"),
+        "adaptation": str(config.get("adaptation") or "lora"),
+        "lora_required": bool(config.get("lora_required", True)),
+        "adapter_training_policy": str(config.get("adapter_training_policy") or "baseline_official_lora_with_project_modules"),
+        "hyperparameter_policy": str(config.get("hyperparameter_policy") or "official_default_or_reported_optimal_for_baselines"),
+        "baseline_hparam_tuning_allowed": bool(config.get("baseline_hparam_tuning_allowed", False)),
+        "official_hparam_source": str(config.get("official_hparam_source") or ""),
+        "shared_protocol": {
+            "dataset_split": True,
+            "candidate_rows": True,
+            "evaluator": True,
+            "score_schema": "candidate_scores_csv_v1",
+        },
         "provenance": provenance,
         "base_model": str(config.get("base_model") or "/home/ajifang/models/Qwen/Qwen3-8B"),
         "packet_dir": str(config.get("packet_dir") or ""),
@@ -359,12 +370,19 @@ def _provenance(config: dict[str, Any], *, implementation_fidelity: str) -> dict
     provenance = raw.copy() if isinstance(raw, dict) else {}
     provenance.setdefault("official_repo", str(config.get("official_repo") or ""))
     provenance.setdefault("official_algorithm_reused", implementation_fidelity == FINAL_FIDELITY)
+    provenance.setdefault("official_hyperparameters_reused", implementation_fidelity == FINAL_FIDELITY)
     provenance.setdefault("adapter_scope", "per_baseline_independent")
     provenance.setdefault("adapter_retention_required", True)
     provenance.setdefault("backbone_control", "shared_across_controlled_baselines")
+    provenance.setdefault("adaptation", str(config.get("adaptation") or "lora"))
+    provenance.setdefault("lora_required", bool(config.get("lora_required", True)))
+    provenance.setdefault("baseline_hparam_tuning_allowed", bool(config.get("baseline_hparam_tuning_allowed", False)))
+    provenance.setdefault("hyperparameter_policy", str(config.get("hyperparameter_policy") or "official_default_or_reported_optimal_for_baselines"))
+    provenance.setdefault("official_hparam_source", str(config.get("official_hparam_source") or ""))
     provenance.setdefault("truce_adapter_scope", [
         "dataset_split_candidate_ingestion",
         "qwen3_8b_base_model_substitution",
+        "lora_adaptation_under_official_baseline_algorithm",
         "score_schema_export",
         "truce_import_and_evaluation",
     ])
@@ -386,6 +404,10 @@ def _validate_fidelity(
         raise SystemExit("official_native_controlled requires official_repo")
     if provenance.get("official_algorithm_reused") is not True:
         raise SystemExit("official_native_controlled requires provenance.official_algorithm_reused=true")
+    if provenance.get("official_hyperparameters_reused") is not True:
+        raise SystemExit("official_native_controlled requires provenance.official_hyperparameters_reused=true")
+    if str(config.get("adaptation") or provenance.get("adaptation") or "lora") != "lora":
+        raise SystemExit("official_native_controlled main lane requires adaptation=lora")
     required = ["official_training_entrypoint", "official_scoring_contract"]
     missing = [key for key in required if not str(provenance.get(key) or "").strip()]
     if missing:

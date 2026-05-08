@@ -13,18 +13,22 @@ the project framework.
 This suite is specifically for comparing TRUCE/CU-GR against reference-paper
 LLM4Rec project families recommended for the paper baseline set. The goal is
 not merely to reproduce their original checkpoints; it is to test whether our
-framework remains stronger when each project uses the same Qwen3-8B base model
-and the same TRUCE data/evaluator contract. LoRA, QLoRA, projection layers,
-collaborative adapters, and other trainable components should follow each
-baseline's official algorithm rather than a single universal LoRA recipe.
+framework remains stronger when each project uses the same Qwen3-8B base model,
+LoRA adaptation, and the same TRUCE data/evaluator contract. Project-specific
+modules such as collaborative encoders, alignment layers, and prompt/objective
+logic should follow each baseline's official algorithm, but the main controlled
+LLM comparison uses LoRA rather than mixing full fine-tuning, QLoRA-only, or
+original-checkpoint protocols.
 
 Important fidelity rule: after the fairness controls below are fixed, every
 main-table baseline should stay as close as possible to the official project
 implementation. We should replace only the parts required for comparability:
-dataset/split/candidate ingestion, Qwen3-8B base-model loading, score export,
-and TRUCE import/evaluation. Prompt shape, training objective, model-side
-modules, collaborative signal construction, adapter/LoRA design, and scoring
-logic should come from the official repository whenever feasible. If a
+dataset/split/candidate ingestion, Qwen3-8B base-model loading, LoRA
+compatibility, score export, and TRUCE import/evaluation. Prompt shape,
+training objective, model-side modules, collaborative signal construction,
+and scoring logic should come from the official repository whenever feasible.
+Baseline hyperparameters should be the official defaults or reported optimal
+settings; do not tune baselines on TRUCE test outcomes. If a
 controlled run uses an internal TRUCE adapter rather than official project
 code, label it as a pilot or non-official controlled adapter, not as a main
 official-native baseline.
@@ -32,8 +36,10 @@ official-native baseline.
 Controlled main-table candidates must use:
 
 - base model: `/home/ajifang/models/Qwen/Qwen3-8B`;
-- trainable adaptation: baseline-specific official LoRA/QLoRA/adapter or
-  alignment modules, with provenance recorded;
+- trainable adaptation: LoRA for every main compared LLM baseline, while
+  retaining baseline-specific official project modules where feasible;
+- hyperparameters: official default or reported optimal baseline settings,
+  with compatibility changes recorded; Ours may tune on validation only;
 - dataset: canonical TRUCE processed splits;
 - candidates: fixed TRUCE candidate sets with target inclusion unchanged;
 - evaluator: TRUCE evaluator only;
@@ -67,8 +73,8 @@ The current official baseline pool has six families:
 | OpenP5-style-Qwen3-LoRA | P5-style generative/sequential recommendation | adapter pilot configured; official-native audit required |
 | DEALRec-Qwen3-LoRA | data-efficient LLM4Rec | adapter pilot configured; official-native audit required |
 | LC-Rec-Qwen3-LoRA | LLM plus collaborative signal | adapter pilot configured; official-native audit required |
-| LLaRA-Qwen3-adapter | LLM plus recommendation-signal alignment | main family; packet/config added; official-native implementation required |
-| LLM-ESR-Qwen3-adapter | long-tail sequential LLM4Rec | main family; packet/config added; official-native implementation required |
+| LLaRA-Qwen3-LoRA | LLM plus recommendation-signal alignment | main family; packet/config added; official-native implementation required |
+| LLM-ESR-Qwen3-LoRA | long-tail sequential LLM4Rec | main family; packet/config added; official-native implementation required |
 
 The first four cover the core external-framework families without spreading the
 first experiment phase too thin. LLaRA is added as a stronger behavioral-signal
@@ -231,7 +237,8 @@ The TRUCE-side adapter pilot currently uses this budget for smoke/full pipeline
 validation. It is not the final rule for official-native baselines; official
 baselines should keep their official adapter/training design when feasible.
 
-Initial pilot budget:
+Initial pilot budget, used only for controlled-adapter diagnostics unless it
+matches an audited official setting:
 
 - epochs: 1;
 - batch size: 1;
@@ -248,7 +255,8 @@ Initial pilot budget:
 
 If memory fails in a pilot run, change the budget consistently across the pilot
 suite and record the reason in each manifest. For official-native runs, record
-why any official adapter/training detail had to be changed for Qwen3-8B.
+the official hyperparameter source and why any official training detail had to
+be changed for Qwen3-8B-LoRA compatibility.
 
 ## Current Execution Status
 

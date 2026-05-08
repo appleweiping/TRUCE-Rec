@@ -143,13 +143,16 @@ Official baseline contract:
 official project algorithm
   + shared TRUCE split/candidates/evaluator
   + shared Qwen3-8B base model
-  + baseline-specific official LoRA/adapter/training logic
+  + LoRA adaptation under baseline-specific official training logic
+  + official default or reported-optimal baseline hyperparameters
   + candidate_scores.csv -> predictions.jsonl -> metrics.json
 ```
 
 Exit criteria:
 
 - Each official baseline has an official-fidelity audit.
+- Each official baseline records official commit, official hyperparameter
+  source, and any Qwen3-8B-LoRA compatibility changes.
 - Controlled adapter pilots are not mixed into final official baseline tables.
 - All baselines preserve the score schema:
   `example_id,user_id,item_id,score`.

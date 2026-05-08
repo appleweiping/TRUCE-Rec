@@ -1,6 +1,7 @@
 # Phase 6 Leakage and Fairness Checklist
 
-This checklist applies to OursMethod, fallback variants, and ablations.
+This checklist applies to OursMethod, fallback variants, ablations, and
+baseline comparisons that share the TRUCE evaluator.
 
 ## Prompt leakage
 
@@ -24,6 +25,12 @@ This checklist applies to OursMethod, fallback variants, and ablations.
   protocol in smoke configs.
 - [x] All methods emit the unified prediction schema.
 - [x] All methods are evaluated by the same evaluator.
+- [x] Baseline candidate scoring may include the target item as an unlabeled
+  candidate, but prompts and training rows must not reveal that it is the
+  target.
+- [x] Main compared LLM baselines use Qwen3-8B-LoRA, shared TRUCE candidate
+  rows, and official default or reported-optimal baseline hyperparameters
+  unless explicitly separated into a reference protocol.
 
 ## Confidence and grounding safeguards
 

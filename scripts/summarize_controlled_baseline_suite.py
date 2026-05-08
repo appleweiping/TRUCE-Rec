@@ -17,8 +17,8 @@ DEFAULT_NAMES = [
     "openp5_style_qwen3_lora_amazon_beauty",
     "dealrec_qwen3_lora_amazon_beauty",
     "lc_rec_qwen3_lora_amazon_beauty",
-    "llara_qwen3_adapter_amazon_beauty",
-    "llmesr_qwen3_adapter_amazon_beauty",
+    "llara_qwen3_lora_amazon_beauty",
+    "llmesr_qwen3_lora_amazon_beauty",
 ]
 
 CONFIG_BY_NAME = {
@@ -26,8 +26,8 @@ CONFIG_BY_NAME = {
     "openp5_style_qwen3_lora_amazon_beauty": ROOT / "configs/server/controlled_baselines/openp5_style_qwen3_lora_amazon_beauty.yaml",
     "dealrec_qwen3_lora_amazon_beauty": ROOT / "configs/server/controlled_baselines/dealrec_qwen3_lora_amazon_beauty.yaml",
     "lc_rec_qwen3_lora_amazon_beauty": ROOT / "configs/server/controlled_baselines/lc_rec_qwen3_lora_amazon_beauty.yaml",
-    "llara_qwen3_adapter_amazon_beauty": ROOT / "configs/server/controlled_baselines/llara_qwen3_adapter_amazon_beauty.yaml",
-    "llmesr_qwen3_adapter_amazon_beauty": ROOT / "configs/server/controlled_baselines/llmesr_qwen3_adapter_amazon_beauty.yaml",
+    "llara_qwen3_lora_amazon_beauty": ROOT / "configs/server/controlled_baselines/llara_qwen3_lora_amazon_beauty.yaml",
+    "llmesr_qwen3_lora_amazon_beauty": ROOT / "configs/server/controlled_baselines/llmesr_qwen3_lora_amazon_beauty.yaml",
 }
 
 
@@ -50,9 +50,14 @@ def main() -> int:
             "official_native_controlled",
             "official_fidelity_audit_required",
             "base_model_policy",
+            "adaptation",
+            "lora_required",
             "adapter_training_policy",
+            "hyperparameter_policy",
+            "baseline_hparam_tuning_allowed",
             "official_repo",
             "official_algorithm_reused",
+            "official_hyperparameters_reused",
             "adapter_dir",
             "training_status",
             "score_rows",
@@ -96,12 +101,23 @@ def summarize_name(name: str) -> dict[str, Any]:
             manifest.get("official_fidelity_audit_required", summary.get("official_fidelity_audit_required", True))
         ),
         "base_model_policy": manifest.get("base_model_policy", summary.get("base_model_policy", "shared_qwen3_8b_base_model")),
+        "adaptation": manifest.get("adaptation", provenance.get("adaptation", "lora")),
+        "lora_required": manifest.get("lora_required", provenance.get("lora_required", True)),
         "adapter_training_policy": manifest.get(
             "adapter_training_policy",
-            summary.get("adapter_training_policy", "baseline_official_algorithm_specific_adapter"),
+            summary.get("adapter_training_policy", "baseline_official_lora_with_project_modules"),
+        ),
+        "hyperparameter_policy": manifest.get(
+            "hyperparameter_policy",
+            provenance.get("hyperparameter_policy", "official_default_or_reported_optimal_for_baselines"),
+        ),
+        "baseline_hparam_tuning_allowed": manifest.get(
+            "baseline_hparam_tuning_allowed",
+            provenance.get("baseline_hparam_tuning_allowed", False),
         ),
         "official_repo": provenance.get("official_repo", manifest.get("official_repo", "")),
         "official_algorithm_reused": provenance.get("official_algorithm_reused", ""),
+        "official_hyperparameters_reused": provenance.get("official_hyperparameters_reused", ""),
         "adapter_dir": summary.get("adapter_dir", str(base / "adapter")),
         "training_status": summary.get("status", "missing"),
         "score_rows": summary.get("score_rows", 0),

@@ -27,6 +27,30 @@ source .venv_truce/bin/activate
 python scripts/summarize_controlled_baseline_suite.py
 ```
 
+## One-Command Week8 Preflight And Conversion
+
+After the parallel data project finishes writing the Week8 task directories,
+the preferred server entrypoint is:
+
+```bash
+cd ~/projects/TRUCE-Rec
+bash scripts/server/run_week8_four_domain_pipeline.sh
+```
+
+The script pulls latest code, preflights the expected
+`beauty/books/electronics/movies x valid/test` source directories, converts
+them without resampling, validates the processed artifacts, prepares Ours
+Qwen3-LoRA adapter data, and writes logs under `outputs/server_logs/`.
+
+For a dry-run check only:
+
+```bash
+python scripts/server/dry_run_week8_four_domain.py \
+  --source-root ~/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks \
+  --domains beauty books electronics movies \
+  --splits valid test
+```
+
 ## Week8 File Check
 
 ```bash
@@ -111,6 +135,18 @@ Every method must end with:
 candidate_scores.csv -> predictions.jsonl -> metrics.json + metrics.csv
 ```
 
+For current Beauty controlled-adapter pilots, use the logging queue:
+
+```bash
+cd ~/projects/TRUCE-Rec
+bash scripts/server/run_controlled_baseline_queue.sh smoke
+bash scripts/server/run_controlled_baseline_queue.sh full
+```
+
+By default the full queue runs TALLRec, DEALRec, and LC-Rec. OpenP5 remains out
+of the full queue until scoring is optimized. These are still
+`controlled_adapter_pilot` unless an official-fidelity audit promotes them.
+
 ## Prepare Ours Qwen Adapter Data
 
 After converting a domain, prepare Ours/TRUCE adapter data:
@@ -138,9 +174,10 @@ python scripts/import_evaluate_ours_adapter.py \
 
 Ours adapter training data is not a generic prompt baseline. The training rows
 encode pairwise acceptance, listwise target-first supervision, train-popularity
-buckets, grounding-oriented evidence, and history repetition risk. Ablations
-must later disable these components rather than comparing only against a single
-monolithic Ours score.
+buckets, deterministic grounding-risk targets, popularity-bias risk,
+history-repetition/echo risk, and contrast roles for head/tail/history-probe
+negatives. Ablations must later disable these components rather than comparing
+only against a single monolithic Ours score.
 
 ## Import And Evaluate
 

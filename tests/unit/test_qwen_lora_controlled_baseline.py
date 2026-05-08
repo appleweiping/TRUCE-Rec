@@ -94,8 +94,13 @@ def test_tallrec_qwen_lora_controlled_contract(tmp_path: Path) -> None:
     assert manifest["implementation_fidelity"] == "controlled_adapter_pilot"
     assert manifest["official_fidelity_audit_required"] is True
     assert manifest["base_model_policy"] == "shared_qwen3_8b_base_model"
-    assert manifest["adapter_training_policy"] == "baseline_official_algorithm_specific_adapter"
+    assert manifest["adaptation"] == "lora"
+    assert manifest["lora_required"] is True
+    assert manifest["adapter_training_policy"] == "baseline_official_lora_with_project_modules"
+    assert manifest["hyperparameter_policy"] == "official_default_or_reported_optimal_for_baselines"
+    assert manifest["baseline_hparam_tuning_allowed"] is False
     assert manifest["provenance"]["claim_label"] == "controlled_adapter_pilot"
+    assert manifest["provenance"]["official_hyperparameters_reused"] is False
     assert "pilot" in manifest["paper_table_policy"]
 
 

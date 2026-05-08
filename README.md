@@ -26,9 +26,10 @@ Use these labels consistently:
 - Controlled adapter pilot: TRUCE-side implementation that uses the shared
   protocol and Qwen3-8B base model but has not yet passed official baseline
   fidelity audit.
-- Official-native controlled baseline: official project algorithm with only
-  the shared TRUCE protocol and Qwen3-8B base-model substitution, where each
-  baseline keeps its own official LoRA/adapter/training logic when applicable.
+- Official-native controlled baseline: official project algorithm with shared
+  TRUCE protocol, Qwen3-8B base-model substitution, LoRA adaptation, and the
+  baseline's official/default or reported-optimal hyperparameters where
+  feasible.
 - Paper result: approved real experiment with tracked code, saved config, logs,
   raw outputs where applicable, predictions, metrics, and artifact checklist.
 
@@ -104,14 +105,23 @@ The paper-grade external baseline lane is:
 official project algorithm
   + shared TRUCE split/candidates/evaluator
   + shared Qwen3-8B base model
-  + baseline-specific official LoRA/adapter/training logic
+  + LoRA adaptation under the baseline's official training logic
+  + official default or reported-optimal baseline hyperparameters
   + candidate_scores.csv -> predictions.jsonl -> metrics.json
 ```
 
-The shared part is the data and evaluation protocol, not a single universal
-LoRA recipe. A baseline may use LoRA, QLoRA, projection/alignment modules, or
-other adapters if that is how the official method works; the provenance fields
-must record this. All methods must still export the same score schema:
+This is the main academic comparison protocol recommended for the project:
+every compared LLM baseline uses Qwen3-8B and LoRA, while official source code,
+project modules, prompts/objectives, and default or reported-optimal
+hyperparameters are retained as much as possible. Baseline hyperparameters are
+not tuned on TRUCE test outcomes. Compatibility changes, official commits, and
+hyperparameter sources must be recorded in provenance. Ours may tune
+hyperparameters only through the declared validation protocol.
+
+Runs that keep an original non-Qwen backbone, use full fine-tuning instead of
+LoRA, or rely on an official checkpoint belong in a separate reference/appendix
+protocol unless the table explicitly separates that comparison. All methods in
+the main lane must export the same score schema:
 
 ```text
 example_id,user_id,item_id,score
@@ -125,8 +135,8 @@ The current recommended official baseline families are:
 | Main | OpenP5 | controlled adapter pilot; scoring optimization and official-native audit required |
 | Main | DEALRec | controlled adapter pilot; official-native audit required |
 | Main | LC-Rec | controlled adapter pilot; official-native audit required |
-| Main | LLaRA | packet/config added; official-native implementation required |
-| Main | LLM-ESR | packet/config added; official-native implementation required |
+| Main | LLaRA | packet/config added as Qwen3-LoRA; official-native implementation required |
+| Main | LLM-ESR | packet/config added as Qwen3-LoRA; official-native implementation required |
 
 CoLLM and SLMRec remain useful follow-up candidates, especially for
 collaborative-signal and efficiency appendices.

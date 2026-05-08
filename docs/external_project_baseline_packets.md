@@ -4,24 +4,25 @@ This document tracks official external LLM4Rec project integrations. It is a
 packet and execution-status matrix, not a paper result table.
 
 For the main fair-comparison lane that controls the small LLM base model and
-TRUCE protocol, see `docs/qwen3_lora_controlled_baselines.md`. The first
-adapter-pilot suite is TALLRec, OpenP5-style, DEALRec, and LC-Rec with Qwen3-8B.
-Final official-native baselines should keep each project's official
-LoRA/adapter/training logic where feasible.
+TRUCE protocol, see `docs/qwen3_lora_controlled_baselines.md`. The main lane
+uses Qwen3-8B plus LoRA for every compared LLM baseline, official source/default
+or reported-optimal hyperparameters where feasible, and the shared TRUCE score
+schema. The first adapter-pilot suite is TALLRec, OpenP5-style, DEALRec, and
+LC-Rec with Qwen3-8B-LoRA.
 
 ## Status Matrix
 
-| Project | Family | Official repo | Packet configs | Current status | Paper-table eligibility |
-| --- | --- | --- | --- | --- | --- |
-| OpenP5 | Generative LLM recommender | <https://github.com/agiresearch/OpenP5> | MovieLens, Amazon Beauty | Packet ready; server repo cloned; Beauty adapter smoke passed with no-model deterministic scores | Main table only after official project run and TRUCE import |
-| TALLRec | Instruction tuning for recommendation | <https://github.com/SAI990323/TALLRec> | MovieLens, Amazon Beauty | Packet ready; server repo cloned; Qwen3 zero-shot diagnostic completed for Beauty | Diagnostic appendix only until LoRA/instruction tuning is run |
-| BIGRec | Data-efficient LLM4Rec | <https://github.com/Linxyhaha/DEALRec> | MovieLens, Amazon Beauty | Generic packet ready; upstream clone/env/run pending | Main table only after upstream run and TRUCE import |
-| DEALRec | Data-efficient LLM4Rec | <https://github.com/Linxyhaha/DEALRec> | MovieLens, Amazon Beauty | Generic packet ready; upstream clone/env/run pending | Main table only after upstream run and TRUCE import |
-| LC-Rec | LLM plus collaborative signal | <https://github.com/RUCAIBox/LC-Rec/> | MovieLens, Amazon Beauty | Generic packet ready; upstream clone/env/run pending | Main table only after upstream run and TRUCE import |
-| LLaRA | LLM plus recommendation-signal alignment | <https://github.com/ljy0ustc/LLaRA> | MovieLens, Amazon Beauty | Generic packet ready; selected as added official baseline candidate; upstream clone/env/run pending | Main/secondary table only after official-native controlled run and TRUCE import |
-| CoLLM | LLM plus collaborative signal | <https://github.com/zyang1580/CoLLM> | MovieLens, Amazon Beauty | Generic packet ready; upstream clone/env/run pending | Main table only after upstream run and TRUCE import |
-| LLM-ESR | Long-tail/sequential LLM4Rec | <https://github.com/Applied-Machine-Learning-Lab/LLM-ESR> | MovieLens, Amazon Beauty | Generic packet ready; selected as added official robustness baseline; upstream clone/env/run pending | Long-tail/sequential robustness table after official-native controlled run and TRUCE import |
-| SLMRec | Small sequential LLM4Rec | <https://github.com/WujiangXu/SLMRec> | MovieLens, Amazon Beauty | Generic packet ready; upstream clone/env/run pending | Sequential/efficiency table after run |
+| Project | Family | Official repo | Packet configs | Qwen3-LoRA compliance | Official implementation reused | Hyperparameter source | TRUCE score schema | Paper-table eligibility |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| OpenP5 | Generative LLM recommender | <https://github.com/agiresearch/OpenP5> | MovieLens, Amazon Beauty | pilot only | pending audit | pending official audit | ready | Main table only after official-native Qwen3-LoRA run and TRUCE import |
+| TALLRec | Instruction tuning for recommendation | <https://github.com/SAI990323/TALLRec> | MovieLens, Amazon Beauty | pilot only | pending audit | pending official audit | ready | Main table only after official-native Qwen3-LoRA instruction tuning and TRUCE import |
+| BIGRec | Data-efficient LLM4Rec | <https://github.com/Linxyhaha/DEALRec> | MovieLens, Amazon Beauty | not selected for main six | pending audit | pending official audit | ready | Follow-up/appendix after controlled run |
+| DEALRec | Data-efficient LLM4Rec | <https://github.com/Linxyhaha/DEALRec> | MovieLens, Amazon Beauty | pilot only | pending audit | pending official audit | ready | Main table only after official-native Qwen3-LoRA run and TRUCE import |
+| LC-Rec | LLM plus collaborative signal | <https://github.com/RUCAIBox/LC-Rec/> | MovieLens, Amazon Beauty | pilot only | pending audit | pending official audit | ready | Main table only after official-native Qwen3-LoRA collaborative run and TRUCE import |
+| LLaRA | LLM plus recommendation-signal alignment | <https://github.com/ljy0ustc/LLaRA> | MovieLens, Amazon Beauty | config added | pending audit | pending official audit | ready | Main table only after official-native Qwen3-LoRA run and TRUCE import |
+| CoLLM | LLM plus collaborative signal | <https://github.com/zyang1580/CoLLM> | MovieLens, Amazon Beauty | follow-up | pending audit | pending official audit | ready | Follow-up/appendix after controlled run |
+| LLM-ESR | Long-tail/sequential LLM4Rec | <https://github.com/Applied-Machine-Learning-Lab/LLM-ESR> | MovieLens, Amazon Beauty | config added | pending audit | pending official audit | ready | Main/robustness table after official-native Qwen3-LoRA run and TRUCE import |
+| SLMRec | Small sequential LLM4Rec | <https://github.com/WujiangXu/SLMRec> | MovieLens, Amazon Beauty | follow-up | pending audit | pending official audit | ready | Sequential/efficiency appendix after run |
 
 The added official baseline candidates are LLaRA and LLM-ESR. LLaRA is chosen
 because the SIGIR 2024 project/paper page points to the official

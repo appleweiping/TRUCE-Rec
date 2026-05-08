@@ -1,13 +1,18 @@
 project: llmesr
-controlled_baseline_name: llmesr_qwen3_adapter_amazon_beauty
+controlled_baseline_name: llmesr_qwen3_lora_amazon_beauty
 seed: 13
 base_model: /home/ajifang/models/Qwen/Qwen3-8B
 base_model_policy: shared_qwen3_8b_base_model
-adapter_training_policy: baseline_official_algorithm_specific_adapter
+adaptation: lora
+lora_required: true
+adapter_training_policy: baseline_official_lora_with_project_modules
+hyperparameter_policy: official_default_or_reported_optimal_for_baselines
+official_hparam_source: pending_official_fidelity_audit
+baseline_hparam_tuning_allowed: false
 implementation_fidelity: controlled_adapter_pilot
 official_repo: https://github.com/Applied-Machine-Learning-Lab/LLM-ESR
 packet_dir: outputs/server_packets/llmesr_amazon_beauty
-output_dir: outputs/server_training/controlled_baselines/llmesr_qwen3_adapter_amazon_beauty
+output_dir: outputs/server_training/controlled_baselines/llmesr_qwen3_lora_amazon_beauty
 max_train_examples: null
 max_valid_examples: null
 negatives_per_train_example: 15
@@ -31,13 +36,22 @@ scoring:
   output: candidate_scores.csv
 paper_policy:
   shared_base_model: Qwen3-8B
-  adapter_policy: baseline_official_algorithm_specific_adapter
+  adaptation: lora
+  adapter_policy: baseline_official_lora_with_project_modules
+  hyperparameter_policy: official_default_or_reported_optimal_for_baselines
+  baseline_hparam_tuning_allowed: false
   current_claim_label: official_native_required_before_main_table
   official_project_checkpoint: false
   main_table_after_real_training_only: true
 provenance:
   official_algorithm_reused: false
+  official_hyperparameters_reused: false
   official_native_upgrade_required: true
+  adaptation: lora
+  lora_required: true
+  baseline_hparam_tuning_allowed: false
+  hyperparameter_policy: official_default_or_reported_optimal_for_baselines
+  official_hparam_source: pending_official_fidelity_audit
   upstream_personal_repo: https://github.com/liuqidong07/LLM-ESR
   recommended_role: main_official_baseline
   notes: LLM-ESR should reuse official long-tail sequential modules and prerequisite embedding artifacts before paper use.

@@ -114,6 +114,33 @@ py -3 -m pip install colorlog==4.7.2 colorama==0.4.4 tensorboard thop tabulate p
 - OursMethod is a method under test, not a baseline.
 - Fallback-only is an ablation/control for OursMethod routing.
 
+## Paper-Grade LLM Baseline Lane
+
+The main compared LLM baseline protocol follows the current research decision:
+
+```text
+official source implementation
+  + Qwen3-8B base model
+  + LoRA adaptation
+  + official default or reported-optimal baseline hyperparameters
+  + shared TRUCE split/candidates/evaluator
+  + example_id,user_id,item_id,score
+```
+
+Selected official baseline families:
+
+- TALLRec;
+- OpenP5;
+- DEALRec;
+- LC-Rec;
+- LLaRA;
+- LLM-ESR.
+
+Baseline hyperparameters are not tuned on TRUCE test outcomes. Ours may tune
+hyperparameters only through the declared validation protocol. API-model or
+MockLLM LLM rows remain diagnostics unless they are explicitly separated from
+the Qwen3-8B-LoRA controlled main table.
+
 ## Limitations
 
 Baseline strength varies by implementation maturity. Minimal smoke-capable
