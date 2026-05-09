@@ -38,3 +38,27 @@ def test_week8_server_dry_run_accepts_ready_task(tmp_path: Path) -> None:
     assert report["missing_task_dirs"] == []
     assert report["missing_required"] == []
     assert report["checks"][0]["status"] == "ready"
+
+
+def test_week8_server_dry_run_uses_beauty_supplementary_slug(tmp_path: Path) -> None:
+    task = tmp_path / "beauty_supplementary_smallerN_100neg_test_same_candidate"
+    task.mkdir()
+    for name in [
+        "ranking_test.jsonl",
+        "candidate_items.csv",
+        "train_interactions.csv",
+        "item_metadata.csv",
+        "selected_users.csv",
+        "metadata.json",
+    ]:
+        (task / name).write_text("", encoding="utf-8")
+    report = build_report(
+        source_root=tmp_path,
+        domains=["beauty"],
+        splits=["test"],
+        expected_users=None,
+        expected_candidates=101,
+    )
+    assert report["checks"][0]["task_slug"] == "beauty_supplementary_smallerN_100neg"
+    assert report["checks"][0]["status"] == "ready"
+    assert report["estimated_candidate_rows_if_complete"] is None

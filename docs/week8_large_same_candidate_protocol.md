@@ -18,24 +18,28 @@ Data root:
 ~/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/
 ```
 
-Large same-candidate task directories:
+Same-candidate task directories:
 
 ```text
-{domain}_large10000_100neg_{valid,test}_same_candidate/
+{artifact_slug}_{valid,test}_same_candidate/
 ```
 
 Target domains:
 
-- `beauty` if the Week8 producer exports matching directories;
-- `books`
-- `electronics`
-- `movies`
+| Logical domain | Artifact slug |
+| --- | --- |
+| `beauty` | `beauty_supplementary_smallerN_100neg` |
+| `books` | `books_large10000_100neg` |
+| `electronics` | `electronics_large10000_100neg` |
+| `movies` | `movies_large10000_100neg` |
 
 ## Protocol
 
-This is a reusable large-scale evaluation protocol, not a result table.
+This is a reusable four-domain same-candidate evaluation package, not model
+weights and not a paper result by itself.
 
-- Up to 10,000 users per domain.
+- Up to 10,000 users for the three large domains; Beauty currently uses the
+  supplementary smaller-N 100-negative artifact.
 - Each event has 1 positive and 100 negatives.
 - Same-candidate setting: all methods must score the same candidate items.
 - Negative sampling: popularity.
@@ -43,8 +47,9 @@ This is a reusable large-scale evaluation protocol, not a result table.
 - Seed: `20260506`.
 - Shuffle seed: `42`.
 
-Do not resample users, negatives, candidates, or histories. Any TRUCE adapter
-must read these task directories and preserve event/candidate alignment.
+Do not resample users, negatives, candidates, or histories. Do not edit
+`candidate_items.csv` or `ranking_valid/test.jsonl`. Any TRUCE adapter must
+read these task directories and preserve event/candidate alignment.
 
 ## Expected Files
 
@@ -75,7 +80,6 @@ Summary outputs from the data project should appear under:
 
 Models and adapters must preserve these fields whenever present:
 
-- `event_id`;
 - `source_event_id`;
 - `user_id`;
 - `item_id`;
@@ -83,6 +87,28 @@ Models and adapters must preserve these fields whenever present:
 
 This is required for paired comparison, oracle analysis, rank fusion, and
 statistical testing across methods.
+
+For this artifact lane, every method must export scores with this schema:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+Use the producer project's importer/evaluator:
+
+```bash
+python main_import_same_candidate_baseline_scores.py ...
+```
+
+TRUCE's internal `example_id,user_id,item_id,score` import path remains useful
+for local adapters and legacy packets, but the four-domain same-candidate
+artifact contract above is authoritative for cross-project evaluation.
+
+Do not use the `test` split for hyperparameter selection. Tune only on the
+declared validation split.
+
+If reusing an LLM2Rec official result, reuse only scores/provenance/audit. Do
+not make intermediate checkpoints or embeddings long-term required artifacts.
 
 ## TRUCE Migration Plan
 
@@ -133,10 +159,10 @@ python scripts/validate_week8_same_candidate_processed.py \
   --root data/processed/week8_same_candidate \
   --domains beauty books electronics movies \
   --splits valid test \
-  --expected-users 10000 \
   --expected-candidates 101 \
   --expected-negatives 100
 ```
 
-If Beauty Week8 directories are absent, do not mark the four-domain suite
-complete; use the existing Beauty pipeline only as the early-domain lane.
+Do not pass `--expected-users 10000` for the mixed four-domain validation unless
+Beauty has been replaced by a 10k-user artifact. The default validator now uses
+`beauty_supplementary_smallerN_100neg` for the Beauty logical domain.

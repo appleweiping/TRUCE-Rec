@@ -293,7 +293,8 @@ Small fixture data is for tests only. Amazon Beauty can debug the pipeline, but
 the intended paper-scale evaluation is the four-domain same-candidate protocol:
 
 - domains: `beauty`, `books`, `electronics`, `movies`;
-- up to 10,000 users per domain;
+- Beauty supplementary smaller-N plus up to 10,000 users for books,
+  electronics, and movies;
 - each event has 1 positive + 100 popularity-sampled negatives;
 - same-candidate setting for every method;
 - negative sampling: popularity;
@@ -306,8 +307,30 @@ Server source root expected from the parallel data project:
 ~/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks/
 ```
 
+Current reusable artifact slugs:
+
+- `beauty_supplementary_smallerN_100neg`
+- `books_large10000_100neg`
+- `electronics_large10000_100neg`
+- `movies_large10000_100neg`
+
 Do not resample users, negatives, or candidates inside TRUCE. If candidate rows
 change, all comparable methods must be regenerated.
+
+Do not modify `candidate_items.csv` or `ranking_valid/test.jsonl` in the
+producer artifact directories. For the cross-project same-candidate lane, all
+methods must export:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+and must be imported/evaluated with `main_import_same_candidate_baseline_scores.py`.
+TRUCE internal `example_id` imports may be used for local scaffolding, but the
+source-event schema is the authoritative four-domain artifact contract. Never
+use `test` for hyperparameter selection. If reusing LLM2Rec official results,
+reuse only scores/provenance/audit; do not make intermediate checkpoints or
+embeddings required long-term artifacts.
 
 Observation scale must match the formal training/evaluation scale whenever
 budget allows. The intended observation set is Beauty full-domain plus

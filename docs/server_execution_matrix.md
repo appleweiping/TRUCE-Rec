@@ -10,12 +10,24 @@ The target full-scale domains are:
 
 | Domain | Week8 source | Intended TRUCE output |
 | --- | --- | --- |
-| beauty | existing TRUCE/Beauty pipeline first, Week8 if available | `data/processed/week8_same_candidate/beauty_large10000_100neg/{valid,test}` |
+| beauty | `beauty_supplementary_smallerN_100neg` | `data/processed/week8_same_candidate/beauty_supplementary_smallerN_100neg/{valid,test}` |
 | books | Week8 external task | `data/processed/week8_same_candidate/books_large10000_100neg/{valid,test}` |
 | electronics | Week8 external task | `data/processed/week8_same_candidate/electronics_large10000_100neg/{valid,test}` |
 | movies | Week8 external task | `data/processed/week8_same_candidate/movies_large10000_100neg/{valid,test}` |
 
-Do not resample users, negatives, histories, or candidates.
+Do not resample users, negatives, histories, or candidates. Do not edit the
+producer project's `candidate_items.csv` or `ranking_valid/test.jsonl`.
+
+For the four-domain same-candidate artifact lane, score exports must use:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+and final cross-project import/evaluation must use
+`main_import_same_candidate_baseline_scores.py`. TRUCE's internal
+`example_id,user_id,item_id,score` importer remains for local adapters and
+legacy packets only.
 
 ## Pull And Status
 
@@ -42,6 +54,15 @@ The script pulls latest code, preflights the expected
 them without resampling, validates the processed artifacts, prepares Ours
 Qwen3-LoRA adapter data, and writes logs under `outputs/server_logs/`.
 
+Default artifact slugs are:
+
+```text
+beauty=beauty_supplementary_smallerN_100neg
+books=books_large10000_100neg
+electronics=electronics_large10000_100neg
+movies=movies_large10000_100neg
+```
+
 For a dry-run check only:
 
 ```bash
@@ -50,6 +71,9 @@ python scripts/server/dry_run_week8_four_domain.py \
   --domains beauty books electronics movies \
   --splits valid test
 ```
+
+Only set `WEEK8_EXPECTED_USERS=10000` for validation when every selected
+artifact, including Beauty, is expected to contain exactly 10,000 users.
 
 ## Week8 File Check
 
@@ -157,11 +181,18 @@ and a prompt JSONL accepted by `scripts/server/run_qwen3_observation.py`.
 cd ~/projects/TRUCE-Rec
 source .venv_truce/bin/activate
 
-for DOMAIN in beauty books electronics movies; do
+for SPEC in \
+  beauty:beauty_supplementary_smallerN_100neg \
+  books:books_large10000_100neg \
+  electronics:electronics_large10000_100neg \
+  movies:movies_large10000_100neg
+do
+  DOMAIN=${SPEC%%:*}
+  SLUG=${SPEC#*:}
   for SPLIT in valid test; do
     python scripts/build_week8_observation_inputs.py \
-      --processed-dir data/processed/week8_same_candidate/${DOMAIN}_large10000_100neg/${SPLIT} \
-      --dataset ${DOMAIN}_large10000_100neg \
+      --processed-dir data/processed/week8_same_candidate/${SLUG}/${SPLIT} \
+      --dataset ${SLUG} \
       --domain ${DOMAIN} \
       --split ${SPLIT} \
       --prompt-template forced_json
@@ -183,8 +214,14 @@ source ~/projects/TALLRec/.venv_tallrec/bin/activate
 mkdir -p outputs/logs
 
 for DOMAIN in beauty books electronics movies; do
-  INPUT=outputs/observation_inputs/week8_same_candidate/${DOMAIN}_large10000_100neg/test_forced_json.jsonl
-  OUT=outputs/server_observations/qwen3_8b/week8_same_candidate/${DOMAIN}_large10000_100neg/test_forced_json
+  case "$DOMAIN" in
+    beauty) SLUG=beauty_supplementary_smallerN_100neg ;;
+    books) SLUG=books_large10000_100neg ;;
+    electronics) SLUG=electronics_large10000_100neg ;;
+    movies) SLUG=movies_large10000_100neg ;;
+  esac
+  INPUT=outputs/observation_inputs/week8_same_candidate/${SLUG}/test_forced_json.jsonl
+  OUT=outputs/server_observations/qwen3_8b/week8_same_candidate/${SLUG}/test_forced_json
   nohup python scripts/server/run_qwen3_observation.py \
     --input-jsonl "$INPUT" \
     --output-dir "$OUT" \
@@ -202,9 +239,15 @@ cd ~/projects/TRUCE-Rec
 source .venv_truce/bin/activate
 
 for DOMAIN in beauty books electronics movies; do
+  case "$DOMAIN" in
+    beauty) SLUG=beauty_supplementary_smallerN_100neg ;;
+    books) SLUG=books_large10000_100neg ;;
+    electronics) SLUG=electronics_large10000_100neg ;;
+    movies) SLUG=movies_large10000_100neg ;;
+  esac
   python scripts/analyze_observation.py \
-    --run-dir outputs/server_observations/qwen3_8b/week8_same_candidate/${DOMAIN}_large10000_100neg/test_forced_json \
-    --input-jsonl outputs/observation_inputs/week8_same_candidate/${DOMAIN}_large10000_100neg/test_forced_json.jsonl \
+    --run-dir outputs/server_observations/qwen3_8b/week8_same_candidate/${SLUG}/test_forced_json \
+    --input-jsonl outputs/observation_inputs/week8_same_candidate/${SLUG}/test_forced_json.jsonl \
     --source-label qwen3_base_${DOMAIN}_week8_test
 done
 ```

@@ -147,8 +147,15 @@ python scripts/convert_week8_same_candidate_to_truce.py \
   --strict-target-in-candidates
 ```
 
-Repeat for `books`, `electronics`, and `movies`, and preserve the original
-candidate/event alignment.
+Repeat for the artifact slugs below, and preserve the original candidate/event
+alignment. Do not edit `candidate_items.csv` or `ranking_valid/test.jsonl`.
+
+```text
+beauty=beauty_supplementary_smallerN_100neg
+books=books_large10000_100neg
+electronics=electronics_large10000_100neg
+movies=movies_large10000_100neg
+```
 
 Generate all four-domain conversion commands:
 
@@ -167,10 +174,12 @@ python scripts/validate_week8_same_candidate_processed.py \
   --root data/processed/week8_same_candidate \
   --domains beauty books electronics movies \
   --splits valid test \
-  --expected-users 10000 \
   --expected-candidates 101 \
   --expected-negatives 100
 ```
+
+Do not add `--expected-users 10000` unless every selected artifact, including
+Beauty, is expected to have exactly 10k users.
 
 ## Build And Run Week8 Observation Inputs
 
@@ -183,10 +192,17 @@ and evaluation size.
 cd ~/projects/TRUCE-Rec
 source .venv_truce/bin/activate
 
-for DOMAIN in beauty books electronics movies; do
+for SPEC in \
+  beauty:beauty_supplementary_smallerN_100neg \
+  books:books_large10000_100neg \
+  electronics:electronics_large10000_100neg \
+  movies:movies_large10000_100neg
+do
+  DOMAIN=${SPEC%%:*}
+  SLUG=${SPEC#*:}
   python scripts/build_week8_observation_inputs.py \
-    --processed-dir data/processed/week8_same_candidate/${DOMAIN}_large10000_100neg/test \
-    --dataset ${DOMAIN}_large10000_100neg \
+    --processed-dir data/processed/week8_same_candidate/${SLUG}/test \
+    --dataset ${SLUG} \
     --domain ${DOMAIN} \
     --split test \
     --prompt-template forced_json
@@ -199,9 +215,10 @@ Base Qwen3-8B observation on one domain:
 source ~/projects/TALLRec/.venv_tallrec/bin/activate
 
 DOMAIN=books
+SLUG=books_large10000_100neg
 nohup python scripts/server/run_qwen3_observation.py \
-  --input-jsonl outputs/observation_inputs/week8_same_candidate/${DOMAIN}_large10000_100neg/test_forced_json.jsonl \
-  --output-dir outputs/server_observations/qwen3_8b/week8_same_candidate/${DOMAIN}_large10000_100neg/test_forced_json \
+  --input-jsonl outputs/observation_inputs/week8_same_candidate/${SLUG}/test_forced_json.jsonl \
+  --output-dir outputs/server_observations/qwen3_8b/week8_same_candidate/${SLUG}/test_forced_json \
   --run-label qwen3_base_${DOMAIN}_week8_test \
   --run-stage observation \
   --execute-server \
@@ -212,3 +229,15 @@ Observation is not complete until the same phenomenon analysis covers base
 Qwen3-8B and the four senior-recommended Qwen3-8B-LoRA baselines:
 TALLRec/OpenP5/DEALRec/LC-Rec. Treat current controlled-adapter outputs as
 pilots unless the official-fidelity audit promotes them.
+
+For the cross-project same-candidate artifact lane, every method must export
+scores as:
+
+```text
+source_event_id,user_id,item_id,score
+```
+
+and final import/evaluation must use `main_import_same_candidate_baseline_scores.py`.
+Do not use `test` split for hyperparameter selection. If reusing LLM2Rec
+official results, reuse only scores/provenance/audit, not intermediate
+checkpoint or embedding artifacts as long-term requirements.

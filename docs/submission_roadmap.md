@@ -237,14 +237,15 @@ Dataset ladder:
 - MovieLens: sanity and low-cost pilot;
 - Amazon Beauty: first full-domain pipeline and debugging domain;
 - Week8 four-domain benchmark:
-  - `beauty`;
-  - `books`;
-  - `electronics`;
-  - `movies`.
+  - `beauty_supplementary_smallerN_100neg`;
+  - `books_large10000_100neg`;
+  - `electronics_large10000_100neg`;
+  - `movies_large10000_100neg`.
 
 Week8 target protocol:
 
-- up to 10,000 users per domain;
+- Beauty supplementary smaller-N plus up to 10,000 users for the three large
+  domains;
 - 1 positive + 100 popularity-sampled negatives per event;
 - same-candidate setting for all methods;
 - test history mode: `train_plus_valid`;

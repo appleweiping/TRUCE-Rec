@@ -248,6 +248,13 @@ List required artifacts for a planned run:
 - `docs/week8_large_same_candidate_protocol.md`: larger same-candidate
   books/electronics/movies protocol.
 
+Current four-domain same-candidate artifact slugs are
+`beauty_supplementary_smallerN_100neg`, `books_large10000_100neg`,
+`electronics_large10000_100neg`, and `movies_large10000_100neg`. This artifact
+lane is not model weights or a paper result by itself; do not edit its
+`candidate_items.csv` or `ranking_valid/test.jsonl`, and export cross-project
+scores as `source_event_id,user_id,item_id,score`.
+
 ## Package Layout
 
 The active implementation package is `src/llm4rec/`. Older `storyflow`

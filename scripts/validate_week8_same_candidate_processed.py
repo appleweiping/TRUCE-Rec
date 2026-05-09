@@ -8,20 +8,35 @@ import json
 from pathlib import Path
 from typing import Any
 
+DEFAULT_TASK_SLUGS = {
+    "beauty": "beauty_supplementary_smallerN_100neg",
+    "books": "books_large10000_100neg",
+    "electronics": "electronics_large10000_100neg",
+    "movies": "movies_large10000_100neg",
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("data/processed/week8_same_candidate"))
     parser.add_argument("--domains", nargs="+", required=True)
+    parser.add_argument(
+        "--task-slugs",
+        nargs="*",
+        default=[],
+        help="Optional domain=processed_slug overrides, e.g. beauty=beauty_supplementary_smallerN_100neg.",
+    )
     parser.add_argument("--splits", nargs="+", default=["valid", "test"])
     parser.add_argument("--expected-users", type=int)
     parser.add_argument("--expected-candidates", type=int, default=101)
     parser.add_argument("--expected-negatives", type=int, default=100)
     args = parser.parse_args()
+    task_slugs = _parse_task_slugs(args.task_slugs)
     rows = [
         validate_split(
             root=args.root,
             domain=domain,
+            task_slug=_task_slug(domain, task_slugs),
             split=split,
             expected_users=args.expected_users,
             expected_candidates=args.expected_candidates,
@@ -39,11 +54,13 @@ def validate_split(
     root: Path,
     domain: str,
     split: str,
+    task_slug: str | None = None,
     expected_users: int | None,
     expected_candidates: int,
     expected_negatives: int,
 ) -> dict[str, Any]:
-    base = root / f"{domain}_large10000_100neg" / split
+    slug = task_slug or _task_slug(domain, {})
+    base = root / slug / split
     examples_path = base / "examples.jsonl"
     manifest_path = base / "preprocess_manifest.json"
     if not examples_path.exists():
@@ -85,6 +102,7 @@ def validate_split(
     manifest = _read_json(manifest_path)
     return {
         "domain": domain,
+        "task_slug": slug,
         "split": split,
         "status": "passed",
         "examples": len(examples),
@@ -93,6 +111,23 @@ def validate_split(
         "expected_negatives": expected_negatives,
         "manifest": manifest,
     }
+
+
+def _parse_task_slugs(values: list[str]) -> dict[str, str]:
+    parsed: dict[str, str] = {}
+    for value in values:
+        if "=" not in value:
+            raise SystemExit(f"--task-slugs entries must be domain=slug, got: {value}")
+        domain, slug = value.split("=", 1)
+        if not domain or not slug:
+            raise SystemExit(f"--task-slugs entries must be domain=slug, got: {value}")
+        parsed[domain] = slug
+    return parsed
+
+
+def _task_slug(domain: str, task_slugs: dict[str, str]) -> str:
+    merged = {**DEFAULT_TASK_SLUGS, **task_slugs}
+    return merged.get(domain, f"{domain}_large10000_100neg")
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:

@@ -10,6 +10,12 @@ from typing import Any
 
 
 DEFAULT_DOMAINS = ["beauty", "books", "electronics", "movies"]
+DEFAULT_TASK_SLUGS = {
+    "beauty": "beauty_supplementary_smallerN_100neg",
+    "books": "books_large10000_100neg",
+    "electronics": "electronics_large10000_100neg",
+    "movies": "movies_large10000_100neg",
+}
 DEFAULT_SPLITS = ["valid", "test"]
 REQUIRED_FILES = ["candidate_items.csv", "train_interactions.csv", "item_metadata.csv", "selected_users.csv", "metadata.json"]
 
@@ -22,14 +28,21 @@ def main() -> int:
         default=Path("~/projects/pony-rec-rescue-shadow-v6/outputs/baselines/external_tasks").expanduser(),
     )
     parser.add_argument("--domains", nargs="+", default=DEFAULT_DOMAINS)
+    parser.add_argument(
+        "--task-slugs",
+        nargs="*",
+        default=[],
+        help="Optional domain=artifact_slug overrides, e.g. beauty=beauty_supplementary_smallerN_100neg.",
+    )
     parser.add_argument("--splits", nargs="+", default=DEFAULT_SPLITS)
-    parser.add_argument("--expected-users", type=int, default=10000)
+    parser.add_argument("--expected-users", type=int)
     parser.add_argument("--expected-candidates", type=int, default=101)
     parser.add_argument("--allow-missing-beauty", action="store_true")
     args = parser.parse_args()
     report = build_report(
         source_root=args.source_root,
         domains=args.domains,
+        task_slugs=_parse_task_slugs(args.task_slugs),
         splits=args.splits,
         expected_users=args.expected_users,
         expected_candidates=args.expected_candidates,
@@ -46,16 +59,19 @@ def build_report(
     source_root: Path,
     domains: list[str],
     splits: list[str],
-    expected_users: int,
+    task_slugs: dict[str, str] | None = None,
+    expected_users: int | None,
     expected_candidates: int,
     allow_missing_beauty: bool = False,
 ) -> dict[str, Any]:
+    task_slugs = {**DEFAULT_TASK_SLUGS, **(task_slugs or {})}
     checks = []
     missing_dirs = []
     missing_files = []
     for domain in domains:
+        slug = _task_slug(domain, task_slugs)
         for split in splits:
-            task_dir = source_root / f"{domain}_large10000_100neg_{split}_same_candidate"
+            task_dir = source_root / f"{slug}_{split}_same_candidate"
             ranking_file = task_dir / f"ranking_{split}.jsonl"
             files = [ranking_file, *[task_dir / name for name in REQUIRED_FILES]]
             absent = [str(path) for path in files if not path.exists()]
@@ -71,16 +87,23 @@ def build_report(
                 status = "ready"
             checks.append({
                 "domain": domain,
+                "task_slug": slug,
                 "split": split,
                 "task_dir": str(task_dir),
                 "ranking_file": str(ranking_file),
                 "status": status,
                 "missing_files": absent,
             })
-    estimated_candidate_rows = len(domains) * len(splits) * expected_users * expected_candidates
+    estimated_candidate_rows = (
+        len(domains) * len(splits) * expected_users * expected_candidates
+        if expected_users is not None
+        else None
+    )
+    task_slug_args = " ".join(f"{domain}={_task_slug(domain, task_slugs)}" for domain in domains)
     return {
         "source_root": str(source_root),
         "domains": domains,
+        "task_slugs": {domain: _task_slug(domain, task_slugs) for domain in domains},
         "splits": splits,
         "expected_users": expected_users,
         "expected_candidates": expected_candidates,
@@ -93,11 +116,29 @@ def build_report(
             f"{source_root} --output-root data/processed/week8_same_candidate "
             "--domains "
             + " ".join(domains)
+            + " --task-slugs "
+            + task_slug_args
             + " --splits "
             + " ".join(splits)
             + " --include-ours-adapter-prep"
         ),
     }
+
+
+def _parse_task_slugs(values: list[str]) -> dict[str, str]:
+    parsed: dict[str, str] = {}
+    for value in values:
+        if "=" not in value:
+            raise SystemExit(f"--task-slugs entries must be domain=slug, got: {value}")
+        domain, slug = value.split("=", 1)
+        if not domain or not slug:
+            raise SystemExit(f"--task-slugs entries must be domain=slug, got: {value}")
+        parsed[domain] = slug
+    return parsed
+
+
+def _task_slug(domain: str, task_slugs: dict[str, str]) -> str:
+    return task_slugs.get(domain, f"{domain}_large10000_100neg")
 
 
 if __name__ == "__main__":
