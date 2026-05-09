@@ -458,7 +458,8 @@ Codex must not:
 
 ## 14. Open Questions For Later
 
-Before OursMethod implementation, the user must decide:
+Before paper-grade Ours finalization and large-scale runs, the user and agents
+must decide:
 
 - Which uncertainty signal is primary?
 - Which correctness target is primary: exact title, grounded item hit, candidate adherence, or semantic match?

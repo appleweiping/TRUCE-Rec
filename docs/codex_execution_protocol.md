@@ -17,8 +17,8 @@ Before editing, Codex must:
    identity.
 4. Run `git status`.
 5. Inspect and report unexpected uncommitted changes before editing.
-6. Read `AGENTS.md` and `docs/RESEARCH_IDEA.md` enough to keep the task
-   aligned.
+6. Read `AGENTS.md`, `docs/PROJECT_MEMORY.md`, and `docs/RESEARCH_IDEA.md`
+   enough to keep the task aligned.
 
 If the branch is not `main`, Codex must stop and report in Chinese. Codex must
 not switch to archive branches and must not read or use
@@ -48,13 +48,15 @@ For each substantial task:
 2. Update `README.md` when workflows, commands, status, modules, dependencies,
    or server instructions change.
 3. Update relevant docs when assumptions, protocols, or architecture change.
-4. Run relevant tests or basic checks.
-5. Write a detailed Chinese local report under
+4. Update `docs/PROJECT_MEMORY.md` when big direction, baseline fairness,
+   server commands, current status, or future-agent workflow changes.
+5. Run relevant tests or basic checks.
+6. Write a detailed Chinese local report under
    `local_reports/YYYYMMDD-HHMMSS-task-name.md`.
-6. Ensure `local_reports/` is ignored by git.
-7. Run `git status`.
-8. Commit with a meaningful message.
-9. Push to `origin/main`.
+7. Ensure `local_reports/` is ignored by git.
+8. Run `git status`.
+9. Commit with a meaningful message.
+10. Push to `origin/main`.
 
 ## Testing Policy
 

@@ -33,6 +33,9 @@ Keep:
 
 - `AGENTS.md`, `docs/RESEARCH_IDEA.md`, and `docs/experiment_protocol.md` as
   the source of truth for non-toy, non-fabricated research practice.
+- `docs/PROJECT_MEMORY.md` as the durable future-agent memory for big
+  direction, senior baseline advice, server workflow, update discipline, and
+  current next moves.
 - Evidence labels: smoke/mock, diagnostic, controlled adapter pilot,
   official-native controlled baseline, paper result.
 - One shared prediction/evaluation schema for every method.
@@ -40,6 +43,7 @@ Keep:
 Exit criteria:
 
 - README and phase handoff point to the current roadmap.
+- README, AGENTS, and phase handoff point to `docs/PROJECT_MEMORY.md`.
 - Any generated result is machine-labeled with its evidence scope.
 
 ### M1. Observation Layer
@@ -255,3 +259,6 @@ Exit criteria:
   a result table.
 - If a method uses a different backbone or official checkpoint, move it to
   reference/appendix unless the table explicitly separates protocols.
+- If a completed stage changes direction, commands, baseline policy, or status
+  but `docs/PROJECT_MEMORY.md` is not updated, stop and update the memory before
+  handing off.

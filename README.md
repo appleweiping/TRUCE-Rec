@@ -11,9 +11,9 @@ Current repository identity:
 - Historical remote alias in this checkout: `https://github.com/appleweiping/uncertainty-llm4rec.git`
 - Local path: `D:\Research\TRUCE-Rec`
 - Active branch: `main`
-- Current stage: controlled-baseline and large-protocol preparation after
-  Phases 1-7 passed. No paper-result claim is allowed until full official
-  baseline/Ours runs are imported and evaluated by TRUCE.
+- Current stage: Gate R1 server-first four-domain controlled experiment
+  buildout. No paper-result claim is allowed until full official baseline/Ours
+  runs are imported and evaluated by TRUCE.
 
 ## Evidence Labels
 
@@ -75,8 +75,8 @@ Not yet completed:
 
 - no approved paper-result experiment suite;
 - no claim that OursMethod is effective;
-- no new real API run in Gate R0;
 - no HF model download;
+- no completed Gate R1 four-domain paper-scale run;
 - no final official-native controlled baseline table;
 - no completed official-native fidelity audit for the external baselines;
 - no final paper conclusions.
@@ -96,6 +96,14 @@ RESEARCH_IDEA
 The active package is `src/llm4rec/`. Historical `src/storyflow/` references
 are legacy scaffolding and should be treated as background unless a current
 document explicitly maps them to `llm4rec` modules.
+
+## Durable Memory
+
+Future agents must read `docs/PROJECT_MEMORY.md` before nontrivial work. It
+records the current big direction, senior baseline advice, server workflow,
+multi-agent expectation, evidence labels, four-domain plan, and update
+discipline. If a task changes the roadmap, baseline policy, server commands,
+or current status, update `docs/PROJECT_MEMORY.md` in the same commit.
 
 ## Official Baseline Contract
 
@@ -192,6 +200,8 @@ List required artifacts for a planned run:
 ## Important Docs
 
 - `AGENTS.md`: engineering and research governance rules.
+- `docs/PROJECT_MEMORY.md`: durable future-agent memory and current project
+  direction.
 - `docs/RESEARCH_IDEA.md`: core research direction.
 - `docs/experiment_protocol.md`: split, candidate, prompt, LLM, metric, and
   leakage protocol.

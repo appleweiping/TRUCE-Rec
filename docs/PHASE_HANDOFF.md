@@ -25,6 +25,9 @@ Current gate:
 
 Current roadmap:
 
+- `docs/PROJECT_MEMORY.md` is the durable future-agent memory. Read and update
+  it when big direction, baseline policy, server commands, or current status
+  changes.
 - `docs/submission_roadmap.md` is the primary milestone document.
 - `docs/server_execution_matrix.md` is the server command and artifact gate.
 - `docs/top_conference_review_plan.md` is the top-conference reviewer defense
@@ -43,9 +46,13 @@ Evidence boundaries:
 - Formal paper results must come from approved real experiment configs,
   tracked code, saved configs, logs, raw outputs, predictions, and metrics.
 
-Next allowed action after Gate R0 pass:
+Next allowed Gate R1 actions:
 
-- Run real pilot experiments on one dataset.
+- Pull latest on the server and inspect Week8 task availability.
+- Convert/validate Week8 same-candidate tasks when available.
+- Continue Beauty controlled-adapter pilots only as diagnostics.
+- Upgrade official baselines toward official-native Qwen3-8B-LoRA runs.
+- Run Ours and ablations on the same candidate rows after data conversion.
 
 Server handoff:
 
@@ -61,10 +68,10 @@ Server handoff:
   official OpenP5 checkpoint.
 - Smoke metrics from TRUCE evaluator on 225 test examples:
   Recall@10 0.017778, NDCG@10 0.005872, MRR@10 0.002519.
-- Next OpenP5 step: replace the deterministic smoke scorer with a real
-  OpenP5/T5 candidate scorer or training/evaluation run, then import with
-  `scripts/import_external_predictions.py --split test` and evaluate with
-  TRUCE only.
+- OpenP5 upstream/T5 reproduction is an appendix/reference path unless clearly
+  separated from the main controlled Qwen3-8B-LoRA lane. The main OpenP5-style
+  controlled path must use Qwen3-8B-LoRA and official/default baseline
+  hyperparameters where feasible.
 - Main external-framework comparison should now use controlled Qwen3-8B base
   model baselines rather than mixing different upstream backbones. See
   `docs/qwen3_lora_controlled_baselines.md`.
@@ -75,10 +82,10 @@ Server handoff:
   baselines. See `docs/controlled_baseline_fidelity_audit.md`.
 - These baselines are selected from the recommended/reference LLM4Rec project
   families. The main claim should be framework-vs-framework under the same
-  Qwen3-8B base model and TRUCE protocol, not copied official metrics with
-  mismatched backbones and not generic prompt baselines mislabeled as official
-  methods. LoRA/adapter training should follow each baseline's official
-  algorithm.
+  Qwen3-8B base model, LoRA adaptation, and TRUCE protocol, not copied
+  official metrics with mismatched backbones and not generic prompt baselines
+  mislabeled as official methods. LoRA training should follow each baseline's
+  official algorithm and official/default hyperparameters where feasible.
 - Do observation analysis on controlled baselines too: check whether the
   motivating TRUCE/CU-GR observation phenomena appear in TALLRec/OpenP5/
   DEALRec/LC-Rec outputs, not only in weak/base-model outputs.
@@ -133,3 +140,9 @@ Next non-toy buildout:
 - Upgrade official baselines from controlled-adapter pilots to
   official-native controlled runs before using them in main tables.
 - Run Ours and ablations on the same candidate rows.
+
+Future-agent update rule:
+
+- After a completed stage, update `docs/PROJECT_MEMORY.md`, this handoff,
+  README, server command docs, and relevant baseline/roadmap docs so the next
+  agent does not start from stale status.

@@ -39,7 +39,52 @@ The final system should support:
 
 The implementation must make it possible to start real experiments after the core modules are completed.
 
-Before implementing OursMethod, Codex must read `docs/RESEARCH_IDEA.md`. `AGENTS.md` defines engineering standards, not the core research idea. Codex must not replace OursMethod with a generic LLM reranker, generic RAG recommender, prompt-engineering baseline, or known-paper clone.
+Before implementing or changing OursMethod, Codex must read
+`docs/RESEARCH_IDEA.md` and `docs/PROJECT_MEMORY.md`. `AGENTS.md` defines
+engineering standards, not the core research idea. Codex must not replace
+OursMethod with a generic LLM reranker, generic RAG recommender,
+prompt-engineering baseline, or known-paper clone.
+
+## 1A. Durable Project Memory
+
+Future agents must preserve the project direction recorded in
+`docs/PROJECT_MEMORY.md`. For any nontrivial task, read that file before
+planning and update it when the task changes the roadmap, baseline policy,
+server commands, evidence boundaries, or current status.
+
+The current strategic spine is:
+
+```text
+generative recommendation observation
+  -> catalog grounding and uncertainty/popularity/long-tail/echo diagnostics
+  -> original CURE/TRUCE framework
+  -> Qwen3-8B-LoRA Ours adapter and ablations
+  -> official Qwen3-8B-LoRA baseline families
+  -> shared same-candidate evaluator
+  -> four-domain paper-scale experiments
+```
+
+Main LLM baseline policy follows the senior collaborator's recommended
+academic setup: obtain official source implementations, use Qwen3-8B as the
+shared backbone, train all compared LLM methods with LoRA, use official default
+or reported-optimal baseline hyperparameters, do not tune baselines on TRUCE
+test outcomes, and evaluate all methods through the same TRUCE candidate rows
+and evaluator. Ours may tune hyperparameters only under the declared validation
+protocol.
+
+Use multi-agent collaboration for nontrivial tasks when the environment
+permits it. At minimum, separate implementation from protocol/fairness review
+and top-conference-style critique. If subagents are unavailable, perform those
+passes explicitly yourself.
+
+Codex usually cannot see the server directly. Provide exact server commands,
+wait for the user to paste logs/errors/artifacts, then diagnose. Do not claim
+server completion without evidence. After substantial local work, commit and
+push to `origin/main` unless the user explicitly asks not to.
+
+Do not let docs become stale. After a completed stage, update the artifact
+truth, narrative truth, and comparability truth: manifests/metrics/logs,
+roadmap/status/limitations, and candidate/evaluator/baseline status.
 
 ## 2. Expected Repository Structure
 
