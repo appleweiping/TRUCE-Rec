@@ -57,6 +57,37 @@ Future agents must preserve the project direction recorded in
 planning and update it when the task changes the roadmap, baseline policy,
 server commands, evidence boundaries, or current status.
 
+For every complex task, default to multi-agent collaboration when tools permit
+it. Use at least one implementation/explorer pass and one reviewer/fairness
+pass. The reviewer pass must compare TRUCE-Rec against the rigor, originality,
+technical depth, experimental completeness, and artifact standards expected in
+recent top-conference recommender/LLM4Rec papers. When literature context is
+needed, search broadly across multiple relevant SIGIR/WWW/KDD/RecSys/NeurIPS/
+ICLR-style papers and official projects, not only one or two convenient
+references. If subagents are unavailable, perform these passes explicitly in
+the main agent and say so.
+
+At the start of a nontrivial task, read the default startup packet unless the
+task is clearly unrelated:
+
+- `AGENTS.md`
+- `docs/PROJECT_MEMORY.md`
+- `docs/RESEARCH_IDEA.md`
+- `docs/submission_roadmap.md`
+- `docs/top_conference_review_plan.md`
+- `docs/qwen3_lora_controlled_baselines.md` for baseline/protocol work
+- `docs/server_execution_matrix.md` and `docs/server_next_commands.md` for
+  server-facing work
+- relevant source, config, and test files before editing
+
+At the end of a nontrivial task, report what was completed, commands/tests run,
+remaining risks, and the next concrete plan. Also state whether the current
+project/experiment stage is still open or can be considered complete. Do not
+create an endless "next step" loop: the project can move from experiments to
+paper writing only after four-domain runs, official/fair baselines, Ours
+ablations, statistical tests, efficiency/cost artifacts, failure cases, and a
+top-conference-style reviewer pass show no fatal gaps.
+
 The current strategic spine is:
 
 ```text

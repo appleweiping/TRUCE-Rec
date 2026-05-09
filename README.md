@@ -112,6 +112,12 @@ multi-agent expectation, evidence labels, four-domain plan, and update
 discipline. If a task changes the roadmap, baseline policy, server commands,
 or current status, update `docs/PROJECT_MEMORY.md` in the same commit.
 
+Complex tasks should use multi-agent collaboration by default when available:
+implementation/exploration plus a reviewer/fairness pass. Each completed task
+should end with the next concrete plan and a stage verdict: still open, blocked
+by specific gates, or ready to move toward paper writing after top-conference
+review.
+
 ## Official Baseline Contract
 
 The paper-grade external baseline lane is:

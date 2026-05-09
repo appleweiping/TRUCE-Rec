@@ -17,8 +17,18 @@ Before editing, Codex must:
    identity.
 4. Run `git status`.
 5. Inspect and report unexpected uncommitted changes before editing.
-6. Read `AGENTS.md`, `docs/PROJECT_MEMORY.md`, and `docs/RESEARCH_IDEA.md`
-   enough to keep the task aligned.
+6. Read the default startup packet enough to keep the task aligned:
+   `AGENTS.md`, `docs/PROJECT_MEMORY.md`, `docs/RESEARCH_IDEA.md`,
+   `docs/submission_roadmap.md`, and
+   `docs/top_conference_review_plan.md`.
+7. For baseline/protocol work, also read
+   `docs/qwen3_lora_controlled_baselines.md` and
+   `docs/controlled_baseline_fidelity_audit.md`.
+8. For server-facing work, also read `docs/server_execution_matrix.md`,
+   `docs/server_next_commands.md`, and the exact scripts being run or edited.
+9. For Ours/method work, also read `docs/ours_method_plan.md`,
+   `docs/cure_truce_framework.md`, `docs/ablation_protocol.md`, and the
+   relevant source/tests.
 
 If the branch is not `main`, Codex must stop and report in Chinese. Codex must
 not switch to archive branches and must not read or use
@@ -57,6 +67,13 @@ For each substantial task:
 8. Run `git status`.
 9. Commit with a meaningful message.
 10. Push to `origin/main`.
+
+For each complex task, use multi-agent collaboration by default when tools
+permit. At minimum, separate implementation/exploration from a reviewer pass
+that checks rigor, originality, technical depth, baseline fairness, leakage,
+experiment completeness, and reproducibility against recent top-conference
+standards. If subagents are unavailable, perform those as explicit named passes
+in the main workflow.
 
 ## Testing Policy
 
@@ -101,6 +118,8 @@ The report must include:
 14. Current risks.
 15. Recommended next step.
 16. User actions needed.
+17. Whether the current project/experiment stage is still open or can be
+    considered complete.
 
 ## Final Response Requirements
 
@@ -115,6 +134,8 @@ At the end of each Codex task, respond in Chinese with:
 - git commit hash;
 - push status;
 - next recommendation;
-- user action needed.
+- user action needed;
+- whether the current stage is complete or which exact gate still blocks
+  moving to paper writing.
 
 Failure cases must be concrete and include the command or step that failed.

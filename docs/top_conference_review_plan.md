@@ -64,6 +64,43 @@ If subagents are unavailable, perform these as separate named passes in the
 main agent. The task is not done until the reviewer pass has a clear verdict,
 the remaining risks are documented, and the next server command is explicit.
 
+## Broad Literature Comparison Rule
+
+When judging whether TRUCE-Rec is rigorous enough, do not compare only against
+one or two convenient baselines. Search and read broadly across recent
+SIGIR/WWW/KDD/RecSys/NeurIPS/ICLR-style recommender and LLM4Rec papers,
+prioritizing official repositories or paper artifacts when available. The
+comparison should ask:
+
+- Is the method more than a prompt wrapper or generic reranker?
+- Are baselines strong, official, and protocol-compatible?
+- Are datasets large and multi-domain enough for the target venue?
+- Are ablations sufficient to isolate each claimed contribution?
+- Are statistical, efficiency, long-tail, validity, and failure analyses
+  complete enough to defend the paper?
+
+Any claim that the experiment phase is "basically done" must cite the current
+artifact gates, not intuition.
+
+## Writing-Ready Gate
+
+The experiment phase can move to paper writing only when a reviewer-style pass
+finds no fatal gap in:
+
+- four-domain same-candidate coverage;
+- base Qwen3-8B and four senior-recommended baseline observation analyses;
+- official/fair baseline training, scoring, import, and evaluation;
+- Ours full and ablation artifacts;
+- paired significance and slice metrics;
+- efficiency/cost/runtime logs;
+- case studies and limitations;
+- reproducibility manifests, configs, git/environment records, and raw score
+  or raw response preservation.
+
+If the gate is satisfied, tell the user the project has entered the
+writing-ready stage. If not, list only the concrete blockers and the shortest
+plan to close them.
+
 ## Required Reviewer Tables
 
 - Main four-domain ranking table.

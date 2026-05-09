@@ -31,6 +31,26 @@ Before a nontrivial task, read at least:
 Do not work from memory alone. If a paper/repo/API/detail is current or
 uncertain, look it up and prefer official sources.
 
+Default startup packet by task type:
+
+- Any roadmap/method/baseline/server task: `AGENTS.md`,
+  `docs/PROJECT_MEMORY.md`, `docs/RESEARCH_IDEA.md`,
+  `docs/submission_roadmap.md`, and `docs/top_conference_review_plan.md`.
+- Baseline or fairness task: also read
+  `docs/qwen3_lora_controlled_baselines.md`,
+  `docs/controlled_baseline_fidelity_audit.md`, and relevant official packet
+  docs/configs.
+- Server task: also read `docs/server_execution_matrix.md`,
+  `docs/server_next_commands.md`, and the exact server scripts being changed.
+- Ours/method task: also read `docs/ours_method_plan.md`,
+  `docs/cure_truce_framework.md`, `docs/ablation_protocol.md`, and current
+  method source/tests.
+
+If the task touches literature, novelty, or baseline selection, search broadly
+across multiple recent top-conference papers and official repositories instead
+of relying on a few convenient examples. Prefer official sources for factual
+claims.
+
 ## User Workflow Assumptions
 
 - The user has the server; Codex usually cannot directly inspect server files
@@ -48,8 +68,8 @@ uncertain, look it up and prefer official sources.
 
 The user explicitly wants multi-agent collaboration for nontrivial tasks.
 
-Use multiple agents when the active tool policy permits and the task is not a
-small one-command/simple-answer job. Typical roles:
+Use multiple agents by default when the active tool policy permits and the task
+is not a small one-command/simple-answer job. Typical roles:
 
 - Explorer for codebase/protocol audit.
 - Explorer for literature/official-repo/fairness review.
@@ -76,6 +96,18 @@ implementation proposal
 Record the reviewer verdict honestly. If the current Ours design is still a
 heuristic scaffold, say so and improve it rather than writing paper-ready
 claims.
+
+The reviewer pass should compare TRUCE-Rec against recent top-conference
+LLM4Rec/recommender work on:
+
+- rigor of experimental protocol;
+- originality rather than stitched components;
+- technical depth and model/algorithm complexity;
+- strength and officialness of baselines;
+- data scale and multi-domain coverage;
+- ablation completeness;
+- leakage and fairness controls;
+- statistical testing, efficiency, and reproducibility.
 
 ## Non-Toy Standard
 
@@ -369,3 +401,31 @@ Future agents should perform real maintenance:
 7. Run observation diagnostics on Ours and strong baselines, not only base or
    weak models.
 8. Use top-conference reviewer/literature checks before paper claims.
+
+## Endgame And Stop Rule
+
+Agents must know when the project/experiment phase can end. Do not keep
+inventing vague next steps after the required evidence exists.
+
+Experiment phase can be considered basically complete only when:
+
+- Beauty/books/electronics/movies same-candidate runs are complete at the
+  declared scale.
+- Base Qwen3-8B and the four senior-recommended Qwen3-8B-LoRA baselines have
+  observation analyses, or missing runs are explicitly justified.
+- Official-native or clearly labeled controlled baselines have complete
+  score/import/evaluation artifacts.
+- Ours full and required ablations have complete artifacts under the same
+  protocol.
+- Metrics include ranking, validity/hallucination/candidate adherence,
+  coverage/diversity/novelty, long-tail/popularity slices, efficiency/cost, and
+  paired significance where applicable.
+- Failure cases and limitations are documented.
+- A top-conference-style reviewer pass finds no fatal gaps in novelty,
+  fairness, scale, leakage, ablations, or reproducibility.
+
+When these are satisfied, tell the user that the project has reached the
+writing-ready stage and the next phase is paper writing/export/positioning,
+not more open-ended experimentation. If any item is missing, state exactly
+which gate remains and the shortest concrete command or implementation step to
+close it.
