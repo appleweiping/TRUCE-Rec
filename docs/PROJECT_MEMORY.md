@@ -4,7 +4,7 @@ This document is the durable memory for future Codex/agent sessions. Read it
 before planning nontrivial work. Keep it current after each completed stage so
 new agents do not have to reconstruct the project from stale fragments.
 
-Last major update: 2026-05-09.
+Last major update: 2026-05-13.
 
 ## One-Sentence Direction
 
@@ -27,6 +27,11 @@ Before a nontrivial task, read at least:
 - `docs/server_execution_matrix.md` and `docs/server_next_commands.md` when
   the task touches server execution.
 - The relevant source/config/test files before editing.
+
+Project-local skill: `.codex/skills/truce-rec/SKILL.md` now summarizes the
+startup workflow, research guardrails, baseline/server discipline, evidence
+labels, and reviewer gates for future Codex sessions. Use it as the compact
+operating entrypoint, then load the canonical docs above as needed.
 
 Do not work from memory alone. If a paper/repo/API/detail is current or
 uncertain, look it up and prefer official sources.

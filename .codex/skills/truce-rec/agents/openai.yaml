@@ -1,0 +1,4 @@
+interface:
+  display_name: "TRUCE-Rec"
+  short_description: "Work safely on TRUCE-Rec research tasks."
+  default_prompt: "Use $truce-rec when changing TRUCE-Rec code, configs, docs, experiments, baselines, or server handoffs."
