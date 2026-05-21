@@ -76,6 +76,10 @@ claims.
 
 ## User Workflow Assumptions
 
+- **本地是主开发环境**：所有代码编辑、文档更新、git commit/push 都在本地完成。
+- **服务器只作为实验场所**：只做 git pull → 跑 GPU 实验 → 产出结果。
+  服务器上不改代码、不 commit、不 push。
+- **GitHub 更新从本地提交**：永远不从服务器 push。
 - The user has the server; Codex usually cannot directly inspect server files
   unless the user pastes logs/results or a local mount exists.
 - Give concrete server commands for the user to run. The user will paste
