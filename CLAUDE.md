@@ -22,10 +22,11 @@ You are working on TRUCE-Rec: Uncertainty-Aware Generative Recommendation with T
 1. Never fabricate experiment results or claim unverified improvements
 2. Evidence labeling is mandatory: smoke/mock → pilot → diagnostic → controlled → official → paper-result
 3. No "paper-result" label without full controlled experiment + significance test
-4. Pony official baselines are REUSED (shared same-candidate protocol)
+4. TRUCE-Rec 与 Pony/TGL-Rec 共享 8 个外部 baseline 和数据 setting，但方法/framework 完全独立
 5. Four domains: Beauty, Books, Electronics, Movies
 6. MockLLM for development; real LLM (API/HF) for official runs only
 7. Follow gate system: no advancement without gate criteria met
+8. **实时更新硬规则**：每完成一个阶段、一个 step、一次错误排除、一次贡献，必须立即更新 memory（`D:\research\Vipin's Knowledgebase\memory\`）和项目文档（PROJECT_MEMORY.md, PHASE_HANDOFF.md 等）。不攒着，不跳过。违反等于工作没做。
 
 ## Research Direction
 Uncertainty-aware generative recommendation:
@@ -37,21 +38,21 @@ Uncertainty-aware generative recommendation:
 ## Current Gate (R1)
 - Infrastructure: COMPLETE (evaluator, metrics, baselines, configs, tests)
 - Ours method (CURE/TRUCE): IMPLEMENTED, smoke-tested
-- Official baselines: REUSING from Pony/Uncertainty project
+- Official baselines: 共享 8 个外部 baseline (LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, ELMRec, ProEx, ProMax)，分数可复用
 - Four-domain experiments: NOT YET RUN at paper scale
+- Server deployment: PENDING (commands ready)
+- Novelty: CONFIRMED safe (2026-05-21 literature check)
 - Paper sections: DRAFT (intro, method, notation, related)
 
 ## Server Access
 
-Remote GPU server `pony-rec-gpu` is now directly accessible via SSH (key-based auth configured):
-- **SSH command**: `ssh pony-rec-gpu`
-- **Host**: `125.71.97.70`, Port `15302`, User `ajifang`
+Remote GPU server `pony-rec-gpu`:
+- **SSH command**: `ssh pony-rec-gpu` (or `ssh -p 15302 ajifang@125.71.97.70`)
 - **GPU**: NVIDIA RTX 4090 (49GB VRAM)
-- **Server project path**: `~/projects/pony-rec-rescue-shadow-v6`
+- **TRUCE-Rec server path**: `~/projects/TRUCE-Rec` (待部署)
 - **Local project path**: `D:\Research\TRUCE-Rec`
-- **SSH config**: `C:\Users\admin\.ssh\config` (Host `pony-rec-gpu`)
 
-Agents can execute server commands directly via `ssh pony-rec-gpu "<command>"`.
+TRUCE-Rec 在服务器上独立部署，不依赖其他项目的目录结构。
 
 ## Agent Roles
 - **Codex**: Primary execution engine, server commands, parallel experiment runs

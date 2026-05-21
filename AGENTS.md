@@ -19,6 +19,12 @@ This repository is a research-grade LLM4Rec codebase. Codex must treat it as a p
   only. The TRUCE/CURE method must not become a stitched-together clone,
   copied objective, copied pipeline, or renamed combination of existing
   baselines.
+- **实时更新硬规则**：每完成一个阶段、一个 step、一次错误排除、一次贡献，
+  必须立即更新共享 memory（`D:\research\Vipin's Knowledgebase\memory\`）和
+  项目文档（PROJECT_MEMORY.md, PHASE_HANDOFF.md 等）。不攒着，不跳过。
+  违反此规则等于工作没做。
+- **项目独立性**：TRUCE-Rec 与 Pony/TGL-Rec 共享 8 个外部 baseline 和数据
+  setting，但方法/framework 完全独立。Baseline 分数可复用，方法代码绝不混用。
 
 ## 1. Research Goal
 
