@@ -35,14 +35,15 @@ Uncertainty-aware generative recommendation:
 - Key components: CU-GR framework, uncertainty policy, preference fusion, override calibrator
 - Ablation: each component must show independent contribution
 
-## Current Gate (R1)
+## Current Gate (R1 → R2 transition)
 - Infrastructure: COMPLETE (evaluator, metrics, baselines, configs, tests)
 - Ours method (CURE/TRUCE): IMPLEMENTED, smoke-tested
 - Official baselines: 共享 8 个外部 baseline (LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, ELMRec, ProEx, ProMax)，分数可复用
-- Four-domain experiments: NOT YET RUN at paper scale
-- Server deployment: PENDING (commands ready)
+- Six-domain experiments: IN PROGRESS (beauty/books/electronics/movies converted, sports/toys preprocessing)
+- Server deployment: COMPLETE (~/projects/TRUCE-Rec on pony-rec-gpu)
 - Novelty: CONFIRMED safe (2026-05-21 literature check)
 - Paper sections: DRAFT (intro, method, notation, related)
+- Qwen3-8B observation: RUNNING on beauty domain (973 examples)
 
 ## Server Access
 

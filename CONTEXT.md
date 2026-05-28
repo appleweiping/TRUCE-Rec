@@ -1,18 +1,19 @@
 # Project Context — TRUCE-Rec
 
-## Current State (as of 2026-05-19)
+## Current State (as of 2026-05-28)
 
 | Metric | Value |
 |--------|-------|
 | GitHub | https://github.com/appleweiping/TRUCE-Rec |
-| Commits | 115 |
-| Stage | Gate R1 — four-domain buildout |
+| Commits | 118 |
+| Stage | Gate R2 — six-domain server experiments |
 | Official baselines | Reusing from Pony/Uncertainty (same-candidate protocol) |
-| Datasets | 4 domains (Beauty, Books, Electronics, Movies) |
-| Method | CURE/TRUCE (uncertainty-aware generative recommendation) |
-| LLM providers | MockLLM (dev), OpenAI-compatible (prod), HF local |
+| Datasets | 6 domains (Beauty, Books, Electronics, Movies, Sports, Toys) |
+| Method | CU-GR (Calibrated Uncertainty-Gated Recommendation) |
+| LLM providers | Qwen3-8B local (server), MockLLM (dev) |
 | Python | >=3.10 |
 | Test count | ~96 (70 unit + 6 smoke + 20 misc) |
+| Server | pony-rec-gpu (~/projects/TRUCE-Rec) DEPLOYED |
 
 ## Research Thesis
 LLM-based recommenders generate plausible suggestions but lack calibrated confidence.
