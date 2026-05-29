@@ -412,6 +412,13 @@ def _format_model_prompt(tokenizer: Any, prompt: str) -> str:
                 [{"role": "user", "content": prompt}],
                 tokenize=False,
                 add_generation_prompt=True,
+                enable_thinking=False,
+            )
+        except TypeError:
+            return tokenizer.apply_chat_template(
+                [{"role": "user", "content": prompt}],
+                tokenize=False,
+                add_generation_prompt=True,
             )
         except Exception:
             return prompt
