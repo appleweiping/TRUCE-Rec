@@ -1,5 +1,14 @@
 # Calibrated Uncertainty-Guided Generative Recommendation
 
+> **⚠️ SUPERSEDED for the main method (2026-06-07).** The generate-title → ground → uncertainty-gate
+> route described below **lost to fallback-only** in the R3 formal run
+> (`docs/r3_ours_error_decomposition.md`) and is **retired** as the paper's method. The current main
+> method is **SCALR** (Set-aware Calibrated Lift Ranking) — see
+> **`docs/method_redesign_decision.md`** (tri-agent ARIS design, passed the ≥8/10 gate). This file
+> is kept for the design history, the shared fairness/leakage rules (§16), the metrics list (§19),
+> and the required-ablations scaffold (§17), which still apply. Read the decision doc for the live
+> method.
+
 ## 1. Method name
 
 Calibrated Uncertainty-Guided Generative Recommendation, abbreviated in configs as

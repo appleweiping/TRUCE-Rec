@@ -1,0 +1,13 @@
+{
+  "candidate_rows": 98273,
+  "score_rows": 98273,
+  "candidate_keys": 98273,
+  "score_keys": 98273,
+  "matched_keys": 98273,
+  "missing_keys": 0,
+  "extra_keys": 0,
+  "duplicate_score_keys": 0,
+  "finite_scores": 98273,
+  "score_coverage_rate": 1.0,
+  "audit_ok": true
+}

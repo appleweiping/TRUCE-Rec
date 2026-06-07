@@ -1,0 +1,13 @@
+{
+  "candidate_rows": 1010000,
+  "score_rows": 1010000,
+  "candidate_keys": 1010000,
+  "score_keys": 1010000,
+  "matched_keys": 1010000,
+  "missing_keys": 0,
+  "extra_keys": 0,
+  "duplicate_score_keys": 0,
+  "finite_scores": 1010000,
+  "score_coverage_rate": 1.0,
+  "audit_ok": true
+}

@@ -4,7 +4,31 @@ This document is the durable memory for future Codex/agent sessions. Read it
 before planning nontrivial work. Keep it current after each completed stage so
 new agents do not have to reconstruct the project from stale fragments.
 
-Last major update: 2026-05-21.
+Last major update: 2026-06-07.
+
+> **Authoritative setting reference:** `docs/experimental_setting_and_baselines.md`
+> (8 domains, 101-candidate protocol, Qwen3-8B, the 8 official baselines, frozen evidence in
+> `data/official_baselines/`, per-domain SOTA bar). Read it before any experiment/method/paper work.
+
+## Status Snapshot (2026-06-07)
+
+- **Setting:** 8 domains (beauty 973 + books/electronics/movies/sports/toys/home/tools 10k each),
+  same-candidate 101 (1 pos + 100 neg), Qwen3-8B backbone, schema
+  `source_event_id,user_id,item_id,score`.
+- **Official baselines: DONE & FROZEN.** 8 official LLM4Rec methods × 8 domains = 64 pairs,
+  lightweight evidence committed at `data/official_baselines/` (master table + per-pair
+  metrics/coverage/provenance + sha256 manifest). These are reused as a shared reference and are
+  **never re-run**. Beauty SOTA bar = **ProEx NDCG@10 0.1506 / HR@10 0.2528 / MRR 0.1429**;
+  the other 7 domains are led by LLMEmb.
+- **Ours method: UNDER REDESIGN.** The prior `ours_uncertainty_guided` / conservative-gate route
+  did **not** beat fallback-only in the R3 formal run (Ours Recall@10 0.0524 vs fallback 0.0591;
+  confidence ECE 0.85; accepted overrides only hurt — see `docs/r3_ours_error_decomposition.md`).
+  A tri-agent ARIS redesign produces the replacement method; decision in
+  `docs/method_redesign_decision.md`.
+- **Server:** pony-rec-gpu `~/projects/TRUCE-Rec`. **BUSY with another project — run NO experiments
+  until the user gives the go-ahead.** First run when unblocked = beauty-first formal Ours run.
+- **Follow-up (after the 8-domain performance table):** observation, ablation, hyper-parameter
+  analysis + overview figure — planned in `docs/followup_experiment_plan.md`.
 
 ## One-Sentence Direction
 
@@ -80,6 +104,20 @@ claims.
 - **服务器只作为实验场所**：只做 git pull → 跑 GPU 实验 → 产出结果。
   服务器上不改代码、不 commit、不 push。
 - **GitHub 更新从本地提交**：永远不从服务器 push。
+
+## Local ↔ Server Alignment Discipline (HARD RULE, 2026-06-07)
+
+1. **本地和服务器必须对齐。** 代码 / configs / docs 两边一致。服务器产出结果后，把**轻量重要
+   证据打包回本地**（metrics CSV/JSON、provenance、summaries、manifests —— 不是多 GB 的
+   scores/checkpoints/predictions，那些留在服务器）。参照 `data/official_baselines/` 的
+   import 模式。
+2. **实验在服务器跑，commit/push 从本地。** 绝不从服务器 `git push`；服务器只 git pull + 执行。
+   更新 GitHub：先把轻量证据同步回本地，本地 commit，本地 push。
+3. **不要停。** 自主跑完整个任务，只有遇到真正的 blocker 才停：**服务器磁盘满**、
+   **API/endpoint 故障**、无法修复的 review 驳回，或**用户让你暂停**（如"GPU 被别人占着先别跑"
+   —— 当前正是此状态）。否则步骤之间不要停下来问。
+4. **周期性持久化。** 每完成一段有意义的工作 → 写/更新 agentmemory、更新本地重要文档、更新
+   README。边做边写，不要攒到最后。
 - The user has the server; Codex usually cannot directly inspect server files
   unless the user pastes logs/results or a local mount exists.
 - Give concrete server commands for the user to run. The user will paste
@@ -251,22 +289,24 @@ Core method milestones:
 
 ## Baseline Policy
 
-TRUCE-Rec 和 Pony 共享相同的 8 个外部 baseline 和数据 setting。因此：
-- Baseline 分数可以复用（同 baseline + 同数据 = 同分数）
-- 如果 Pony 已经跑完了某个 baseline 在某个域的分数，TRUCE 可以直接引用
-- 但 TRUCE 的 Ours method 必须独立实现和训练，不能混用 Pony 的方法代码
+TRUCE-Rec compares against **8 official LLM4Rec baselines** under a fixed same-candidate setting it
+shares with sibling recommendation projects in the group. Because the same official baseline, run
+on the same data under the same protocol and backbone, yields identical scores regardless of which
+paper consumes them, the baseline numbers are **imported once as a shared frozen reference and
+never re-run**. TRUCE-Rec's Ours method is implemented and trained **independently** — no other
+project's method code is reused.
 
-8 个共享外部 baseline：
-LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, ELMRec, ProEx, ProMax
+- Frozen evidence: `data/official_baselines/` (64 pairs, master table, sha256 manifest, frontier).
+- Ours may tune hyper-parameters only via the declared validation protocol; never on test.
 
-数据 setting（四域 same-candidate）：
-- Beauty, Books, Electronics, Movies (Amazon Reviews 2023)
-- 1 positive + 100 popularity-sampled negatives per event
-- Same-candidate evaluation for all methods
-- Qwen3-8B + LoRA as shared backbone
+The 8 official baselines:
+ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLM-ESR, ProEx, ProMax, RLMRec.
 
-TRUCE 自己的 controlled baselines（TALLRec, OpenP5, DEALRec, LC-Rec with
-Qwen3-8B-LoRA）已有 smoke 完成，可作为补充对比。
+Data setting (8-domain same-candidate):
+- Domains: beauty (973), books, electronics, movies, sports, toys, home, tools (10k each).
+- 1 positive + 100 popularity-sampled negatives per event (101 candidates).
+- Same-candidate evaluation and the same evaluator for all methods.
+- Qwen3-8B + LoRA as the shared backbone.
 
 ## Senior Baseline Advice To Preserve
 
@@ -437,15 +477,20 @@ Future agents should perform real maintenance:
 
 ## Current Next Moves
 
-1. Deploy TRUCE-Rec to server (git clone, venv setup).
-2. Prepare four-domain same-candidate data using TRUCE's own preprocessing
-   (Amazon Beauty/Books/Electronics/Movies from raw Amazon Reviews 2023 data).
-3. Run base Qwen3-8B observation on prepared data.
-4. Train and run TRUCE's own baselines (TALLRec, OpenP5, DEALRec, LC-Rec with
-   Qwen3-8B + LoRA) independently.
-5. Train/score/evaluate Ours Qwen3-LoRA adapter and ablations.
-6. Run observation diagnostics on Ours and baselines.
-7. Use top-conference reviewer/literature checks before paper claims.
+1. **Method redesign** (active, no GPU needed): finish the tri-agent ARIS discussion and lock the
+   replacement method in `docs/method_redesign_decision.md`; implement it in
+   `src/llm4rec/methods/` with mock/smoke tests. Must clear the ARIS ≥8/10 design gate before any
+   formal run.
+2. **Beauty-first formal run** (BLOCKED on server availability — user will say when): run Ours on
+   beauty under the frozen protocol, target SOTA (beat ProEx NDCG@10 0.1506). If not SOTA, re-run
+   the tri-agent discussion and iterate on beauty until it is.
+3. **Roll out** the validated method to the other 7 domains (same protocol).
+4. **Follow-up experiments** (`docs/followup_experiment_plan.md`): observation, ablation,
+   hyper-parameter analysis; draw the overview figure.
+5. **Paper:** fill the 8-domain main table, run the top-conference reviewer gate, prep submission.
+
+Do NOT re-run any official baseline, re-prepare baseline data, or re-deploy — those are done. The
+only open experimental work is TRUCE-Rec's own method.
 
 ## Literature Status (updated 2026-05-21)
 

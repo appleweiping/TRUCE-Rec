@@ -1,0 +1,1677 @@
+{
+  "description": "Integrity manifest for official-baseline comparison evidence.",
+  "protocol": "same-candidate ranking, 101 candidates/user, Qwen3-8B backbone",
+  "domains": [
+    "sports",
+    "toys",
+    "home",
+    "tools",
+    "beauty",
+    "books",
+    "electronics",
+    "movies"
+  ],
+  "baselines": [
+    "elmrec",
+    "irllrec",
+    "llm2rec",
+    "llmemb",
+    "llmesr",
+    "proex",
+    "promax",
+    "rlmrec"
+  ],
+  "n_pairs": 64,
+  "files": [
+    {
+      "path": "domains/sports/elmrec/elmrec_official_run_summary.json",
+      "bytes": 9345,
+      "sha256": "3384be9cadc4b4ac0994c4ac8990360112fb94416a74cfcedccc08e2ec4f6ce7"
+    },
+    {
+      "path": "domains/sports/elmrec/elmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/elmrec/external_score_coverage.csv",
+      "bytes": 209,
+      "sha256": "fb7dc281d4094a9f559149b40937a024f6dd2b35ac14f73f8465ce61a78cde58"
+    },
+    {
+      "path": "domains/sports/elmrec/fairness_provenance.json",
+      "bytes": 8073,
+      "sha256": "e327e41767f498870b125a27bc07c851e185471db3b295c91e65a2c587ab721e"
+    },
+    {
+      "path": "domains/sports/elmrec/ranking_metrics.csv",
+      "bytes": 579,
+      "sha256": "42e7608a4a2e672b08177c4585fa3c3d627baa23bb11bc36965ab789ca567977"
+    },
+    {
+      "path": "domains/sports/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1834,
+      "sha256": "68608aa9de08aa05c13e3e87d2d285697ad5824a6b30bc3c1e4a36f06a0a58b3"
+    },
+    {
+      "path": "domains/sports/irllrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "cbe780803f23c25ca263636d15047ac68e534588c0ce6151ae9d1d1a447df988"
+    },
+    {
+      "path": "domains/sports/irllrec/fairness_provenance.json",
+      "bytes": 8173,
+      "sha256": "7ba24b968b02d38f41f3f0000534bafb379804d58a1b5947c9ff75f1bcf62ac4"
+    },
+    {
+      "path": "domains/sports/irllrec/irllrec_official_run_summary.json",
+      "bytes": 9787,
+      "sha256": "9154425fa9f04f844024b7ec0b44ee11d6e8e32a8a071482f654bada2a70c01e"
+    },
+    {
+      "path": "domains/sports/irllrec/irllrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/irllrec/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "e9f93814b0de11364b1cf20cf60ea1199ed14be97805f2f9474d83272d52f8fa"
+    },
+    {
+      "path": "domains/sports/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1843,
+      "sha256": "1a3786df4bbfeb87618e0d1b712ea3aff4fe1c55dd458715d86979a969edae4f"
+    },
+    {
+      "path": "domains/sports/llm2rec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "6e90dbf9374eb36199e8dddb78ab1d5aa26d01a3bcf6d21fa597d1d4c07bdf2d"
+    },
+    {
+      "path": "domains/sports/llm2rec/fairness_provenance.json",
+      "bytes": 8547,
+      "sha256": "7babcc7dfc59896c764dd9ee6c2349b412e1f6e03a20b0223860a7c0166f2462"
+    },
+    {
+      "path": "domains/sports/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 13242,
+      "sha256": "86e9b62bc9bb3533e11e52a94c3c39ea307bd97a6cd395cf8ef3d3ab686a7ee5"
+    },
+    {
+      "path": "domains/sports/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/llm2rec/ranking_metrics.csv",
+      "bytes": 576,
+      "sha256": "f47bcd764f9049297ad6c2aaa69284aef6662c30828729c98be4d3b042b3341a"
+    },
+    {
+      "path": "domains/sports/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1839,
+      "sha256": "a87dc00e833a34907dd486f80559265852de052172b83d2dbfa639a4d5290a7a"
+    },
+    {
+      "path": "domains/sports/llmemb/external_score_coverage.csv",
+      "bytes": 203,
+      "sha256": "abe322e8c6d5dff0308a486a76c3d5ee43dd4ea2613b3458732fcf18376cab31"
+    },
+    {
+      "path": "domains/sports/llmemb/fairness_provenance.json",
+      "bytes": 7630,
+      "sha256": "1a0a05198557e55f4e2c2ab718f3651c4fe5196ae09c887bc095ddd1daabd257"
+    },
+    {
+      "path": "domains/sports/llmemb/llmemb_official_run_summary.json",
+      "bytes": 9212,
+      "sha256": "9326d2f01fb305df506a9716ac53c818c3c89106dc5b6a61a723dc485f340939"
+    },
+    {
+      "path": "domains/sports/llmemb/llmemb_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/llmemb/ranking_metrics.csv",
+      "bytes": 575,
+      "sha256": "25ce62536b8464abd9a6e194764de9fbfcecdf19f23111327821904c62657c92"
+    },
+    {
+      "path": "domains/sports/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1806,
+      "sha256": "f7d69dd981108fd0b07920bec71619f49782f9dda218930660ccf1def3e05256"
+    },
+    {
+      "path": "domains/sports/llmesr/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "7320f7ae074a79fcd32251228c5348179f69df69335195d27232f451fba7b497"
+    },
+    {
+      "path": "domains/sports/llmesr/fairness_provenance.json",
+      "bytes": 7581,
+      "sha256": "be5c1bcaf21348b5562e8c0d738e085c74ada060e759f30511d2b58c8ecba861"
+    },
+    {
+      "path": "domains/sports/llmesr/llmesr_official_run_summary.json",
+      "bytes": 8729,
+      "sha256": "6c5a780e9edda77379163d20b79e5c057023120c8c3a3b49c52133035eedb839"
+    },
+    {
+      "path": "domains/sports/llmesr/llmesr_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/llmesr/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "81fd4642ee25e29da545dc9c0851eef6e48799d1856d259c099d901c7d58f5b7"
+    },
+    {
+      "path": "domains/sports/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1841,
+      "sha256": "62fc5ec0cbadda83c9dedc55b22ee4fabbb3fa716725ea715c86f1fc98e65346"
+    },
+    {
+      "path": "domains/sports/proex/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "246b15024d179f50fa6d45a0d9939ce94ec985d87e9b37c7fa18dbcbc4d2223e"
+    },
+    {
+      "path": "domains/sports/proex/fairness_provenance.json",
+      "bytes": 8678,
+      "sha256": "4b2d8a5a0077c4bb0afd5f79a423b54d7549e1caa8777ef822e5981b947ad891"
+    },
+    {
+      "path": "domains/sports/proex/proex_official_run_summary.json",
+      "bytes": 10945,
+      "sha256": "8309dfdb9220751e0a4f09c18661e0fe47413d2202e1f44399465e6ebc5f5841"
+    },
+    {
+      "path": "domains/sports/proex/proex_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/proex/ranking_metrics.csv",
+      "bytes": 578,
+      "sha256": "268ef03106301ef9bc1e271f0be173eb42ef75782fb300b7e4e747105d8035c9"
+    },
+    {
+      "path": "domains/sports/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1837,
+      "sha256": "b7b14d24cc969d7fe703833675301136ff704029d01eeda9d1501b34e78120e8"
+    },
+    {
+      "path": "domains/sports/promax/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "fa59f27dedd2829cfd2ec74bbd1c6ae184cf29fdeefbf5e193b92944faf67d57"
+    },
+    {
+      "path": "domains/sports/promax/fairness_provenance.json",
+      "bytes": 8858,
+      "sha256": "7ddbb3fef289f90b3b8b73eb9227bc3104b2bcbb57d49f917ee43b6e2a5706eb"
+    },
+    {
+      "path": "domains/sports/promax/promax_official_run_summary.json",
+      "bytes": 10801,
+      "sha256": "ccf98f114b4e2c0895693a1a1354ddb33d605afadd612e0519de8dff64cbe393"
+    },
+    {
+      "path": "domains/sports/promax/promax_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/promax/ranking_metrics.csv",
+      "bytes": 581,
+      "sha256": "b9eacb1ecc755764d708b26b8a5352a4b6d1d2bcd27880970259533312ad7fe4"
+    },
+    {
+      "path": "domains/sports/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1844,
+      "sha256": "8ebddf488deb92b9c0f585afbf1c5b9ed930e07d8a870e7a76b75e19ca913df8"
+    },
+    {
+      "path": "domains/sports/rlmrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "66433a43cd7dccc7a4f5ffdaac591009f81aee3084b681ae52321c0f3d3fe0fb"
+    },
+    {
+      "path": "domains/sports/rlmrec/fairness_provenance.json",
+      "bytes": 7729,
+      "sha256": "7b89a494ee5c387b12c710fd9b32c66da4d532d1750de4a04aea597e51889c15"
+    },
+    {
+      "path": "domains/sports/rlmrec/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "0a41113a4a02c199b1210a4fd090a73598b6f81f06148b2b334d57a683d2c757"
+    },
+    {
+      "path": "domains/sports/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 9286,
+      "sha256": "924861409da11425bbe4069f82ba0b26a808857722de6ca08bb1e59e77edca67"
+    },
+    {
+      "path": "domains/sports/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/sports/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1843,
+      "sha256": "84174f6d3155c1915ba7a405d88740b9c400259607d7874535a1a4dda1e92ae8"
+    },
+    {
+      "path": "domains/toys/elmrec/elmrec_official_run_summary.json",
+      "bytes": 9275,
+      "sha256": "1aa58e3965d0183d0632d854029058c5fffb2db6b525a45384c2dd6607c8db9b"
+    },
+    {
+      "path": "domains/toys/elmrec/elmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/elmrec/external_score_coverage.csv",
+      "bytes": 209,
+      "sha256": "fb7dc281d4094a9f559149b40937a024f6dd2b35ac14f73f8465ce61a78cde58"
+    },
+    {
+      "path": "domains/toys/elmrec/fairness_provenance.json",
+      "bytes": 8037,
+      "sha256": "2a4fed499c7ffc15ed31ab55bf78ce89d10d159138dd678c1651c92ced8fd175"
+    },
+    {
+      "path": "domains/toys/elmrec/ranking_metrics.csv",
+      "bytes": 578,
+      "sha256": "a0e5b0cdc9f92f34f0ccb72f62e4cd8d55328ae0fe1b89ac0782e9c2be33ada6"
+    },
+    {
+      "path": "domains/toys/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1823,
+      "sha256": "cb72f37d7ad188e9f4543c259675f9686d3b3f1b93794969e9fb9e5461fce8d9"
+    },
+    {
+      "path": "domains/toys/irllrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "cbe780803f23c25ca263636d15047ac68e534588c0ce6151ae9d1d1a447df988"
+    },
+    {
+      "path": "domains/toys/irllrec/fairness_provenance.json",
+      "bytes": 8137,
+      "sha256": "50972afe4f49e2ceeef1dbf0c224f8241954a9fce40de8c5de78a0e70653cb24"
+    },
+    {
+      "path": "domains/toys/irllrec/irllrec_official_run_summary.json",
+      "bytes": 9719,
+      "sha256": "e08f38d82f4048b0f083fb565804c3c9e1365934df225d31a4dbd2b0d88a1ec9"
+    },
+    {
+      "path": "domains/toys/irllrec/irllrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/irllrec/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "e9844ad1037b8ac5b7858a1d83cfbb1efeb106ec28baab3d5f6f57f1944759c1"
+    },
+    {
+      "path": "domains/toys/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1833,
+      "sha256": "8c1e89f3eda36de8cfcae48c1c70be45fbf1a3f54ea031432ad011c166c9bce1"
+    },
+    {
+      "path": "domains/toys/llm2rec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "6e90dbf9374eb36199e8dddb78ab1d5aa26d01a3bcf6d21fa597d1d4c07bdf2d"
+    },
+    {
+      "path": "domains/toys/llm2rec/fairness_provenance.json",
+      "bytes": 8755,
+      "sha256": "541e70b63db4ab2262d2a7cce67549f724ae428adcfeb67309c66b98c4febbde"
+    },
+    {
+      "path": "domains/toys/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 13402,
+      "sha256": "5e45b3b7d5944b8740c9f2adbdb8f49859c6bbfa7e267e92a20a63bb978c6bc8"
+    },
+    {
+      "path": "domains/toys/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/llm2rec/ranking_metrics.csv",
+      "bytes": 574,
+      "sha256": "971cd35955327e7e80b3ee0ff5e19ec01c34788b6bd0afb7a57d876c442564fe"
+    },
+    {
+      "path": "domains/toys/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1827,
+      "sha256": "68182273aa48d168e18a69ff80e13550216bbdccfd2f709b998160ea4328e220"
+    },
+    {
+      "path": "domains/toys/llmemb/external_score_coverage.csv",
+      "bytes": 203,
+      "sha256": "abe322e8c6d5dff0308a486a76c3d5ee43dd4ea2613b3458732fcf18376cab31"
+    },
+    {
+      "path": "domains/toys/llmemb/fairness_provenance.json",
+      "bytes": 7592,
+      "sha256": "4bb7bf6d21bc8619d1bd8ad18cdd6908322c3ca2b82e4e267d801a0a72c41011"
+    },
+    {
+      "path": "domains/toys/llmemb/llmemb_official_run_summary.json",
+      "bytes": 9141,
+      "sha256": "9d29e2a0c0f5ad242655eecfb27fa542b0fd1fdb8ad547b637d1ae33d841b71a"
+    },
+    {
+      "path": "domains/toys/llmemb/llmemb_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/llmemb/ranking_metrics.csv",
+      "bytes": 576,
+      "sha256": "be83596bd8f6c081d0f842a760ebab5269b1c23ea43eef7b6469e7373eade33a"
+    },
+    {
+      "path": "domains/toys/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1797,
+      "sha256": "39e193a2056f2eca704abc999966e06a575331c3bfdf82418355377062584262"
+    },
+    {
+      "path": "domains/toys/llmesr/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "7320f7ae074a79fcd32251228c5348179f69df69335195d27232f451fba7b497"
+    },
+    {
+      "path": "domains/toys/llmesr/fairness_provenance.json",
+      "bytes": 7543,
+      "sha256": "3127b296c7b229558e4c0fe76b788d7fe057407c22e1eec92abccd72cd283b57"
+    },
+    {
+      "path": "domains/toys/llmesr/llmesr_official_run_summary.json",
+      "bytes": 8066,
+      "sha256": "8296a817d587d015056923afb42b34736c5014a6240dc976974d4955b4bf68af"
+    },
+    {
+      "path": "domains/toys/llmesr/llmesr_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/llmesr/ranking_metrics.csv",
+      "bytes": 585,
+      "sha256": "d0f988755387a0fe3b03ff3f2f4bb059dbcd85341e24e1854c04788f3617dac4"
+    },
+    {
+      "path": "domains/toys/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1834,
+      "sha256": "5f13d77cdd4f827bc0ba0027705bb4eca59d5535583056ad5025f7ac158346a4"
+    },
+    {
+      "path": "domains/toys/proex/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "246b15024d179f50fa6d45a0d9939ce94ec985d87e9b37c7fa18dbcbc4d2223e"
+    },
+    {
+      "path": "domains/toys/proex/fairness_provenance.json",
+      "bytes": 8638,
+      "sha256": "f223de1a596392d52d1fa30bc7eefbb079310ae8511f39ad9bc5748c896ea66c"
+    },
+    {
+      "path": "domains/toys/proex/proex_official_run_summary.json",
+      "bytes": 10868,
+      "sha256": "89d25c4c83233d1f7f75412d25c8e9843763fdc264d595a5c2ebc3bfa269f8f8"
+    },
+    {
+      "path": "domains/toys/proex/proex_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/proex/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "bf331a6424e3b85b353dfe2e35e312121c03a58494a052b1c22a280dd2b0288f"
+    },
+    {
+      "path": "domains/toys/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1831,
+      "sha256": "f6d19eda6827f0b6500fae6765291b5095b523413221c262891e466038338015"
+    },
+    {
+      "path": "domains/toys/promax/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "fa59f27dedd2829cfd2ec74bbd1c6ae184cf29fdeefbf5e193b92944faf67d57"
+    },
+    {
+      "path": "domains/toys/promax/fairness_provenance.json",
+      "bytes": 8818,
+      "sha256": "1c60d48f5b3413d139ab315bd63aad4236a0e146731f37bcd2dbfa8e42af39a3"
+    },
+    {
+      "path": "domains/toys/promax/promax_official_run_summary.json",
+      "bytes": 10722,
+      "sha256": "d9036b7b5eeaaae570ba6c49a8e458b35418f1ec32baacbda8a0d5229a73ced1"
+    },
+    {
+      "path": "domains/toys/promax/promax_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/promax/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "b9762f19b750ad64c1a1c1da6af8e10e7f0cab09a66a6ce146f98bf375c45312"
+    },
+    {
+      "path": "domains/toys/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1835,
+      "sha256": "0ed04db9ea059d5af65adf612b1ecb97c25e145e4a6b6e37608e45c114d4da62"
+    },
+    {
+      "path": "domains/toys/rlmrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "66433a43cd7dccc7a4f5ffdaac591009f81aee3084b681ae52321c0f3d3fe0fb"
+    },
+    {
+      "path": "domains/toys/rlmrec/fairness_provenance.json",
+      "bytes": 7693,
+      "sha256": "653246e4bd202f937fd19d6b1c0307055384eeade8c2e60388150da3ce46311b"
+    },
+    {
+      "path": "domains/toys/rlmrec/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "9abce16ad380be3f4e1b8a6328db2021a5de069e884901251500d91946cf488a"
+    },
+    {
+      "path": "domains/toys/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 9218,
+      "sha256": "96a2010c97edecb3f49460dbca890e874c9ff61e22bfd1743cd286d79b93f3db"
+    },
+    {
+      "path": "domains/toys/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/toys/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1833,
+      "sha256": "0a22d54b6d884da43629a6c81b53460e6ef21a37b8216c83a6ff953622d6bbd0"
+    },
+    {
+      "path": "domains/home/elmrec/elmrec_official_run_summary.json",
+      "bytes": 9277,
+      "sha256": "030256b3d2f6f607cd6af4f5ff321714f4ec3b6866909883dfcf01a1f6d79491"
+    },
+    {
+      "path": "domains/home/elmrec/elmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/elmrec/external_score_coverage.csv",
+      "bytes": 209,
+      "sha256": "fb7dc281d4094a9f559149b40937a024f6dd2b35ac14f73f8465ce61a78cde58"
+    },
+    {
+      "path": "domains/home/elmrec/fairness_provenance.json",
+      "bytes": 8037,
+      "sha256": "bcf7605ab26902bb7a566e07d8ae6607cae65d3c4e34e24420b649d1873914b2"
+    },
+    {
+      "path": "domains/home/elmrec/ranking_metrics.csv",
+      "bytes": 576,
+      "sha256": "56c91851a1daf1a429b07f332e91d739becb07b0833b56d378b6c91ab6d1845a"
+    },
+    {
+      "path": "domains/home/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1821,
+      "sha256": "d566bb39a122eedc8ef434eb866124f06358b68a98a57ca511248770e4a3a4c0"
+    },
+    {
+      "path": "domains/home/irllrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "cbe780803f23c25ca263636d15047ac68e534588c0ce6151ae9d1d1a447df988"
+    },
+    {
+      "path": "domains/home/irllrec/fairness_provenance.json",
+      "bytes": 8137,
+      "sha256": "4de43f969f53609e395f03cf46660f50409821aba5016e86b13834a177cf729b"
+    },
+    {
+      "path": "domains/home/irllrec/irllrec_official_run_summary.json",
+      "bytes": 9721,
+      "sha256": "ae197d1c6663ab7ada909bf1a1694f97ae99da3cb778dfe0fbe8941f619ef8f7"
+    },
+    {
+      "path": "domains/home/irllrec/irllrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/irllrec/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "87aa6bd77743cd40adb969ba928e03bc4953bc6330cbcf510f1d55eef9515aba"
+    },
+    {
+      "path": "domains/home/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1835,
+      "sha256": "f70b11b6d6b6840df591703a0e391794e28532b2bbe4dce10a390709553630f4"
+    },
+    {
+      "path": "domains/home/llm2rec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "6e90dbf9374eb36199e8dddb78ab1d5aa26d01a3bcf6d21fa597d1d4c07bdf2d"
+    },
+    {
+      "path": "domains/home/llm2rec/fairness_provenance.json",
+      "bytes": 8519,
+      "sha256": "79ef22ec110f17e8ffc14fb201e6e59792df5a2a774bac5baaa0640b90d0c0e0"
+    },
+    {
+      "path": "domains/home/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 13107,
+      "sha256": "80d521dd9e585571dc8b704b8fb7f6418bbc98334b19707cceb16807dc5813fd"
+    },
+    {
+      "path": "domains/home/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/llm2rec/ranking_metrics.csv",
+      "bytes": 584,
+      "sha256": "ec6b2c665ffdf83301a33dddda6648e605f4f92907adc768c77b196dd04e4791"
+    },
+    {
+      "path": "domains/home/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1837,
+      "sha256": "0834c669a2a696854c4a1bb4ca32b14e6c3cc4079ca22475c2cf04bf7bf19bd7"
+    },
+    {
+      "path": "domains/home/llmemb/external_score_coverage.csv",
+      "bytes": 203,
+      "sha256": "abe322e8c6d5dff0308a486a76c3d5ee43dd4ea2613b3458732fcf18376cab31"
+    },
+    {
+      "path": "domains/home/llmemb/fairness_provenance.json",
+      "bytes": 7592,
+      "sha256": "89142e092dad8713de8997b94935dbbcf56ac67ebaefc4ae5f326cd1ffb349b7"
+    },
+    {
+      "path": "domains/home/llmemb/llmemb_official_run_summary.json",
+      "bytes": 8406,
+      "sha256": "fb55187019fce331b5d7d15802c5c422a886abdbded43d3b524d7e6ee88c4326"
+    },
+    {
+      "path": "domains/home/llmemb/llmemb_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/llmemb/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "153d2e64ed8c906705d46f95c0d171fe527c99baf88bbe131f4acc2b25fc2a24"
+    },
+    {
+      "path": "domains/home/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1801,
+      "sha256": "06e038060761ec60c172cfb8a824cefb180e517ac44d6cc91afa8dbfb1015727"
+    },
+    {
+      "path": "domains/home/llmesr/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "7320f7ae074a79fcd32251228c5348179f69df69335195d27232f451fba7b497"
+    },
+    {
+      "path": "domains/home/llmesr/fairness_provenance.json",
+      "bytes": 7543,
+      "sha256": "90e7a1602c1f114d0185d10efbcb75aedd1cc8a5c2829942dc1944c692a7574d"
+    },
+    {
+      "path": "domains/home/llmesr/llmesr_official_run_summary.json",
+      "bytes": 8661,
+      "sha256": "d2b988c5c2f94582357aecedaa8d017fa0fa0e167c60fcb8967f87bd994439fc"
+    },
+    {
+      "path": "domains/home/llmesr/llmesr_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/llmesr/ranking_metrics.csv",
+      "bytes": 583,
+      "sha256": "efdddfc832636862865a66d37eef86bf5b4ca5bba74edf354910abf35a83adc4"
+    },
+    {
+      "path": "domains/home/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1832,
+      "sha256": "4b6b626eeb6866153e0e46a5869a6de2eca39be9fcac7f4acdc748eaa1e5d7ad"
+    },
+    {
+      "path": "domains/home/proex/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "246b15024d179f50fa6d45a0d9939ce94ec985d87e9b37c7fa18dbcbc4d2223e"
+    },
+    {
+      "path": "domains/home/proex/fairness_provenance.json",
+      "bytes": 8638,
+      "sha256": "0aee706d1183ba504d29718a423c937f1b3d27f82dac04020ed7a338723fde6f"
+    },
+    {
+      "path": "domains/home/proex/proex_official_run_summary.json",
+      "bytes": 10870,
+      "sha256": "1549de7e85b3a3bb7cbda86a5df8999cf59b42ec94307e4320b81f3ebf9b246d"
+    },
+    {
+      "path": "domains/home/proex/proex_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/proex/ranking_metrics.csv",
+      "bytes": 583,
+      "sha256": "6c81c5d788e08dda21f2b4f921a0031f52e0a7626da1f165befa55cca7b2fbe9"
+    },
+    {
+      "path": "domains/home/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1832,
+      "sha256": "ed08eea21a5c0296b53614a91722dfb354b6f7b7492d09bf659a02911769999d"
+    },
+    {
+      "path": "domains/home/promax/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "fa59f27dedd2829cfd2ec74bbd1c6ae184cf29fdeefbf5e193b92944faf67d57"
+    },
+    {
+      "path": "domains/home/promax/fairness_provenance.json",
+      "bytes": 8818,
+      "sha256": "59f0391042a932a89ecf7deffc69cc1989642e19e316a2131bb517b6ff40534a"
+    },
+    {
+      "path": "domains/home/promax/promax_official_run_summary.json",
+      "bytes": 10728,
+      "sha256": "df2f8eb945ec3cc59fb37feeb7c88ea0f072d928089d74563802dfa66c3ddbe2"
+    },
+    {
+      "path": "domains/home/promax/promax_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/promax/ranking_metrics.csv",
+      "bytes": 584,
+      "sha256": "3be173f4488022eda9d6bf9d4587e1984dadabc78b0f5e71e6d9126ea815a2dd"
+    },
+    {
+      "path": "domains/home/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1837,
+      "sha256": "70ea3a46228366cdd0789a9c36234c061402f9abdaea76b9e2e352f9da4453bb"
+    },
+    {
+      "path": "domains/home/rlmrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "66433a43cd7dccc7a4f5ffdaac591009f81aee3084b681ae52321c0f3d3fe0fb"
+    },
+    {
+      "path": "domains/home/rlmrec/fairness_provenance.json",
+      "bytes": 7693,
+      "sha256": "0f12c6714cfe3011802a3c04fb271b55ee4bb48d83f14f4e1d20e1de167ebf24"
+    },
+    {
+      "path": "domains/home/rlmrec/ranking_metrics.csv",
+      "bytes": 586,
+      "sha256": "d91ca3d7d04aa1fd36db488477bf7a125e8366f7492be540fbfcb490b383db45"
+    },
+    {
+      "path": "domains/home/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 9219,
+      "sha256": "d0dcd8c956d6c8a8910be0f694308a56f5f222093a17ca990d16ca9a9f3c2879"
+    },
+    {
+      "path": "domains/home/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/home/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1839,
+      "sha256": "582f1fdc213787f2b4985fd49aabe3fd7914cc69139a3c7f27cceb842a4f9a05"
+    },
+    {
+      "path": "domains/tools/elmrec/elmrec_official_run_summary.json",
+      "bytes": 9404,
+      "sha256": "f110196e13557aa732abe0daa0e1c2a436832826e0db517e5eb5c80f0f2277d2"
+    },
+    {
+      "path": "domains/tools/elmrec/elmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/elmrec/external_score_coverage.csv",
+      "bytes": 209,
+      "sha256": "fb7dc281d4094a9f559149b40937a024f6dd2b35ac14f73f8465ce61a78cde58"
+    },
+    {
+      "path": "domains/tools/elmrec/fairness_provenance.json",
+      "bytes": 8055,
+      "sha256": "714f60ea6148d19720a666a325830e70ac465e358d48ecbb2a6396be10792cfc"
+    },
+    {
+      "path": "domains/tools/elmrec/ranking_metrics.csv",
+      "bytes": 579,
+      "sha256": "90501f63e4faf341f08b3bfab2073ac362939c6d6e27664c71bd84ce2244c1d2"
+    },
+    {
+      "path": "domains/tools/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1829,
+      "sha256": "49e025658353610ae698319fd98f2261af3ab8b1323ada8578c24ee8ed44a167"
+    },
+    {
+      "path": "domains/tools/irllrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "cbe780803f23c25ca263636d15047ac68e534588c0ce6151ae9d1d1a447df988"
+    },
+    {
+      "path": "domains/tools/irllrec/fairness_provenance.json",
+      "bytes": 8155,
+      "sha256": "f8fc67dcf4a447b04d500956311687d5986810c0fa203fbd8683400d5888d715"
+    },
+    {
+      "path": "domains/tools/irllrec/irllrec_official_run_summary.json",
+      "bytes": 9847,
+      "sha256": "feb1e425fa5e3929d83e26fd392b2949e6b7356b32c2da1a470f43a726f98738"
+    },
+    {
+      "path": "domains/tools/irllrec/irllrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/irllrec/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "324be6599f6723685cb35e2734378482d0ed3737e69ace1f0f1c357d7445aa31"
+    },
+    {
+      "path": "domains/tools/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1838,
+      "sha256": "3bcb1a882803272cbc433a5fd9e9dc36ddbf331a9a9e53b2d7e9ddb710a895b8"
+    },
+    {
+      "path": "domains/tools/llm2rec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "6e90dbf9374eb36199e8dddb78ab1d5aa26d01a3bcf6d21fa597d1d4c07bdf2d"
+    },
+    {
+      "path": "domains/tools/llm2rec/fairness_provenance.json",
+      "bytes": 8512,
+      "sha256": "6944b923608983ce9192f9a5fe2c1ee92841281e2d5f84bd3c7fd4f298b738b2"
+    },
+    {
+      "path": "domains/tools/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 13266,
+      "sha256": "059bece3ccd4a8b02de6fe8434db65c837061e98a907c7ee15d7983154ec0ac4"
+    },
+    {
+      "path": "domains/tools/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/llm2rec/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "750caa559cf4387cc53d28b9c6d460ea5ccf0466036a40929254eb359b4846a7"
+    },
+    {
+      "path": "domains/tools/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1838,
+      "sha256": "47b2543c7cc635a2297651f489801f534674c536d41d16ec505834098f66dcad"
+    },
+    {
+      "path": "domains/tools/llmemb/external_score_coverage.csv",
+      "bytes": 203,
+      "sha256": "abe322e8c6d5dff0308a486a76c3d5ee43dd4ea2613b3458732fcf18376cab31"
+    },
+    {
+      "path": "domains/tools/llmemb/fairness_provenance.json",
+      "bytes": 7611,
+      "sha256": "229f4ee7922f7255e66aff10da403935e2f7706bd39055ec7400d578ee2e5b60"
+    },
+    {
+      "path": "domains/tools/llmemb/llmemb_official_run_summary.json",
+      "bytes": 9270,
+      "sha256": "2df66c86fe613b28a925b73fa02f856bfadb80de81bbdbe6fb4d876f023054f1"
+    },
+    {
+      "path": "domains/tools/llmemb/llmemb_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/llmemb/ranking_metrics.csv",
+      "bytes": 576,
+      "sha256": "026235a5a09ce39717dac09459ada13a58a5b8b566369ce315ae94879a14a7c0"
+    },
+    {
+      "path": "domains/tools/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1802,
+      "sha256": "be9e4464ec01e257c0a19ace51266408f02e741e2f084daed7ee6a7147d7f4f3"
+    },
+    {
+      "path": "domains/tools/llmesr/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "7320f7ae074a79fcd32251228c5348179f69df69335195d27232f451fba7b497"
+    },
+    {
+      "path": "domains/tools/llmesr/fairness_provenance.json",
+      "bytes": 7562,
+      "sha256": "d23101dc28a587959f1980015951866ec2e5a9e4dd60a0fa4fda22e0b0e3ef6e"
+    },
+    {
+      "path": "domains/tools/llmesr/llmesr_official_run_summary.json",
+      "bytes": 8788,
+      "sha256": "35b60ac2c3a05c5661b14d49e3415a6b9be08445f36350259e0c91b2b31e5cf7"
+    },
+    {
+      "path": "domains/tools/llmesr/llmesr_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/llmesr/ranking_metrics.csv",
+      "bytes": 586,
+      "sha256": "d2d483bdd85887742482a69ef1a95248d0cc7ef8dedadd118ab86d25dceb96a0"
+    },
+    {
+      "path": "domains/tools/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1840,
+      "sha256": "625f5ebd18b7df3b6b3980e0f04cfb960c3a37458730ccf3c5e78cce1a4d9fff"
+    },
+    {
+      "path": "domains/tools/proex/external_score_coverage.csv",
+      "bytes": 210,
+      "sha256": "246b15024d179f50fa6d45a0d9939ce94ec985d87e9b37c7fa18dbcbc4d2223e"
+    },
+    {
+      "path": "domains/tools/proex/fairness_provenance.json",
+      "bytes": 8658,
+      "sha256": "840a39a2ba9ff8ade830b580fc1331f2ea874f97540861a452fc2a7c9b2ad144"
+    },
+    {
+      "path": "domains/tools/proex/proex_official_run_summary.json",
+      "bytes": 11001,
+      "sha256": "7e10576be547c6065fd1e7146e55e89d8791e85f0515b4ee5d73472aa805c57c"
+    },
+    {
+      "path": "domains/tools/proex/proex_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/proex/ranking_metrics.csv",
+      "bytes": 583,
+      "sha256": "f0621033f7b8cf106c31a7cf58bb003e4e35913f5d7c8e31d1d8f6ede1e6fd13"
+    },
+    {
+      "path": "domains/tools/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1837,
+      "sha256": "57a885997c878134da837366e53829208fdb87deacffa28268c81939efc4a46b"
+    },
+    {
+      "path": "domains/tools/promax/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "fa59f27dedd2829cfd2ec74bbd1c6ae184cf29fdeefbf5e193b92944faf67d57"
+    },
+    {
+      "path": "domains/tools/promax/fairness_provenance.json",
+      "bytes": 8838,
+      "sha256": "635e26d5242dc710cc4de597a23b87036200842c584298e79df895f81d0a61b3"
+    },
+    {
+      "path": "domains/tools/promax/promax_official_run_summary.json",
+      "bytes": 10856,
+      "sha256": "8f881c50b3e8b311cd729de559ae3d72cf2fb7f17f3cccce927f0ad887a5cd44"
+    },
+    {
+      "path": "domains/tools/promax/promax_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/promax/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "e2eb6a14ecd1b095ae68e7dfb0c0719fbc1ac693d263c58ac0be8e178c8284e5"
+    },
+    {
+      "path": "domains/tools/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1840,
+      "sha256": "94fe9f0b42d25b157590096c28358af8849c6ed2ec81d50326c1ded8189e9128"
+    },
+    {
+      "path": "domains/tools/rlmrec/external_score_coverage.csv",
+      "bytes": 211,
+      "sha256": "66433a43cd7dccc7a4f5ffdaac591009f81aee3084b681ae52321c0f3d3fe0fb"
+    },
+    {
+      "path": "domains/tools/rlmrec/fairness_provenance.json",
+      "bytes": 7711,
+      "sha256": "253bfe80702775b8245022773031e620beb9fefc9d5854ec70ed57d8c4e66937"
+    },
+    {
+      "path": "domains/tools/rlmrec/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "489e416cd53f00696b076b80d2737e3b73b46f5ee7bb22e734a56cdc2d14f7dd"
+    },
+    {
+      "path": "domains/tools/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 9346,
+      "sha256": "a5fd2621869e22c118cfd40abb58a9cb88822cd019e6b0fc81b429df5bc267e3"
+    },
+    {
+      "path": "domains/tools/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/tools/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1840,
+      "sha256": "95af263c81d5121010563913665fe652f0706b02c71d3704bfea2c301fe11bba"
+    },
+    {
+      "path": "domains/beauty/elmrec/external_score_coverage.csv",
+      "bytes": 220,
+      "sha256": "696111b543d78921297f50fcb72b930de0c866ee9676cf046385f8866e8b69a6"
+    },
+    {
+      "path": "domains/beauty/elmrec/ranking_metrics.csv",
+      "bytes": 645,
+      "sha256": "c3b2fd7521bf48400c7a4ee8676a4e1bc038cf9c6659a1135efcf0a14f2268e1"
+    },
+    {
+      "path": "domains/beauty/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1965,
+      "sha256": "d34b14486f5a125ec107221b5c94eea972b1f8bae9f2d5101195a5513a603c92"
+    },
+    {
+      "path": "domains/beauty/irllrec/external_score_coverage.csv",
+      "bytes": 222,
+      "sha256": "433aa85b8314a5120b64d16247f6052c4cbee079430bb6837f0af006c99b1838"
+    },
+    {
+      "path": "domains/beauty/irllrec/fairness_provenance.json",
+      "bytes": 8158,
+      "sha256": "84b56ee2f02b9f2336a2455a088e3a59fe70539b40f749f06951124590510326"
+    },
+    {
+      "path": "domains/beauty/irllrec/irllrec_official_run_summary.json",
+      "bytes": 8959,
+      "sha256": "1cc403b1405cc5e0d07c8227019863bedc5d7ea9b5c7fb7287c07cc6c19c7e7e"
+    },
+    {
+      "path": "domains/beauty/irllrec/irllrec_official_score_audit.json",
+      "bytes": 273,
+      "sha256": "834a7d283878ceb5a8c4ac5eea9732ee86b1a5dd273b120d54d3c2a84c8bb742"
+    },
+    {
+      "path": "domains/beauty/irllrec/ranking_metrics.csv",
+      "bytes": 639,
+      "sha256": "4cb8de707db9c97001ccdf30e7bdd14b09fb3546181706bebab3301a878da425"
+    },
+    {
+      "path": "domains/beauty/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1966,
+      "sha256": "7579525b04f8e76deed0401087f1f34b1cfe49e61838c0fe19cd33dbab582b8b"
+    },
+    {
+      "path": "domains/beauty/llm2rec/external_score_coverage.csv",
+      "bytes": 222,
+      "sha256": "88afd73e9eb25a9c8d2c011cad5e9b4df0e3ed0911db314d6ab2ab39f381fdb8"
+    },
+    {
+      "path": "domains/beauty/llm2rec/fairness_provenance.json",
+      "bytes": 7847,
+      "sha256": "63194973d02187cb54a42559307c770516e415ab6e5853d643aa191c9837631a"
+    },
+    {
+      "path": "domains/beauty/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 12656,
+      "sha256": "38bad40e0ba6fadb21c160a66917a5cb40a2276b302883e89e68dc3733f9f885"
+    },
+    {
+      "path": "domains/beauty/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 273,
+      "sha256": "834a7d283878ceb5a8c4ac5eea9732ee86b1a5dd273b120d54d3c2a84c8bb742"
+    },
+    {
+      "path": "domains/beauty/llm2rec/ranking_metrics.csv",
+      "bytes": 635,
+      "sha256": "9965e551ba78e8609592649f2c74bb8880ea56538b5923597eff1cb7b02ac43b"
+    },
+    {
+      "path": "domains/beauty/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1962,
+      "sha256": "7184affb706b24274ec49bad8a2ba3928d8623ba9e67d3eafaddd17c0a30d2b8"
+    },
+    {
+      "path": "domains/beauty/llmemb/external_score_coverage.csv",
+      "bytes": 214,
+      "sha256": "15ba6828305f9cce8a883e481d28e9106d1183d508d5f46bc4300eedefcef7fd"
+    },
+    {
+      "path": "domains/beauty/llmemb/fairness_provenance.json",
+      "bytes": 7878,
+      "sha256": "eb263aceb2aa5bd84417694d9f128a967f1a9fc39be4bf4f2f856054ec9c7ae4"
+    },
+    {
+      "path": "domains/beauty/llmemb/llmemb_official_run_summary.json",
+      "bytes": 9378,
+      "sha256": "e9d02479c58bbb9c1f659cfdc757772f3d3d53058c08fb3ef850a879fe1bee4d"
+    },
+    {
+      "path": "domains/beauty/llmemb/llmemb_official_score_audit.json",
+      "bytes": 273,
+      "sha256": "834a7d283878ceb5a8c4ac5eea9732ee86b1a5dd273b120d54d3c2a84c8bb742"
+    },
+    {
+      "path": "domains/beauty/llmemb/ranking_metrics.csv",
+      "bytes": 643,
+      "sha256": "c5b41861034daf431534183953b258301f1b3eda684b906cca623f59dfc34ae2"
+    },
+    {
+      "path": "domains/beauty/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1951,
+      "sha256": "0ef9a8cdf50e44b51909343c280e473220e88de6181741b44dbcfc2ac20123f0"
+    },
+    {
+      "path": "domains/beauty/llmesr/external_score_coverage.csv",
+      "bytes": 221,
+      "sha256": "de4555e8061ffa15c12427d45084f4ad2ad69ce42985a57a4bebb792fdf04fd4"
+    },
+    {
+      "path": "domains/beauty/llmesr/ranking_metrics.csv",
+      "bytes": 645,
+      "sha256": "4783f88927a4185693b2ce4631a61e3d2a8d7888f7cad3fbd95b6c5cbcbd18e5"
+    },
+    {
+      "path": "domains/beauty/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1967,
+      "sha256": "2e092e9f57f11b0a9d5e75e8a45d24f7c997705c14127f9b3bcb195e4d02a2de"
+    },
+    {
+      "path": "domains/beauty/proex/external_score_coverage.csv",
+      "bytes": 221,
+      "sha256": "e7b0d3561bceb300b27ec11b6a666800484f9e44ba7f9b28eec58aeb554fc258"
+    },
+    {
+      "path": "domains/beauty/proex/ranking_metrics.csv",
+      "bytes": 641,
+      "sha256": "4d9f4645e6405209acf1f8a2f423fbff9cc7391a9be3545a0f8d97c93f31debb"
+    },
+    {
+      "path": "domains/beauty/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1960,
+      "sha256": "2db78cf8afce5eb80c45e0ad296ca2680eefea56560c366ceeba1de5bb4dddbf"
+    },
+    {
+      "path": "domains/beauty/promax/external_score_coverage.csv",
+      "bytes": 222,
+      "sha256": "9a17d4f03ed13dea0a4da318b0333d08b265ae158acf61efe8f3fe367e631fbf"
+    },
+    {
+      "path": "domains/beauty/promax/ranking_metrics.csv",
+      "bytes": 643,
+      "sha256": "2970518b646245e008c7ea499b89f8ac4a533dfe5e4500e5f270242460bb59b4"
+    },
+    {
+      "path": "domains/beauty/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1967,
+      "sha256": "781b838a8f836b5a3a32ae02b1883cfa05e17b5742682f7e5c87cca53ccb05b2"
+    },
+    {
+      "path": "domains/beauty/rlmrec/external_score_coverage.csv",
+      "bytes": 222,
+      "sha256": "a0af21848a7020c0a1059a19a9fb9b1594b3b55621afead89a1fd14b1fc86ae5"
+    },
+    {
+      "path": "domains/beauty/rlmrec/fairness_provenance.json",
+      "bytes": 7887,
+      "sha256": "1539d29f267579af2f1c1e14d489b3a72450c0f919059ee5541a6a0725448bd1"
+    },
+    {
+      "path": "domains/beauty/rlmrec/ranking_metrics.csv",
+      "bytes": 640,
+      "sha256": "69976091c194a9d07eb6b85ace173471af22dc8e6321ecb72073062719d5f0b3"
+    },
+    {
+      "path": "domains/beauty/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 9441,
+      "sha256": "a5b06c2dbd71c9cd837f70825a238868b5b271dc9b947f4ab6f9047326d71b93"
+    },
+    {
+      "path": "domains/beauty/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 273,
+      "sha256": "834a7d283878ceb5a8c4ac5eea9732ee86b1a5dd273b120d54d3c2a84c8bb742"
+    },
+    {
+      "path": "domains/beauty/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1964,
+      "sha256": "e238d62534a03d2bcf374651b10b7f4056b587e26fade9f5c62d05b7d86c8917"
+    },
+    {
+      "path": "domains/books/elmrec/external_score_coverage.csv",
+      "bytes": 228,
+      "sha256": "efe8226d0e428a1daefed94f7b8976ee8cacfd4a2c57850b163e567acaf54934"
+    },
+    {
+      "path": "domains/books/elmrec/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "786ae65fa4178b459398e30083d4bd5d9e603bf7bad7011b131008124daa1fb5"
+    },
+    {
+      "path": "domains/books/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1859,
+      "sha256": "579f5b54d1620b58840527fd788e5d3766dd947c7fcc1899c61dbea93c7dfd21"
+    },
+    {
+      "path": "domains/books/irllrec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "f1bbf292409c86028a26e53f05feba85e26740ef6983799a00ab2ef6f9d40caa"
+    },
+    {
+      "path": "domains/books/irllrec/fairness_provenance.json",
+      "bytes": 8288,
+      "sha256": "3ddb8759637155e05a07b377fea25a0ca349f90d8dda233690e34e56f287162f"
+    },
+    {
+      "path": "domains/books/irllrec/irllrec_official_run_summary.json",
+      "bytes": 8918,
+      "sha256": "2f5de31546d2f39ac9ba9f3a639229538bbe4ea9d469969ee3013c3db6160d63"
+    },
+    {
+      "path": "domains/books/irllrec/irllrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/books/irllrec/ranking_metrics.csv",
+      "bytes": 578,
+      "sha256": "f3b1db11c51ae6d4790d62bbf89e036442d246801dd5924414ff6d4596898cbf"
+    },
+    {
+      "path": "domains/books/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1864,
+      "sha256": "ab869a6706160d8de6616435ea8eee490af32e160a09eb181a39cf0e7411cee5"
+    },
+    {
+      "path": "domains/books/llm2rec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "8cc0bd00880e4fc913e865bd0448feb8e6e366dcb720b82800f0e97f0d1fd7da"
+    },
+    {
+      "path": "domains/books/llm2rec/fairness_provenance.json",
+      "bytes": 8126,
+      "sha256": "53777b15c37eac76bb984ccb3f993d031df174f60dd77b22cab9564381c1162e"
+    },
+    {
+      "path": "domains/books/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 11985,
+      "sha256": "e267cc2afc40459e872ee354dc64e5b3bd6b8b6c89bfaf1baf248091f5a75935"
+    },
+    {
+      "path": "domains/books/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/books/llm2rec/ranking_metrics.csv",
+      "bytes": 572,
+      "sha256": "ba6ac0658de6afaeb3e8fad63f93146ccffc5161474be2c042eddfcbc1dc48ea"
+    },
+    {
+      "path": "domains/books/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1858,
+      "sha256": "553c8a3a82f1b7d3f8d9dd1128c084c73ce9c1fac93c675620848d8ebef5fc06"
+    },
+    {
+      "path": "domains/books/llmemb/external_score_coverage.csv",
+      "bytes": 222,
+      "sha256": "28aa07716fe4c2fcbf9c07782579f6e904a640503e8f8a870dee979678517b4a"
+    },
+    {
+      "path": "domains/books/llmemb/fairness_provenance.json",
+      "bytes": 7706,
+      "sha256": "caaa7cee59b35f367fd87b4b55650d6a8c9e77632b038a99080b67591b593a0c"
+    },
+    {
+      "path": "domains/books/llmemb/llmemb_official_run_summary.json",
+      "bytes": 9080,
+      "sha256": "d96ac44094fb90ecf7e2f5a850477532747b14011ff0232f710302e39d60935b"
+    },
+    {
+      "path": "domains/books/llmemb/llmemb_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/books/llmemb/ranking_metrics.csv",
+      "bytes": 576,
+      "sha256": "318409671cf046bee48889a235f9d9454f5edcbc8715c587d556a97a06b35181"
+    },
+    {
+      "path": "domains/books/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1843,
+      "sha256": "c30f24771e8a15ea073b7f64e49f2a2f805b4a30ea4823808073d43e46453ec4"
+    },
+    {
+      "path": "domains/books/llmesr/external_score_coverage.csv",
+      "bytes": 229,
+      "sha256": "3feae30a097c3686a1cb57f25f2cf43efa647fe9f6f33cb9b96728c1da3cbfee"
+    },
+    {
+      "path": "domains/books/llmesr/ranking_metrics.csv",
+      "bytes": 584,
+      "sha256": "d1d3ddd8ac58c9b475f40ce853e8bcd28a3e5592fba7e1bd698b0cfcc857e32f"
+    },
+    {
+      "path": "domains/books/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1865,
+      "sha256": "0800b17eba493a49197bed31f30d55dc0c58110fab1fd0c6b22afa3e222d7429"
+    },
+    {
+      "path": "domains/books/proex/external_score_coverage.csv",
+      "bytes": 229,
+      "sha256": "5c931797401ed26d4c5c0d7c394a5284307bf1912f0f5a4dd5f123209024f136"
+    },
+    {
+      "path": "domains/books/proex/ranking_metrics.csv",
+      "bytes": 579,
+      "sha256": "0eabf36aae9131888f9c9926aad7055dd020afcc4d2c523b15dbbc532137468c"
+    },
+    {
+      "path": "domains/books/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1857,
+      "sha256": "a6a38f01a1c01ae2ee8b772f0a28ec27c1e9ee9bd211e1235dcaa2cfcb5643ed"
+    },
+    {
+      "path": "domains/books/promax/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "b12f1974b6a34c82e00e5f499bd4f54804b731329a8d1f70285757bf7d6e832d"
+    },
+    {
+      "path": "domains/books/promax/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "1e4d64e46c1a0d136e1bd05afb100662069418f604461c84714bab49283b2aa4"
+    },
+    {
+      "path": "domains/books/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1865,
+      "sha256": "18378d8c3ed8b71063b8416b3d15ecd6beb9612bcd86faf7a3c5e6477e880fff"
+    },
+    {
+      "path": "domains/books/rlmrec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "00002e364898911add3fc546658968f321ffa8c3b1e172221e6d1333f9c3825a"
+    },
+    {
+      "path": "domains/books/rlmrec/fairness_provenance.json",
+      "bytes": 6607,
+      "sha256": "6fda580abbd5635e05b893fc5ff71fbb7efccc0c5fc271df91e3d3697c642b9f"
+    },
+    {
+      "path": "domains/books/rlmrec/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "5f209b9f59d767a21c7096df956fc3b3f61b9bcbc97154cf54fb6083db105196"
+    },
+    {
+      "path": "domains/books/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 2860,
+      "sha256": "432b2253a9d35f86a1624d4f4dd557839c6f3c8bd9ed27ada3af123ce9399406"
+    },
+    {
+      "path": "domains/books/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/books/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1865,
+      "sha256": "e343c1a92b385d431066e33f95aa06446b7bead4417d231a48c97f6c0e32fc33"
+    },
+    {
+      "path": "domains/electronics/elmrec/external_score_coverage.csv",
+      "bytes": 228,
+      "sha256": "efe8226d0e428a1daefed94f7b8976ee8cacfd4a2c57850b163e567acaf54934"
+    },
+    {
+      "path": "domains/electronics/elmrec/ranking_metrics.csv",
+      "bytes": 578,
+      "sha256": "36ad29a41fb18677a9d0214a64cb000efe1cc8c3f06465d3f58484048606e33d"
+    },
+    {
+      "path": "domains/electronics/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1887,
+      "sha256": "585ec537db7fae4f44b2b2662a27d69a7f0239de6d53933f0cadba35f1a88a5e"
+    },
+    {
+      "path": "domains/electronics/irllrec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "f1bbf292409c86028a26e53f05feba85e26740ef6983799a00ab2ef6f9d40caa"
+    },
+    {
+      "path": "domains/electronics/irllrec/ranking_metrics.csv",
+      "bytes": 579,
+      "sha256": "7693985ab6578a446e35141090c2da815f2513a47b70be886bdf723e5c7c9ff2"
+    },
+    {
+      "path": "domains/electronics/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1895,
+      "sha256": "2fbb0e286c96861cc4a9357555305e15714e2dff98339d82d88a9098c7f843bf"
+    },
+    {
+      "path": "domains/electronics/llm2rec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "8cc0bd00880e4fc913e865bd0448feb8e6e366dcb720b82800f0e97f0d1fd7da"
+    },
+    {
+      "path": "domains/electronics/llm2rec/fairness_provenance.json",
+      "bytes": 8564,
+      "sha256": "95f8bca090ca701dd6ec62694250dd88f1ea11345475a720436c7b249625e921"
+    },
+    {
+      "path": "domains/electronics/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 13862,
+      "sha256": "8a7e95f44501ba7102e63f122e2e9dfb7b7320586f8749bcbf15f9811a57a44c"
+    },
+    {
+      "path": "domains/electronics/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/electronics/llm2rec/ranking_metrics.csv",
+      "bytes": 583,
+      "sha256": "04e5e1290091f68b21fe9d9be44171a01a9e59b757a0488fe844671b4df793d5"
+    },
+    {
+      "path": "domains/electronics/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1899,
+      "sha256": "8103a8a0f69509b802a4f4510fee65efdf259c54312eaf83de56a870fc97d05f"
+    },
+    {
+      "path": "domains/electronics/llmemb/external_score_coverage.csv",
+      "bytes": 222,
+      "sha256": "28aa07716fe4c2fcbf9c07782579f6e904a640503e8f8a870dee979678517b4a"
+    },
+    {
+      "path": "domains/electronics/llmemb/fairness_provenance.json",
+      "bytes": 7820,
+      "sha256": "b390f94aaaa7df32d7d72782248ef67509345f807888f38818acf2ca2abf1207"
+    },
+    {
+      "path": "domains/electronics/llmemb/llmemb_official_run_summary.json",
+      "bytes": 9305,
+      "sha256": "1195b4d8390b09509261a1185d8cb574e74fb2e78d67ff352930e653f804c197"
+    },
+    {
+      "path": "domains/electronics/llmemb/llmemb_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/electronics/llmemb/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "2bfd78af85796230cf5364c8cdb253ac9024638e6a74e992103407b362fa4d43"
+    },
+    {
+      "path": "domains/electronics/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1879,
+      "sha256": "549d323dadc0723d4757fe832597cde325c53ea0f51c3704d475278208f66fa6"
+    },
+    {
+      "path": "domains/electronics/llmesr/external_score_coverage.csv",
+      "bytes": 229,
+      "sha256": "3feae30a097c3686a1cb57f25f2cf43efa647fe9f6f33cb9b96728c1da3cbfee"
+    },
+    {
+      "path": "domains/electronics/llmesr/ranking_metrics.csv",
+      "bytes": 586,
+      "sha256": "c739732aa11b82a50eedb4639fa3898578d339141eec54aedb055b583d2701b2"
+    },
+    {
+      "path": "domains/electronics/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1897,
+      "sha256": "3ec0e52910042e44757efc688d6e61fedd208deb03ab5a97ce5255a846e29d14"
+    },
+    {
+      "path": "domains/electronics/proex/external_score_coverage.csv",
+      "bytes": 229,
+      "sha256": "5c931797401ed26d4c5c0d7c394a5284307bf1912f0f5a4dd5f123209024f136"
+    },
+    {
+      "path": "domains/electronics/proex/ranking_metrics.csv",
+      "bytes": 584,
+      "sha256": "d9c7ae77537366568f342a01509dd61f588ca3b9677b6b75738710edd5e1dbb0"
+    },
+    {
+      "path": "domains/electronics/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1892,
+      "sha256": "7de4f3868d7df7bbdc2f0ebe6a4a019259048257d7d122feffb5cd47a3f4be64"
+    },
+    {
+      "path": "domains/electronics/promax/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "b12f1974b6a34c82e00e5f499bd4f54804b731329a8d1f70285757bf7d6e832d"
+    },
+    {
+      "path": "domains/electronics/promax/ranking_metrics.csv",
+      "bytes": 581,
+      "sha256": "cb6b117c80eefc18e87e1b742b7286566209302c31019ae0610b6ce311661ac8"
+    },
+    {
+      "path": "domains/electronics/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1894,
+      "sha256": "b0b403a5dd4f32561284b2deda3df7ce9b0c28ae020fdd4e2fae6ec3fe928437"
+    },
+    {
+      "path": "domains/electronics/rlmrec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "00002e364898911add3fc546658968f321ffa8c3b1e172221e6d1333f9c3825a"
+    },
+    {
+      "path": "domains/electronics/rlmrec/fairness_provenance.json",
+      "bytes": 7904,
+      "sha256": "97e5030e58af7a35f437d9564492ca87a1ce53e6d782749cd048d9bf77875612"
+    },
+    {
+      "path": "domains/electronics/rlmrec/ranking_metrics.csv",
+      "bytes": 586,
+      "sha256": "98dde448d7de0d578997668e2c252f7abd6f85c537b1c7c4334ddbd475aca264"
+    },
+    {
+      "path": "domains/electronics/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 9345,
+      "sha256": "22aa1dfe3ff5aabfdbc609132bb7ac6b719d23b18eda5c181199b1973f4d7de4"
+    },
+    {
+      "path": "domains/electronics/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/electronics/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1899,
+      "sha256": "6f6a09978204b0094bc3afc9728b429649d8d48ad713cccdea0ab73dad16f10d"
+    },
+    {
+      "path": "domains/movies/elmrec/external_score_coverage.csv",
+      "bytes": 228,
+      "sha256": "efe8226d0e428a1daefed94f7b8976ee8cacfd4a2c57850b163e567acaf54934"
+    },
+    {
+      "path": "domains/movies/elmrec/ranking_metrics.csv",
+      "bytes": 581,
+      "sha256": "d4d5cb8b9aa5b0682e317757aed34419fe9ad8857a108af41422f66002c2c7a9"
+    },
+    {
+      "path": "domains/movies/elmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1865,
+      "sha256": "9a9dd85c151da79a6f69a31eecf73fd6059f187c77d2a09e77d80bc148ddcedb"
+    },
+    {
+      "path": "domains/movies/irllrec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "f1bbf292409c86028a26e53f05feba85e26740ef6983799a00ab2ef6f9d40caa"
+    },
+    {
+      "path": "domains/movies/irllrec/ranking_metrics.csv",
+      "bytes": 579,
+      "sha256": "4efc3d1abe9f535d94b53ef6540f3f2e71630ddbdb7e8541fed7241dec3171bc"
+    },
+    {
+      "path": "domains/movies/irllrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1870,
+      "sha256": "9d1763ebc3ae14647165501de498fffd3a0e0d3684f5049bd7b32632769ccda0"
+    },
+    {
+      "path": "domains/movies/llm2rec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "8cc0bd00880e4fc913e865bd0448feb8e6e366dcb720b82800f0e97f0d1fd7da"
+    },
+    {
+      "path": "domains/movies/llm2rec/fairness_provenance.json",
+      "bytes": 8394,
+      "sha256": "c11c96a5221343c7271b177b6f6c2488f41618ff02093c59c2d38a402691d9c9"
+    },
+    {
+      "path": "domains/movies/llm2rec/llm2rec_official_run_summary.json",
+      "bytes": 13512,
+      "sha256": "9c170509022a61d085ef85d83a4f2b65e157c69a6a5d75ac9601b3b9369ee888"
+    },
+    {
+      "path": "domains/movies/llm2rec/llm2rec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/movies/llm2rec/ranking_metrics.csv",
+      "bytes": 573,
+      "sha256": "09a251ff00de7e063b580c0abdbae4965be5a8c1549596918f7ad0432be9167b"
+    },
+    {
+      "path": "domains/movies/llm2rec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1864,
+      "sha256": "dcfba8f8bd6aef71abbc91282b1e3887e81bf2643b0d01ba4e1c1d6f96a32e7a"
+    },
+    {
+      "path": "domains/movies/llmemb/external_score_coverage.csv",
+      "bytes": 222,
+      "sha256": "28aa07716fe4c2fcbf9c07782579f6e904a640503e8f8a870dee979678517b4a"
+    },
+    {
+      "path": "domains/movies/llmemb/fairness_provenance.json",
+      "bytes": 7725,
+      "sha256": "8ca8b9b89a305a78132898e86066d358d54bca46c0434b1d9e2616233b9d768e"
+    },
+    {
+      "path": "domains/movies/llmemb/llmemb_official_run_summary.json",
+      "bytes": 9131,
+      "sha256": "e78426d6a06dc5b4512fbe75ac8d5193603173a2adb2b6bde0b1b3718bbae5c7"
+    },
+    {
+      "path": "domains/movies/llmemb/llmemb_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/movies/llmemb/ranking_metrics.csv",
+      "bytes": 578,
+      "sha256": "1d11fd242811d738c0d3f9129b4328699e03150b8f2f6470e0ad1093df2b9753"
+    },
+    {
+      "path": "domains/movies/llmemb/same_candidate_external_baseline_summary.csv",
+      "bytes": 1850,
+      "sha256": "4c6c97292b13205c8440f9cacfe2301e199512ad55e9c381624f92f5aaef1ba7"
+    },
+    {
+      "path": "domains/movies/llmesr/external_score_coverage.csv",
+      "bytes": 229,
+      "sha256": "3feae30a097c3686a1cb57f25f2cf43efa647fe9f6f33cb9b96728c1da3cbfee"
+    },
+    {
+      "path": "domains/movies/llmesr/ranking_metrics.csv",
+      "bytes": 582,
+      "sha256": "36f2dd0bef1d89f668370911ec0190372cb0b34e0f9d82e43a999bd1b7a4f68f"
+    },
+    {
+      "path": "domains/movies/llmesr/same_candidate_external_baseline_summary.csv",
+      "bytes": 1868,
+      "sha256": "595b7e48a9f551bd005fa9200ca21635b1cf8948f6ea14234d651fa05cbf18fd"
+    },
+    {
+      "path": "domains/movies/proex/external_score_coverage.csv",
+      "bytes": 229,
+      "sha256": "5c931797401ed26d4c5c0d7c394a5284307bf1912f0f5a4dd5f123209024f136"
+    },
+    {
+      "path": "domains/movies/proex/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "97b1f44effa56b4da98d2f9d73755e8049ae3eaf09d98ef9a3345edbcee85e02"
+    },
+    {
+      "path": "domains/movies/proex/same_candidate_external_baseline_summary.csv",
+      "bytes": 1863,
+      "sha256": "8fc7d3da463fe7d8749bb06a1eff4e600487791466ed9390a83dcf0b32a70243"
+    },
+    {
+      "path": "domains/movies/promax/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "b12f1974b6a34c82e00e5f499bd4f54804b731329a8d1f70285757bf7d6e832d"
+    },
+    {
+      "path": "domains/movies/promax/ranking_metrics.csv",
+      "bytes": 580,
+      "sha256": "7c184be838324d439fcc7f6f290caccf716203b3fd3b8ec82f5bd7f8b81f7215"
+    },
+    {
+      "path": "domains/movies/promax/same_candidate_external_baseline_summary.csv",
+      "bytes": 1868,
+      "sha256": "0b55f36b849252259a7eb111c85997e2dac81d9407325a9305c6184fd9ad547d"
+    },
+    {
+      "path": "domains/movies/rlmrec/external_score_coverage.csv",
+      "bytes": 230,
+      "sha256": "00002e364898911add3fc546658968f321ffa8c3b1e172221e6d1333f9c3825a"
+    },
+    {
+      "path": "domains/movies/rlmrec/fairness_provenance.json",
+      "bytes": 7814,
+      "sha256": "6e39e6d9362e556d1c923ffeec9042d54968b737639cfa2558618562f3979883"
+    },
+    {
+      "path": "domains/movies/rlmrec/ranking_metrics.csv",
+      "bytes": 583,
+      "sha256": "407c849edd2691d658cb748dbdcae1cf3b9d469e018bbbea0245075bf9160b03"
+    },
+    {
+      "path": "domains/movies/rlmrec/rlmrec_official_run_summary.json",
+      "bytes": 9180,
+      "sha256": "958e630b2eb8a78526b8594aa75a8aa1559e1065c2f2064962558b431b8408b9"
+    },
+    {
+      "path": "domains/movies/rlmrec/rlmrec_official_score_audit.json",
+      "bytes": 285,
+      "sha256": "6e40b5b936273db6e82196afec5b1c649ac08c4db53949b1f33280888fc6c1b9"
+    },
+    {
+      "path": "domains/movies/rlmrec/same_candidate_external_baseline_summary.csv",
+      "bytes": 1871,
+      "sha256": "0bc7cc0af45e812a02d62d89f137aedf115d90726c3c025f2bafdab0b9594a6c"
+    }
+  ]
+}

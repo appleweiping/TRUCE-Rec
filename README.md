@@ -11,10 +11,15 @@ Current repository identity:
 - Historical remote alias in this checkout: `https://github.com/appleweiping/uncertainty-llm4rec.git`
 - Local path: `D:\Research\TRUCE-Rec`
 - Active branch: `main`
-- Current stage: Gate R1 server-first four-domain buildout with reused
-  Pony/Uncertainty official-qwen3base baseline evidence. No paper-result claim
-  is allowed until TRUCE Ours runs, ablations, and remaining audits are
-  imported and evaluated under the same protocol.
+- Current stage: **Method redesign + 8-domain performance buildout.** The eight official
+  baselines are complete and frozen in `data/official_baselines/` (8 domains × 8 baselines, 64
+  pairs). The open work is TRUCE-Rec's own method: the prior uncertainty-gate route did not beat
+  fallback in the R3 formal run, so the method is being redesigned (tri-agent ARIS). No
+  paper-result claim is allowed until TRUCE Ours runs, ablations, and remaining audits are
+  evaluated under the same protocol.
+
+> **Read first for setting/metrics/baselines:**
+> [`docs/experimental_setting_and_baselines.md`](docs/experimental_setting_and_baselines.md).
 
 ## Evidence Labels
 
@@ -129,41 +134,43 @@ review.
 
 ## Official Baseline Contract
 
-The paper-facing external baseline lane now reuses Pony/Uncertainty completed
-official-qwen3base same-candidate evidence:
+The paper-facing external comparison is the **eight official LLM4Rec baselines**, evaluated under
+TRUCE-Rec's shared same-candidate protocol on the **Qwen3-8B** backbone. The complete, frozen,
+lightweight evidence lives in [`data/official_baselines/`](data/official_baselines/): 64 pairs
+(8 domains × 8 baselines), master table `baseline_comparison_8domains.csv`, integrity manifest
+`IMPORT_MANIFEST.json`, and per-domain frontier `frontier_best_baseline_per_domain.csv`.
 
 ```text
-Pony official or official-code-level baseline run
-  + shared four-domain same-candidate task
-  + shared Qwen3-8B text/LLM backbone policy where applicable
-  + source_event_id,user_id,item_id,score
-  + copied TRUCE evidence package and tracked manifest
+official baseline run (official code @ pinned commit)
+  + 8-domain same-candidate task (101 candidates: 1 pos + 100 neg)
+  + Qwen3-8B backbone (LoRA where the method fine-tunes)
+  + official/default (or reported-optimal) baseline hyper-parameters
+  + declared, audited adaptation to the shared candidate schema
+  + score schema: source_event_id,user_id,item_id,score
 ```
 
-Rows enter TRUCE main baseline tables only when
-`artifact_class=completed_result`, `status_label=same_schema_external_baseline`,
-`implementation_status=official_completed`, and a local copied evidence package
-is present. Ours may tune hyperparameters only through the declared validation
-protocol. The score schema is:
+These baseline numbers are **frozen and reused as a shared reference, never re-run** (same baseline
++ same data + same protocol = same scores). TRUCE-Rec's own method is implemented, trained, and
+evaluated **fully independently** and is the only thing measured against this set. Ours may tune
+hyper-parameters only through the declared validation protocol; never on test.
 
-```text
-source_event_id,user_id,item_id,score
-```
+The eight official baselines:
 
-The current reused official baseline families are:
-
-| Role | Family | Current TRUCE status |
+| key | method | family |
 | --- | --- | --- |
-| Main | LLM2Rec | Pony completed rows reused where evidence package is present |
-| Main | LLM-ESR | Pony completed rows reused |
-| Main | LLMEmb | Pony completed rows reused |
-| Main | RLMRec | Pony completed rows reused |
-| Main | IRLLRec | Pony completed rows reused |
-| Main | ELMRec | Pony completed rows reused |
-| Main | ProEx | Pony completed rows reused |
-| Main | ProMax | Beauty reused; remaining domains pending |
+| `elmrec`  | ELMRec  | graph-enhanced LLM4Rec |
+| `irllrec` | IRLLRec | intent-aware LLM4Rec |
+| `llm2rec` | LLM2Rec | sequential (SASRec-style) LLM4Rec |
+| `llmemb`  | LLMEmb  | embedding-alignment LLM4Rec |
+| `llmesr`  | LLM-ESR | LLM-enhanced sequential rec |
+| `proex`   | ProEx   | profile / explanation LLM4Rec |
+| `promax`  | ProMax  | profile-based LLM4Rec |
+| `rlmrec`  | RLMRec  | graph-contrastive representation LLM4Rec |
 
-See `docs/pony_official_baseline_reuse.md`.
+Domains: beauty (973 users, supplementary smaller-N), books / electronics / movies / sports / toys
+/ home / tools (10,000 users each).
+
+See `data/official_baselines/README.md` and `docs/experimental_setting_and_baselines.md`.
 
 ## Key Commands
 
@@ -217,6 +224,12 @@ List required artifacts for a planned run:
 
 ## Important Docs
 
+- `docs/experimental_setting_and_baselines.md`: **authoritative** setting, metrics, the 8 official
+  baselines, frozen evidence location, and the per-domain SOTA bar. Read this first.
+- `docs/method_redesign_decision.md`: tri-agent method-redesign brief, proposals, critique, and the
+  selected SOTA-targeting method (replaces the fallback-losing uncertainty-gate route).
+- `docs/followup_experiment_plan.md`: the three required follow-up experiments (observation,
+  ablation, hyper-parameter analysis) + overview figure, scheduled after the performance table.
 - `AGENTS.md`: engineering and research governance rules.
 - `docs/PROJECT_MEMORY.md`: durable future-agent memory and current project
   direction.

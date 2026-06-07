@@ -26,7 +26,9 @@ You are working on TRUCE-Rec: Uncertainty-Aware Generative Recommendation with T
 5. Four domains: Beauty, Books, Electronics, Movies
 6. MockLLM for development; real LLM (API/HF) for official runs only
 7. Follow gate system: no advancement without gate criteria met
-8. **实时更新硬规则**：每完成一个阶段、一个 step、一次错误排除、一次贡献，必须立即更新 memory（`D:\research\Vipin's Knowledgebase\memory\`）和项目文档（PROJECT_MEMORY.md, PHASE_HANDOFF.md 等）。不攒着，不跳过。违反等于工作没做。
+8. **实时更新硬规则**：每完成一个阶段、一个 step、一次错误排除、一次贡献，必须立即更新 memory（agentmemory MCP）和项目文档（PROJECT_MEMORY.md, experimental_setting_and_baselines.md 等）。不攒着，不跳过。违反等于工作没做。
+9. **本地↔服务器对齐硬规则**：代码/configs/docs 两边一致；实验在服务器跑，commit/push 只从本地；服务器产出后把轻量证据（metrics/provenance/manifests，非多 GB 文件）打包回本地。除非服务器磁盘满 / API 故障 / 用户喊停，否则不要停。详见 `docs/PROJECT_MEMORY.md` 的 "Local ↔ Server Alignment Discipline"。
+10. **8 域 8 baseline 已冻结**：官方 baseline 证据在 `data/official_baselines/`（64 对，read-only，永不重跑）。setting/metrics/baselines/SOTA bar 一律以 `docs/experimental_setting_and_baselines.md` 为准。
 
 ## Research Direction
 Uncertainty-aware generative recommendation:
@@ -35,15 +37,19 @@ Uncertainty-aware generative recommendation:
 - Key components: CU-GR framework, uncertainty policy, preference fusion, override calibrator
 - Ablation: each component must show independent contribution
 
-## Current Gate (R1 → R2 transition)
+## Current Gate (method redesign → beauty-first SOTA)
 - Infrastructure: COMPLETE (evaluator, metrics, baselines, configs, tests)
-- Ours method (CURE/TRUCE): IMPLEMENTED, smoke-tested
-- Official baselines: 共享 8 个外部 baseline (LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, ELMRec, ProEx, ProMax)，分数可复用
-- Six-domain experiments: IN PROGRESS (beauty/books/electronics/movies converted, sports/toys preprocessing)
-- Server deployment: COMPLETE (~/projects/TRUCE-Rec on pony-rec-gpu)
-- Novelty: CONFIRMED safe (2026-05-21 literature check)
-- Paper sections: DRAFT (intro, method, notation, related)
-- Qwen3-8B observation: RUNNING on beauty domain (973 examples)
+- Official baselines: **COMPLETE & FROZEN** — 8 official methods × 8 domains (64 pairs) in
+  `data/official_baselines/`, reused as shared reference, never re-run.
+- Setting: 8 domains (beauty 973 + 7 domains @10k), 101-candidate, Qwen3-8B. SOTA bar per domain in
+  `docs/experimental_setting_and_baselines.md` (beauty bar = ProEx NDCG@10 0.1506).
+- Ours method: **UNDER REDESIGN** — prior uncertainty-gate route lost to fallback-only in the R3
+  formal run (`docs/r3_ours_error_decomposition.md`). Tri-agent ARIS redesign →
+  `docs/method_redesign_decision.md`.
+- Server: pony-rec-gpu, **BUSY with another project — no runs until user says go**. First run =
+  beauty-first formal Ours run.
+- Follow-up after performance table: observation / ablation / hyper-parameter analysis + overview
+  figure (`docs/followup_experiment_plan.md`).
 
 ## Server Access
 
