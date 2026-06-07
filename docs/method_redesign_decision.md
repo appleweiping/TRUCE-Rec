@@ -176,11 +176,30 @@ This is an afternoon of re-scoring on one 4090, and it independently tests every
 
 ## 8. Open items before the formal run (no GPU needed)
 
-1. Implement SCALR in `src/llm4rec/methods/` (new module; retire the gate path from the main lane).
-2. Mock/smoke test the scoring contract (101 scores, schema `source_event_id,user_id,item_id,score`).
-3. Decide the readout (full 101 vs sub-panel chunking) on a tiny local fixture.
-4. Wire the beauty kill-test ladder (variants 1-6) as a re-scoring script over one checkpoint.
-5. Server run only on the user's go-ahead (server busy). First target: beat ProEx 0.1506 on beauty.
+1. ~~Implement SCALR in `src/llm4rec/methods/`~~ **DONE** — `src/llm4rec/methods/scalr.py`
+   (pure scoring core + `SCALRRanker` + `PanelScorer` abstraction + `MockPanelScorer`).
+2. ~~Mock/smoke test the scoring contract~~ **DONE** — `tests/unit/test_scalr.py` (13) +
+   `tests/smoke/test_scalr_pipeline.py` (2, incl. end-to-end through the real evaluator). 15/15 pass,
+   no regressions. The scoring contract (101 scores, schema `source_event_id,user_id,item_id,score`)
+   is validated; uncertainty terms reorder; no gating/generation.
+3. **TODO (no GPU):** decide the 101-item readout (full panel vs sub-panel chunking) on a fixture.
+4. **TODO (no GPU):** implement the real `PanelScorer` (Qwen3-8B+LoRA, title-span pooling) behind the
+   same interface; wire SCALR into the experiment runner/registry + a `configs/methods/scalr.yaml` and
+   `configs/experiments/` entry; wire the beauty kill-test ladder (variants 1-6) as a re-scoring script.
+5. **Server run only on the user's go-ahead** (server busy). First target: beat ProEx 0.1506 on beauty.
+
+### Implementation notes (2026-06-07)
+
+- The Qwen3-8B+LoRA cross-encoder `f_θ` is abstracted as `PanelScorer.score_panel(PanelScoreRequest)
+  -> {candidate_id: score}`; SCALR's scoring/ranking logic has **zero GPU/model dependency** and is
+  fully unit-tested with `MockPanelScorer`. The real scorer drops in behind this interface server-side.
+- Pure, separately-tested functions: `popularity_residual_lift`, `panel_instability`, `echo_risk`,
+  `global_recalibrate` (+ `MonotoneCalibration` PAV isotonic), `combine_scores` (additive form),
+  `perturbed_panels` (R reorderings). `SCALRRanker` implements the `BaseRanker` `fit`/`rank` contract
+  and builds train-only popularity + category-neighbor (echo) indices; `fit_calibration` fits the
+  global monotone map on a disjoint split; `set_hyperparams` applies validation-selected `λ, β`.
+- The echo neighbor index is currently a leakage-free category-overlap proxy; the trained adapter
+  will supply a finer echo signal behind the same lookup.
 
 ## 9. Participants & record
 
