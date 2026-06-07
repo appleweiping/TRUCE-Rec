@@ -1,9 +1,16 @@
 # Method Redesign Decision — TRUCE-Rec "Ours"
 
+> **⚠️ SUPERSEDED (2026-06-07, same day).** A subsequent ≥20-iteration tri-agent upgrade evolved
+> SCALR (this doc) into **CALM-Rec** — see **`docs/method_calm_rec_spec.md`** (the live method, ARIS
+> 9.0/10). SCALR was found to be a single debiased listwise scorer + two additive penalties: enough
+> to *match* but not *beat* strong baselines (rank-1 personalization bottleneck). This doc is kept for
+> the design history and the shared discipline (falsifiability contract, leakage rules) that CALM-Rec
+> inherits. Read the CALM-Rec spec for the current method.
+
 **Date:** 2026-06-07
 **Process:** tri-agent ARIS discussion (Opus 4.8 lead + Opus 4.8 #2 + GPT-5.5 xhigh), 5 steps.
-**Status:** DESIGN LOCKED, passed the ARIS ≥8/10 design gate (see §6). Implementation pending;
-formal run BLOCKED until the user frees the server (currently busy with another project).
+**Status:** SUPERSEDED by CALM-Rec. (SCALR scoring core remains implemented as an ablation/diagnostic
+reference.)
 **Replaces:** the `ours_uncertainty_guided` / conservative-gate route, which lost to fallback-only
 in the R3 formal run (`docs/r3_ours_error_decomposition.md`). That route is retired for the main
 method (kept only as legacy/diagnostic).

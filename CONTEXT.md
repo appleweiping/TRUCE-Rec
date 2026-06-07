@@ -5,11 +5,11 @@
 | Metric | Value |
 |--------|-------|
 | GitHub | https://github.com/appleweiping/TRUCE-Rec |
-| Stage | Method redesign (prior formal method did not beat fallback; see below) |
+| Stage | Method locked (CALM-Rec); 8-domain performance buildout |
 | Official baselines | 8 official LLM4Rec methods, frozen evidence in `data/official_baselines/` |
 | Setting | 8 domains, 101-candidate (1 pos + 100 neg), Qwen3-8B backbone |
 | Domains | beauty(973), books, electronics, movies, sports, toys, home, tools (10k each) |
-| Method | UNDER REDESIGN — prior CU-GR/uncertainty-gate route lost to fallback (R3) |
+| Method | CALM-Rec (Calibrated trust over Attribute-anchored Latent Multi-intent); scoring core implemented + tested |
 | LLM providers | Qwen3-8B local (server), MockLLM (dev) |
 | Python | >=3.10 |
 | Server | pony-rec-gpu (`~/projects/TRUCE-Rec`); BUSY with another project — no runs yet |
@@ -46,12 +46,13 @@ TRUCE adds:
 The performance phase = **8 domains × (Ours + 8 official baselines)** under the frozen setting.
 Baselines are done (frozen evidence); the gap is **TRUCE-Rec's own method**.
 
-- [ ] **Method redesign** (active): prior uncertainty-gate route lost to fallback-only in the R3
-      formal run. Tri-agent ARIS discussion to design a non-stitched, SOTA-targeting method aligned
-      to the 8-baseline setting + Qwen3-8B. See `docs/method_redesign_decision.md`.
-- [ ] **Beauty-first formal run** (BLOCKED — server busy with another project; run only on user
-      go-ahead): bring Ours to SOTA on beauty (beat ProEx NDCG@10 0.1506). If it can't, re-run the
-      tri-agent discussion and iterate until beauty is SOTA.
+- [x] **Method locked: CALM-Rec** — evolved from SCALR over a ≥20-iteration tri-agent upgrade
+      (ARIS 9.0/10). Headline = endogenous per-user-item calibrated trust between an LLM multi-intent
+      score and a history-free prior. Scoring core implemented + tested (no GPU). See
+      `docs/method_calm_rec_spec.md`. Remaining no-GPU work: real Qwen3-8B encoders + 3-stage trainer.
+- [ ] **Beauty-first formal run** (BLOCKED — server busy; run only on user go-ahead): bring CALM-Rec
+      to SOTA on beauty (beat ProEx NDCG@10 0.1506); priority-1 = real ρ vs placebo + stage-2.5 AUC
+      gate. If it can't, re-run the tri-agent discussion and iterate until beauty is SOTA.
 - [ ] Roll the validated method out to the other seven domains.
 - [ ] Then the three required follow-up experiments + overview figure (see
       `docs/followup_experiment_plan.md`): observation, ablation, hyper-parameter analysis.

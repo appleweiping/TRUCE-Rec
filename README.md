@@ -11,12 +11,12 @@ Current repository identity:
 - Historical remote alias in this checkout: `https://github.com/appleweiping/uncertainty-llm4rec.git`
 - Local path: `D:\Research\TRUCE-Rec`
 - Active branch: `main`
-- Current stage: **Method redesign + 8-domain performance buildout.** The eight official
+- Current stage: **Method locked (CALM-Rec) + 8-domain performance buildout.** The eight official
   baselines are complete and frozen in `data/official_baselines/` (8 domains × 8 baselines, 64
-  pairs). The open work is TRUCE-Rec's own method: the prior uncertainty-gate route did not beat
-  fallback in the R3 formal run, so the method is being redesigned (tri-agent ARIS). No
-  paper-result claim is allowed until TRUCE Ours runs, ablations, and remaining audits are
-  evaluated under the same protocol.
+  pairs). TRUCE-Rec's own method — after the prior uncertainty-gate route lost to fallback in R3 —
+  is **CALM-Rec** (Calibrated trust over Attribute-anchored Latent Multi-intent), locked via a
+  ≥20-iteration tri-agent upgrade (ARIS 9.0/10); scoring core implemented + tested. No paper-result
+  claim is allowed until CALM-Rec runs, ablations, and audits are evaluated under the same protocol.
 
 > **Read first for setting/metrics/baselines:**
 > [`docs/experimental_setting_and_baselines.md`](docs/experimental_setting_and_baselines.md).
@@ -226,8 +226,10 @@ List required artifacts for a planned run:
 
 - `docs/experimental_setting_and_baselines.md`: **authoritative** setting, metrics, the 8 official
   baselines, frozen evidence location, and the per-domain SOTA bar. Read this first.
-- `docs/method_redesign_decision.md`: tri-agent method-redesign brief, proposals, critique, and the
-  selected SOTA-targeting method (replaces the fallback-losing uncertainty-gate route).
+- `docs/method_calm_rec_spec.md`: **the live Ours method — CALM-Rec** (Calibrated trust over
+  Attribute-anchored Latent Multi-intent), locked via a ≥20-iteration tri-agent upgrade (ARIS 9.0/10).
+- `docs/method_redesign_decision.md`: SCALR (superseded by CALM-Rec) — design history + the shared
+  falsifiability/leakage discipline CALM-Rec inherits.
 - `docs/followup_experiment_plan.md`: the three required follow-up experiments (observation,
   ablation, hyper-parameter analysis) + overview figure, scheduled after the performance table.
 - `AGENTS.md`: engineering and research governance rules.

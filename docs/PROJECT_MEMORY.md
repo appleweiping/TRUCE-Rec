@@ -20,11 +20,15 @@ Last major update: 2026-06-07.
   metrics/coverage/provenance + sha256 manifest). These are reused as a shared reference and are
   **never re-run**. Beauty SOTA bar = **ProEx NDCG@10 0.1506 / HR@10 0.2528 / MRR 0.1429**;
   the other 7 domains are led by LLMEmb.
-- **Ours method: UNDER REDESIGN.** The prior `ours_uncertainty_guided` / conservative-gate route
-  did **not** beat fallback-only in the R3 formal run (Ours Recall@10 0.0524 vs fallback 0.0591;
-  confidence ECE 0.85; accepted overrides only hurt — see `docs/r3_ours_error_decomposition.md`).
-  A tri-agent ARIS redesign produces the replacement method; decision in
-  `docs/method_redesign_decision.md`.
+- **Ours method: CALM-Rec (LOCKED, ARIS 9.0/10).** The prior `ours_uncertainty_guided` /
+  conservative-gate route did **not** beat fallback-only in the R3 formal run
+  (`docs/r3_ours_error_decomposition.md`) — retired. A first tri-agent redesign produced SCALR
+  (`docs/method_redesign_decision.md`); a follow-up **≥20-iteration** tri-agent upgrade found SCALR
+  was only rank-1 personalization (matches but can't beat baselines) and evolved it into **CALM-Rec**
+  (Calibrated trust over Attribute-anchored Latent Multi-intent) — see **`docs/method_calm_rec_spec.md`**.
+  Headline = endogenous per-user-item *calibrated trust* between an LLM multi-intent personalized
+  score and a history-free prior (multi-intent is the vehicle). Scoring core implemented + tested
+  (no GPU); real Qwen3-8B encoders + trainer are the remaining no-GPU TODO.
 - **Server:** pony-rec-gpu `~/projects/TRUCE-Rec`. **BUSY with another project — run NO experiments
   until the user gives the go-ahead.** First run when unblocked = beauty-first formal Ours run.
 - **Follow-up (after the 8-domain performance table):** observation, ablation, hyper-parameter
@@ -477,12 +481,15 @@ Future agents should perform real maintenance:
 
 ## Current Next Moves
 
-1. **Method redesign** (active, no GPU needed): finish the tri-agent ARIS discussion and lock the
-   replacement method in `docs/method_redesign_decision.md`; implement it in
-   `src/llm4rec/methods/` with mock/smoke tests. Must clear the ARIS ≥8/10 design gate before any
-   formal run.
-2. **Beauty-first formal run** (BLOCKED on server availability — user will say when): run Ours on
-   beauty under the frozen protocol, target SOTA (beat ProEx NDCG@10 0.1506). If not SOTA, re-run
+1. **Finish CALM-Rec implementation** (no GPU): the scoring core + ranker + mocks + tests are DONE
+   (`src/llm4rec/methods/calm_rec.py`, `tests/unit/test_calm_rec.py`,
+   `tests/smoke/test_calm_rec_pipeline.py`). Remaining no-GPU work: real Qwen3-8B `ItemEncoder` /
+   `IntentEncoder` (attribute soft-prompt anchors, title-span pooling), weak-label pipeline +
+   lexicon YAML, the 3-stage trainer, runner/registry wiring + `configs/methods/calm_rec.yaml`, and
+   the falsifiability ladder + stage-2.5 AUC gate as scripts. Spec: `docs/method_calm_rec_spec.md`.
+2. **Beauty-first formal run** (BLOCKED on server availability — user will say when): run CALM-Rec on
+   beauty under the frozen protocol, target SOTA (beat ProEx NDCG@10 0.1506). **Priority-1 experiment
+   = real ρ vs variance-matched placebo** + the stage-2.5 reliability AUC gate. If not SOTA, re-run
    the tri-agent discussion and iterate on beauty until it is.
 3. **Roll out** the validated method to the other 7 domains (same protocol).
 4. **Follow-up experiments** (`docs/followup_experiment_plan.md`): observation, ablation,
