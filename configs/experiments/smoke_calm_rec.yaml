@@ -1,0 +1,29 @@
+# Smoke run for CALM-Rec on the tiny fixture dataset (CPU, hashed backend, no GPU/model).
+# Verifies the full runner -> ranker -> evaluator path end to end. NOT paper evidence.
+seed: 13
+run_name: smoke_calm_rec
+output_dir: outputs/runs
+domain: tiny
+dataset:
+  name: tiny
+  config_path: configs/datasets/tiny.yaml
+  processed_dir: data/processed/tiny/phase1
+split: test
+candidate:
+  protocol: full
+  k: null
+  seed: 13
+method:
+  config_path: configs/methods/calm_rec.yaml
+llm:
+  config_path: configs/llm/mock.yaml
+  response_mode: generative_correct
+evaluation:
+  config_path: configs/evaluation/full.yaml
+  top_k: [1, 5, 10]
+top_k: [1, 5, 10]
+logging:
+  level: INFO
+output:
+  run_name: smoke_calm_rec
+  output_dir: outputs/runs

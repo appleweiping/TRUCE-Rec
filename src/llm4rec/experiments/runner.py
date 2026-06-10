@@ -25,6 +25,8 @@ from llm4rec.llm.mock_provider import MockLLMProvider
 from llm4rec.llm.openai_provider import OpenAICompatibleProvider
 from llm4rec.llm.response_cache import ResponseCache
 from llm4rec.methods.ours_method import OursMethodRanker
+from llm4rec.methods.calm_rec import CALMConfig, CALMRecRanker
+from llm4rec.methods.calm_encoders import build_encoders
 from llm4rec.rankers.base import BaseRanker
 from llm4rec.rankers.bm25 import BM25Ranker
 from llm4rec.rankers.llm_generative import LLMConfidenceObservationRanker, LLMGenerativeRanker
@@ -616,6 +618,24 @@ def _build_ranker(config: dict[str, Any], *, run_dir: Path | None = None) -> Bas
             provider=_build_llm_provider(config, run_dir=run_dir),
             method_name=str(params.get("prediction_method") or "llm_confidence_observation_mock"),
             text_policy=str(params.get("text_policy") or "title"),
+        )
+    if method in {"calm_rec", "calm"}:
+        backend = str(params.get("backend") or "hashed")
+        n_intents = int(params.get("n_intents") or params.get("K") or 4)
+        item_encoder, intent_encoder = build_encoders(
+            backend=backend,
+            n_intents=n_intents,
+            dim=int(params.get("dim") or 64),
+            qwen_model_path=params.get("qwen_model_path"),
+            qwen_lora_path=params.get("qwen_lora_path"),
+            seed=seed,
+        )
+        return CALMRecRanker(
+            item_encoder=item_encoder,
+            intent_encoder=intent_encoder,
+            config=CALMConfig.from_params(params),
+            method_config=method_config,
+            seed=seed,
         )
     if _is_ours_method(method, method_config):
         return OursMethodRanker(

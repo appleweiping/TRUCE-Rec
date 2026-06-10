@@ -165,16 +165,27 @@ grad-checkpoint fits 24 GB. Beauty trains (3 stages) + infers in **hours**.
 
 ## 12. Implementation status & next steps
 
-- **DONE (no GPU):** scoring core + `CALMRecRanker` + encoder abstractions + deterministic mocks in
-  `src/llm4rec/methods/calm_rec.py`; `reliability_auc` stage-2.5 gate; tests
-  `tests/unit/test_calm_rec.py` (13) + `tests/smoke/test_calm_rec_pipeline.py` (2) — 15/15 pass, no
-  regressions, numpy-free.
-- **TODO (no GPU):** real `ItemEncoder`/`IntentEncoder` (Qwen3-8B + LoRA, attribute soft-prompt
-  anchors, title-span pooling); weak-label pipeline + lexicon YAML; the 3-stage trainer; wire into the
-  experiment runner/registry + `configs/methods/calm_rec.yaml`; the falsifiability ladder + stage-2.5
-  AUC gate as scripts.
+- **DONE (no GPU), tested:**
+  - Scoring core + `CALMRecRanker` + encoder abstractions + deterministic mocks —
+    `src/llm4rec/methods/calm_rec.py`.
+  - Encoders: `calm_encoders.py` — `HashedItemEncoder`/`LexiconIntentEncoder` (CPU, runs anywhere) +
+    gated `QwenItemEncoder`/`QwenIntentEncoder` (server path) + `build_encoders` factory.
+  - Weak-labels: `calm_weak_labels.py` (attribute lexicon, deterministic soft-labeling) +
+    `scripts/build_calm_weak_labels.py` (verified: 254/479 real beauty items get a dominant facet).
+  - 3-stage trainer scaffold + leakage-clean Stage-A stats + Stage-C ρ calibration + the stage-2.5
+    reliability gate — `calm_trainer.py`.
+  - Runner wiring (method `calm_rec`), `configs/methods/calm_rec.yaml`,
+    `configs/experiments/smoke_calm_rec.yaml`; runs end-to-end through the official runner + evaluator.
+  - Falsifiability ladder + verdict — `scripts/run_calm_rec.py`.
+  - Tests: `tests/unit/test_calm_rec.py` (13) + `tests/unit/test_calm_encoders.py` (11) +
+    `tests/smoke/test_calm_rec_pipeline.py` (2) + `tests/smoke/test_calm_rec_runner.py` (1) — all pass,
+    numpy-free, no regressions.
+- **TODO (the only remaining work):** implement the real Qwen3-8B forward inside
+  `QwenItemEncoder.encode` (cached) and the Qwen3-8B+LoRA Stage-B gradient loop behind
+  `QwenIntentEncoder` (the contract it must satisfy is already exercised by the hashed encoders).
+  Everything that *consumes* the encoders/trainer exists. See `docs/CALM_REC_RUNBOOK.md` §2.2-2.3.
 - **Server run only on the user's go-ahead** (server busy). First experiment priority: **real ρ vs
-  placebo** + beat ProEx 0.1506 on beauty.
+  placebo** + beat ProEx 0.1506 on beauty. **Any future agent: follow `docs/CALM_REC_RUNBOOK.md`.**
 
 ## 13. ARIS design-gate score (lead ruling, post-20-iteration)
 

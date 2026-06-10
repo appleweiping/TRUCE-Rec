@@ -9,6 +9,10 @@ Last major update: 2026-06-07.
 > **Authoritative setting reference:** `docs/experimental_setting_and_baselines.md`
 > (8 domains, 101-candidate protocol, Qwen3-8B, the 8 official baselines, frozen evidence in
 > `data/official_baselines/`, per-domain SOTA bar). Read it before any experiment/method/paper work.
+>
+> **Standing procedure for any future agent:** `docs/CALM_REC_RUNBOOK.md` — how to run experiments and
+> write the paper, end to end. The method is designed + implemented; follow the runbook, don't
+> re-derive rules.
 
 ## Status Snapshot (2026-06-07)
 
@@ -481,12 +485,12 @@ Future agents should perform real maintenance:
 
 ## Current Next Moves
 
-1. **Finish CALM-Rec implementation** (no GPU): the scoring core + ranker + mocks + tests are DONE
-   (`src/llm4rec/methods/calm_rec.py`, `tests/unit/test_calm_rec.py`,
-   `tests/smoke/test_calm_rec_pipeline.py`). Remaining no-GPU work: real Qwen3-8B `ItemEncoder` /
-   `IntentEncoder` (attribute soft-prompt anchors, title-span pooling), weak-label pipeline +
-   lexicon YAML, the 3-stage trainer, runner/registry wiring + `configs/methods/calm_rec.yaml`, and
-   the falsifiability ladder + stage-2.5 AUC gate as scripts. Spec: `docs/method_calm_rec_spec.md`.
+1. **CALM-Rec implementation (mostly DONE, no GPU):** scoring core + ranker + encoders (hashed CPU +
+   gated Qwen) + weak-labels + 3-stage trainer scaffold + stage-2.5 gate + runner wiring + configs +
+   `scripts/run_calm_rec.py` + `scripts/build_calm_weak_labels.py` + 27 tests — all green, runs
+   end-to-end through the official runner/evaluator on CPU. **Only remaining work:** the real Qwen3-8B
+   forward in `QwenItemEncoder` + the Qwen+LoRA Stage-B gradient loop (the contract is already
+   exercised by the hashed encoders). Procedure: `docs/CALM_REC_RUNBOOK.md` §2.2-2.3.
 2. **Beauty-first formal run** (BLOCKED on server availability — user will say when): run CALM-Rec on
    beauty under the frozen protocol, target SOTA (beat ProEx NDCG@10 0.1506). **Priority-1 experiment
    = real ρ vs variance-matched placebo** + the stage-2.5 reliability AUC gate. If not SOTA, re-run

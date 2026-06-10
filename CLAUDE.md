@@ -43,12 +43,12 @@ Uncertainty-aware generative recommendation:
   `data/official_baselines/`, reused as shared reference, never re-run.
 - Setting: 8 domains (beauty 973 + 7 domains @10k), 101-candidate, Qwen3-8B. SOTA bar per domain in
   `docs/experimental_setting_and_baselines.md` (beauty bar = ProEx NDCG@10 0.1506).
-- Ours method: **CALM-Rec (LOCKED, ARIS 9.0/10)** — Calibrated trust over Attribute-anchored Latent
-  Multi-intent. Headline = endogenous per-user-item calibrated trust between an LLM multi-intent score
-  and a history-free prior. Evolved from SCALR over a ≥20-iteration tri-agent upgrade after SCALR was
-  found to be rank-1 (matches but can't beat baselines). Spec: `docs/method_calm_rec_spec.md`. Scoring
-  core implemented + tested (`src/llm4rec/methods/calm_rec.py`, 15 tests). Prior gate route retired
-  (lost to fallback in R3, `docs/r3_ours_error_decomposition.md`).
+- Ours method: **CALM-Rec (LOCKED, ARIS 9.0/10), implemented (CPU) + tested.** Calibrated trust over
+  Attribute-anchored Latent Multi-intent. Headline = endogenous per-user-item calibrated trust between
+  an LLM multi-intent score and a history-free prior. Spec: `docs/method_calm_rec_spec.md`. Code:
+  `src/llm4rec/methods/calm_{rec,encoders,weak_labels,trainer}.py` (+27 tests, runs through the
+  official runner). Only remaining: real Qwen3-8B encoder forward + Stage-B LoRA loop.
+  **Any agent: follow `docs/CALM_REC_RUNBOOK.md` for experiments + paper — don't re-derive rules.**
 - Server: pony-rec-gpu, **BUSY with another project — no runs until user says go**. First run =
   beauty-first formal Ours run.
 - Follow-up after performance table: observation / ablation / hyper-parameter analysis + overview

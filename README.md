@@ -20,6 +20,10 @@ Current repository identity:
 
 > **Read first for setting/metrics/baselines:**
 > [`docs/experimental_setting_and_baselines.md`](docs/experimental_setting_and_baselines.md).
+>
+> **Future agents — how to run experiments + write the paper:**
+> [`docs/CALM_REC_RUNBOOK.md`](docs/CALM_REC_RUNBOOK.md). The method (CALM-Rec) is designed and
+> implemented; the runbook is the standing procedure — read it and execute, don't re-derive rules.
 
 ## Evidence Labels
 
@@ -174,6 +178,16 @@ See `data/official_baselines/README.md` and `docs/experimental_setting_and_basel
 
 ## Key Commands
 
+Run the Ours method (CALM-Rec) smoke + falsifiability ladder (CPU, no GPU):
+
+```powershell
+.\.venv\bin\python.exe -m pytest tests/unit/test_calm_rec.py tests/unit/test_calm_encoders.py tests/smoke/test_calm_rec_pipeline.py tests/smoke/test_calm_rec_runner.py
+py -3 scripts\build_calm_weak_labels.py --processed-dir data/processed/<domain> --out outputs/calm/<domain>
+py -3 scripts\run_calm_rec.py --processed-dir data/processed/tiny/phase1 --out outputs/calm/tiny --backend hashed --sota-ndcg10 0.0
+```
+
+See `docs/CALM_REC_RUNBOOK.md` for the full beauty-first → 8-domain → paper procedure.
+
 Run smoke baselines:
 
 ```powershell
@@ -228,6 +242,8 @@ List required artifacts for a planned run:
   baselines, frozen evidence location, and the per-domain SOTA bar. Read this first.
 - `docs/method_calm_rec_spec.md`: **the live Ours method — CALM-Rec** (Calibrated trust over
   Attribute-anchored Latent Multi-intent), locked via a ≥20-iteration tri-agent upgrade (ARIS 9.0/10).
+- `docs/CALM_REC_RUNBOOK.md`: **standing operating procedure for any future agent** — how to run the
+  experiments and write the paper, end to end. Read this and execute; the rules are all there.
 - `docs/method_redesign_decision.md`: SCALR (superseded by CALM-Rec) — design history + the shared
   falsifiability/leakage discipline CALM-Rec inherits.
 - `docs/followup_experiment_plan.md`: the three required follow-up experiments (observation,

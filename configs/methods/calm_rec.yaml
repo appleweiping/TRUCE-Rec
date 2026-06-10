@@ -1,0 +1,19 @@
+# CALM-Rec — Calibrated trust over Attribute-anchored Latent Multi-intent (TRUCE-Rec Ours v2).
+# Live method. Full spec: docs/method_calm_rec_spec.md. Runbook: docs/CALM_REC_RUNBOOK.md.
+#
+# Headline: learn per-user-item how much to trust the LLM K-intent personalized score vs a
+# history-free prior, using the intent mixture's own responsibility entropy + ensemble variance
+# as an endogenous reliability signal. Multi-intent = vehicle; calibrated trust = contribution.
+# Uncertainty REORDERS via score mixing; it never gates / accepts / abstains.
+name: calm_rec
+description: "Set-aware K-intent mixture-energy scorer with per-intent popularity residualization and a per-user-item calibrated trust gate between personalization and a history-free prior."
+params:
+  backend: hashed
+  n_intents: 4
+  dim: 64
+  tau: 2.0
+  m_dropout: 4
+  max_history: 20
+  use_trust_gate: true
+  rho_floor: 0.15
+seed: 0

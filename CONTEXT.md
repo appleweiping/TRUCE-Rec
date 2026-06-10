@@ -9,7 +9,7 @@
 | Official baselines | 8 official LLM4Rec methods, frozen evidence in `data/official_baselines/` |
 | Setting | 8 domains, 101-candidate (1 pos + 100 neg), Qwen3-8B backbone |
 | Domains | beauty(973), books, electronics, movies, sports, toys, home, tools (10k each) |
-| Method | CALM-Rec (Calibrated trust over Attribute-anchored Latent Multi-intent); scoring core implemented + tested |
+| Method | CALM-Rec (Calibrated trust over Attribute-anchored Latent Multi-intent); implemented (CPU) + tested, wired into runner |
 | LLM providers | Qwen3-8B local (server), MockLLM (dev) |
 | Python | >=3.10 |
 | Server | pony-rec-gpu (`~/projects/TRUCE-Rec`); BUSY with another project — no runs yet |
@@ -17,6 +17,9 @@
 > **Read first:** [`docs/experimental_setting_and_baselines.md`](docs/experimental_setting_and_baselines.md)
 > — authoritative setting, metrics, the 8 official baselines, frozen evidence location, and the
 > per-domain SOTA bar (beauty bar = ProEx NDCG@10 0.1506).
+>
+> **Future agents — run experiments + write the paper:** [`docs/CALM_REC_RUNBOOK.md`](docs/CALM_REC_RUNBOOK.md).
+> Method (CALM-Rec) is designed + implemented; follow the runbook, don't re-derive rules.
 
 ## Research Thesis
 LLM-based recommenders generate plausible suggestions but lack calibrated confidence.
@@ -46,10 +49,11 @@ TRUCE adds:
 The performance phase = **8 domains × (Ours + 8 official baselines)** under the frozen setting.
 Baselines are done (frozen evidence); the gap is **TRUCE-Rec's own method**.
 
-- [x] **Method locked: CALM-Rec** — evolved from SCALR over a ≥20-iteration tri-agent upgrade
-      (ARIS 9.0/10). Headline = endogenous per-user-item calibrated trust between an LLM multi-intent
-      score and a history-free prior. Scoring core implemented + tested (no GPU). See
-      `docs/method_calm_rec_spec.md`. Remaining no-GPU work: real Qwen3-8B encoders + 3-stage trainer.
+- [x] **Method locked + implemented: CALM-Rec** — evolved from SCALR over a ≥20-iteration tri-agent
+      upgrade (ARIS 9.0/10). Scoring core + encoders + weak-labels + 3-stage trainer scaffold +
+      stage-2.5 gate + runner wiring + configs + scripts + 27 tests, all CPU/no-GPU, runs end-to-end
+      through the official runner/evaluator. Only remaining: real Qwen3-8B encoder forward + Stage-B
+      LoRA loop. Spec `docs/method_calm_rec_spec.md`; procedure `docs/CALM_REC_RUNBOOK.md`.
 - [ ] **Beauty-first formal run** (BLOCKED — server busy; run only on user go-ahead): bring CALM-Rec
       to SOTA on beauty (beat ProEx NDCG@10 0.1506); priority-1 = real ρ vs placebo + stage-2.5 AUC
       gate. If it can't, re-run the tri-agent discussion and iterate until beauty is SOTA.
