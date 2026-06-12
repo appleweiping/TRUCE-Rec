@@ -50,13 +50,22 @@ The performance phase = **8 domains × (Ours + 8 official baselines)** under the
 Baselines are done (frozen evidence); the gap is **TRUCE-Rec's own method**.
 
 - [x] **Method locked + implemented: CALM-Rec** — evolved from SCALR over a ≥20-iteration tri-agent
-      upgrade (ARIS 9.0/10). Scoring core + encoders + weak-labels + 3-stage trainer scaffold +
-      stage-2.5 gate + runner wiring + configs + scripts + 27 tests, all CPU/no-GPU, runs end-to-end
-      through the official runner/evaluator. Only remaining: real Qwen3-8B encoder forward + Stage-B
-      LoRA loop. Spec `docs/method_calm_rec_spec.md`; procedure `docs/CALM_REC_RUNBOOK.md`.
-- [ ] **Beauty-first formal run** (BLOCKED — server busy; run only on user go-ahead): bring CALM-Rec
-      to SOTA on beauty (beat ProEx NDCG@10 0.1506); priority-1 = real ρ vs placebo + stage-2.5 AUC
-      gate. If it can't, re-run the tri-agent discussion and iterate until beauty is SOTA.
+      upgrade (ARIS 9.0/10). Spec `docs/method_calm_rec_spec.md`; procedure `docs/CALM_REC_RUNBOOK.md`.
+- [x] **Real Qwen3-8B encoders + Stage-B loop implemented** (2026-06-12, branch
+      `feat/calm-qwen-stage-b`): `calm_qwen.py` runtime (frozen item encoder w/ fp16 cache; intent
+      encoder w/ K anchored soft slots; differentiable scorer at 1e-9 parity vs the python core);
+      `scripts/train_calm_stage_b.py` (full CALMLossSpec gradient loop);
+      `scripts/eval_calm_beauty.py` (cached-signal formal evaluator: Stage-C grid + 2.5 gate +
+      ladder + placebo + paired bootstrap without per-grid-point model reruns).
+      D_uk salience deferred (γ=0, recorded in artifacts). 40 CALM tests green.
+- [x] **Frozen-protocol data converted** (server `data/processed/frozen_week8_beauty`): 973 test +
+      973 valid 101-cand panels from the pony external_tasks exports (the exact frozen sets the
+      baselines scored), 3578 train transitions, 1184 items; weak labels rebuilt (672/1184 dominant
+      facets). WARNING: uncertainty-project panels share positives but NOT candidate sets — never
+      evaluate on those.
+- [ ] **Beauty formal run** — queued on server (`~/projects/gpu_queue_20260612.sh`): after TGL's
+      zero-shot pair → Stage-B smoke → Stage-B full → `eval_calm_beauty.py`. Beat ProEx NDCG@10
+      0.1506 with falsifiability checks passing; if not SOTA → tri-agent redesign loop.
 - [ ] Roll the validated method out to the other seven domains.
 - [ ] Then the three required follow-up experiments + overview figure (see
       `docs/followup_experiment_plan.md`): observation, ablation, hyper-parameter analysis.
