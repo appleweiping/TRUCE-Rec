@@ -548,3 +548,32 @@ writing-ready stage and the next phase is paper writing/export/positioning,
 not more open-ended experimentation. If any item is missing, state exactly
 which gate remains and the shortest concrete command or implementation step to
 close it.
+
+## 2026-06-12 — Qwen encoders + Stage-B implemented; frozen panels converted; queued on GPU
+
+- Branch `feat/calm-qwen-stage-b`: `methods/calm_qwen.py` (frozen Qwen3-8B item encoder
+  with fp16 npz cache; intent encoder with K attribute-anchored soft slots, z = c_k +
+  clip(W_r u), pi = softmax(g + lambda*E_hist); D_uk deferred gamma=0 recorded in
+  artifacts; `torch_calm_scores` differentiable scorer at 1e-9 parity with calm_rec.py).
+  `scripts/train_calm_stage_b.py` = full CALMLossSpec loop (L_rank on fixed-rho-0.1 mixed
+  score + attr/bal/orth/use/tau; tau annealed 1.5->4; popularity-matched negatives;
+  leakage-clean Stage-A stats; artifacts lora/ + extras + anchors + item cache + meta).
+- Formal evaluator `scripts/eval_calm_beauty.py`: per-user signals computed ONCE
+  (vectorized), Stage-C rho grid + stage-2.5 AUC gate + ladder (raw/full/K1/placebo) +
+  paired bootstrap all derived from the cache. (Naive grid = 81x model reruns; pure-python
+  scoring at d=4096 was 30h+ CPU — both fixed.) Parity tests green (40 CALM tests total).
+- Frozen-protocol data: `convert_frozen_task.py` ran on server ->
+  `data/processed/frozen_week8_beauty` (973 test + 973 valid 101-cand panels from the pony
+  external_tasks exports + canonical item_metadata.csv/train_interactions.csv; 3578 train
+  transitions; 1184 items). Weak labels rebuilt: outputs/calm/beauty_frozen (672/1184
+  dominant facets). CRITICAL: uncertainty-llm4rec panels share users/positives but NOT
+  candidate sets (verified 0/973) — never evaluate on them.
+- Server copy converted from tarball to git checkout (data/ preserved). Python env reused:
+  `~/miniconda3/envs/tglrec-lora/bin/python` (runtime only; method code fully independent).
+  Sync = git bundle over scp (server cannot reach GitHub).
+- QUEUED on GPU (after TGL-Rec's zero-shot pair; `~/projects/gpu_queue_20260612.sh`):
+  Stage-B smoke (--max-train 32) -> Stage-B full -> then run eval_calm_beauty.py
+  (--sota-ndcg10 0.1506). Release needs all four falsifiability checks; stage-2.5
+  AUC <= ~0.55 -> drop the trust headline automatically (spec section 9).
+- agentmemory MCP unavailable in this session; durable state recorded here + CONTEXT.md +
+  local auto-memory. Store a digest into agentmemory in the next session that has it.
