@@ -82,13 +82,42 @@ def _ndcg_at_k(ranker: CALMRecRanker, examples: list[dict[str, Any]], k: int = 1
 
 
 def _build_ranker(processed_dir: Path, train: list, items: list, *, backend: str, n_intents: int,
-                  use_trust_gate: bool, qwen_model_path: str | None, seed: int) -> CALMRecRanker:
-    ie, qe = build_encoders(backend=backend, n_intents=n_intents, qwen_model_path=qwen_model_path, seed=seed)
-    cfg = CALMConfig(n_intents=n_intents, tau=2.0, m_dropout=4, use_trust_gate=use_trust_gate, seed=seed)
+                  use_trust_gate: bool, qwen_model_path: str | None, seed: int,
+                  stage_b_dir: Path | None = None, held_out: set[str] | None = None) -> CALMRecRanker:
+    """Build + Stage-A-fit a ranker. With backend='qwen' and a Stage-B artifact dir,
+    loads the trained LoRA / heads / anchors / delta / tau (see train_calm_stage_b.py)."""
+    sb = stage_b_dir if (stage_b_dir and stage_b_dir.exists()) else None
+    meta: dict[str, Any] = {}
+    if sb and (sb / "calm_stage_b_meta.json").exists():
+        meta = json.loads((sb / "calm_stage_b_meta.json").read_text(encoding="utf-8"))
+    ie, qe = build_encoders(
+        backend=backend, n_intents=n_intents, qwen_model_path=qwen_model_path, seed=seed,
+        qwen_lora_path=str(sb / "lora") if sb and (sb / "lora").exists() else None,
+        qwen_cache_path=str(sb / "item_vectors_fp16.npz") if sb else None,
+        qwen_extras_path=str(sb / "calm_stage_b_extras.pt") if sb else None,
+    )
+    tau = float(meta.get("tau_final", 2.0))
+    cfg = CALMConfig(n_intents=n_intents, tau=min(8.0, max(1.0, tau)), m_dropout=4,
+                     use_trust_gate=use_trust_gate, seed=seed)
     ranker = CALMRecRanker(item_encoder=ie, intent_encoder=qe, config=cfg)
-    held = {str(e.get("target")) for e in train}  # placeholder; real held-out set passed by caller
     trainer = CALMScaffoldTrainer(ranker, backend=backend)
-    trainer.fit(train, items, held_out_targets=set())
+    trainer.fit(train, items, held_out_targets=held_out or set())
+    if meta.get("delta_final"):
+        ranker.delta = [float(x) for x in meta["delta_final"]][: n_intents]
+        ranker.delta += [0.0] * (n_intents - len(ranker.delta))
+    if backend == "qwen" and sb:
+        # inject frozen anchors + Stage-A stats into the intent runtime
+        import torch as _torch
+
+        rt = qe.runtime()
+        rt.anchors = _torch.load(sb / "anchors.pt", map_location="cpu", weights_only=True)
+        rt.set_stage_a(
+            ranker.item_vec,
+            {k: 1e-6 for k in ranker.item_support} | {
+                k: max(v, 1) / max(1, sum(ranker.item_support.values()))
+                for k, v in ranker.item_support.items()
+            },
+        )
     return ranker
 
 
@@ -98,6 +127,8 @@ def main() -> None:
     ap.add_argument("--out", required=True)
     ap.add_argument("--backend", default="hashed", choices=["hashed", "qwen"])
     ap.add_argument("--qwen-model-path", default=None)
+    ap.add_argument("--stage-b-dir", default=None,
+                    help="Stage-B artifact dir (lora/, calm_stage_b_extras.pt, anchors.pt, item cache)")
     ap.add_argument("--sota-ndcg10", type=float, default=0.0, help="per-domain SOTA bar to beat")
     ap.add_argument("--seed", type=int, default=13)
     args = ap.parse_args()
@@ -111,9 +142,13 @@ def main() -> None:
     test = [e for e in examples if str(e.get("split")) == "test"] or val
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
 
+    held = {str(e.get("target")) for e in val} | {str(e.get("target")) for e in test}
+
     def mk(n_intents, trust):
         return _build_ranker(pd, train, items, backend=args.backend, n_intents=n_intents,
-                             use_trust_gate=trust, qwen_model_path=args.qwen_model_path, seed=args.seed)
+                             use_trust_gate=trust, qwen_model_path=args.qwen_model_path,
+                             seed=args.seed, held_out=held,
+                             stage_b_dir=Path(args.stage_b_dir) if args.stage_b_dir else None)
 
     # Ladder variant 1: raw personalized (no trust gate)
     r_raw = mk(4, False)

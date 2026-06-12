@@ -154,37 +154,87 @@ _QWEN_HELP = (
 
 @dataclass
 class QwenItemEncoder:
-    """Frozen Qwen3-8B item encoder (offline, cached). Server-only; not loadable on dev box."""
+    """Frozen Qwen3-8B item encoder (offline, fp16 disk cache). Server/GPU path.
+
+    Thin shell over calm_qwen.QwenItemEncoderRuntime so this module stays
+    importable without torch; the runtime (and torch) load on first use.
+    """
 
     model_path: str
     pooling: str = "mean"
-    _model: Any = field(default=None, repr=False)
+    cache_path: str | None = None
+    device: str = "cuda"
+    _rt: Any = field(default=None, repr=False)
 
-    def _ensure(self) -> None:
-        if self._model is None:
-            raise NotImplementedError(_QWEN_HELP)
+    def _runtime(self):
+        if self._rt is None:
+            try:
+                from llm4rec.methods.calm_qwen import (
+                    QwenBackboneRuntime,
+                    QwenItemEncoderRuntime,
+                )
+            except ImportError as e:  # pragma: no cover
+                raise NotImplementedError(_QWEN_HELP) from e
+            backbone = QwenBackboneRuntime(self.model_path, device=self.device)
+            self._rt = QwenItemEncoderRuntime(
+                backbone, pooling=self.pooling, cache_path=self.cache_path
+            )
+        return self._rt
 
     def encode(self, item_id: str, item_row: dict[str, Any]) -> list[float]:  # pragma: no cover
-        self._ensure()
-        raise NotImplementedError(_QWEN_HELP)
+        try:
+            return self._runtime().encode(item_id, item_row)
+        except (ImportError, OSError, EnvironmentError) as e:
+            # gated: never silently runs on a box without torch/weights
+            raise NotImplementedError(_QWEN_HELP) from e
 
 
 @dataclass
 class QwenIntentEncoder:
-    """Qwen3-8B + LoRA intent encoder with K attribute-anchored soft-prompt slots. Server-only."""
+    """Qwen3-8B + LoRA intent encoder with K attribute-anchored soft-prompt slots.
+
+    Thin shell over calm_qwen.QwenIntentEncoderRuntime (torch loads lazily).
+    ``anchors`` / Stage-A stats are injected by the trainer / run script before
+    the first encode_intents call.
+    """
 
     model_path: str
     n_intents: int
     lora_path: str | None = None
-    _model: Any = field(default=None, repr=False)
+    extras_path: str | None = None
+    device: str = "cuda"
+    _rt: Any = field(default=None, repr=False)
 
-    def _ensure(self) -> None:
-        if self._model is None:
-            raise NotImplementedError(_QWEN_HELP)
+    def runtime(self):
+        if self._rt is None:
+            try:
+                from llm4rec.methods.calm_qwen import (
+                    QwenBackboneRuntime,
+                    QwenIntentEncoderRuntime,
+                )
+            except ImportError as e:  # pragma: no cover
+                raise NotImplementedError(_QWEN_HELP) from e
+            backbone = QwenBackboneRuntime(self.model_path, device=self.device)
+            if self.lora_path:
+                backbone.attach_lora(self.lora_path)
+            self._rt = QwenIntentEncoderRuntime(
+                backbone, n_intents=self.n_intents, extras_path=self.extras_path
+            )
+        return self._rt
 
     def encode_intents(self, history_item_ids, item_lookup, *, dropout: bool = False) -> IntentSet:  # pragma: no cover
-        self._ensure()
-        raise NotImplementedError(_QWEN_HELP)
+        try:
+            rt = self.runtime()
+            if rt.anchors is None:
+                raise RuntimeError(
+                    "QwenIntentEncoder needs anchors before encoding: call "
+                    "runtime().anchors = anchors_from_weak_labels(...) (see "
+                    "scripts/train_calm_stage_b.py / run_calm_rec.py wiring)."
+                )
+            return rt.encode_intents(history_item_ids, item_lookup, dropout=dropout)
+        except (ImportError, OSError, EnvironmentError) as e:
+            # gated: never silently runs on a box without torch/weights
+            raise NotImplementedError(_QWEN_HELP) from e
 
 
 def build_encoders(
@@ -195,12 +245,15 @@ def build_encoders(
     lexicon: AttributeLexicon | None = None,
     qwen_model_path: str | None = None,
     qwen_lora_path: str | None = None,
+    qwen_cache_path: str | None = None,
+    qwen_extras_path: str | None = None,
     seed: int = 0,
 ) -> tuple[Any, Any]:
     """Construct (item_encoder, intent_encoder) for the configured backend.
 
     backend='hashed' (default): CPU, dependency-free, runs anywhere — for smoke / contract tests.
     backend='qwen': real Qwen3-8B (+LoRA); requires a GPU host with weights (raises otherwise).
+    qwen_cache_path: fp16 item-vector cache (.npz); qwen_extras_path: trained Stage-B heads (.pt).
     """
     lex = lexicon or default_beauty_lexicon()
     if backend == "hashed":
@@ -210,7 +263,12 @@ def build_encoders(
     if backend == "qwen":
         if not qwen_model_path:
             raise ValueError("backend='qwen' requires qwen_model_path. " + _QWEN_HELP)
-        ie = QwenItemEncoder(model_path=qwen_model_path)
-        qe = QwenIntentEncoder(model_path=qwen_model_path, n_intents=n_intents, lora_path=qwen_lora_path)
+        ie = QwenItemEncoder(model_path=qwen_model_path, cache_path=qwen_cache_path)
+        qe = QwenIntentEncoder(
+            model_path=qwen_model_path,
+            n_intents=n_intents,
+            lora_path=qwen_lora_path,
+            extras_path=qwen_extras_path,
+        )
         return ie, qe
     raise ValueError(f"unknown CALM encoder backend: {backend!r} (use 'hashed' or 'qwen')")
