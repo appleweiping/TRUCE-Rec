@@ -206,12 +206,15 @@ def main() -> None:
         for bstart in range(0, len(panels), args.batch_panels):
             batch = panels[bstart : bstart + args.batch_panels]
             opt.zero_grad()
-            tau = tau_value()
             tau_target = 1.5 + (4.0 - 1.5) * min(1.0, step / max(1, total_steps - 1))
             losses = {k: 0.0 for k in ("rank", "attr", "bal", "orth", "use", "tau")}
             n_ok = 0
             resp_means = []
             for ex in batch:
+                # tau must be recomputed per example: each example calls backward()
+                # immediately, which frees the graph through sigmoid(theta_tau) —
+                # reusing one tau across the batch raises "backward a second time".
+                tau = tau_value()
                 tgt = str(ex.get("target"))
                 hist = history_ids(ex)
                 # popularity-matched negatives, excluding history + target
