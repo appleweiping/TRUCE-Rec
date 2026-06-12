@@ -152,7 +152,7 @@ def main() -> None:
 
     # ---- examples.jsonl ----
     valid_targets = {(r["user_id"], r["target"]) for r in valid}
-    held_targets = {r["target"] for r in valid} | {r["target"] for r in test}
+    own_held = valid_targets | {(r["user_id"], r["target"]) for r in test}
     n_train = 0
     with (out / "examples.jsonl").open("w", encoding="utf-8") as fh:
         for split, rows in (("test", test), ("valid", valid)):
@@ -173,9 +173,11 @@ def main() -> None:
                     + "\n"
                 )
         # train transitions: prefer the canonical uncapped train stream; fall back
-        # to deriving from the (length-capped) test histories. Either way, drop
-        # the user's valid target from the sequence (supervised by the valid
-        # panel instead) and never supervise on any held-out target.
+        # to deriving from the (length-capped) test histories. Drop the user's
+        # OWN valid target from the sequence (supervised by the valid panel
+        # instead). Another user's held-out target appearing as a train target
+        # here is standard leave-last-out, NOT leakage — the statistics-level
+        # exclusion is handled separately by build_train_only_stats.
         if train_seqs:
             sources = [(u, seq) for u, seq in sorted(train_seqs.items())]
         else:
@@ -183,8 +185,8 @@ def main() -> None:
         for user_id, raw_seq in sources:
             seq = [h for h in raw_seq if (user_id, h) not in valid_targets]
             for j in range(1, len(seq)):
-                if seq[j] in held_targets:
-                    continue  # never supervise on a held-out target
+                if (user_id, seq[j]) in own_held:
+                    continue  # never supervise on the user's own held-out target
                 fh.write(
                     json.dumps(
                         {
