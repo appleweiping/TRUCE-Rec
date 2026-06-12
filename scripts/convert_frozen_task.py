@@ -80,7 +80,13 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--test", required=True)
     ap.add_argument("--valid", default=None)
-    ap.add_argument("--items-meta", default=None, help="optional CSV with item_id,title,categories,description")
+    ap.add_argument("--items-meta", default=None,
+                    help="optional CSV; supports both item_id,title,categories,description and the "
+                         "frozen-export item_id,candidate_title,candidate_text,popularity_group")
+    ap.add_argument("--train-interactions", default=None,
+                    help="optional CSV user_id,item_id,timestamp[,sequence_index] — the canonical "
+                         "uncapped train stream from the frozen export (preferred over deriving "
+                         "transitions from the capped test histories)")
     ap.add_argument("--domain", required=True)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
@@ -95,6 +101,18 @@ def main() -> None:
             for r in csv.DictReader(fh):
                 meta[str(r.get("item_id"))] = r
         print(f"items-meta rows: {len(meta)}")
+
+    train_seqs: dict[str, list[str]] = {}
+    if args.train_interactions and Path(args.train_interactions).exists():
+        by_user: dict[str, list[tuple[float, int, str]]] = {}
+        with open(args.train_interactions, encoding="utf-8", newline="") as fh:
+            for r in csv.DictReader(fh):
+                ts = float(r.get("timestamp") or -1)
+                si = int(r.get("sequence_index") or 0)
+                by_user.setdefault(str(r["user_id"]), []).append((ts, si, str(r["item_id"])))
+        for u, evs in by_user.items():
+            train_seqs[u] = [i for _, _, i in sorted(evs)]
+        print(f"train interactions: {sum(len(v) for v in train_seqs.values())} over {len(train_seqs)} users")
 
     # ---- items.csv: union of everything the panels mention ----
     titles: dict[str, str] = {}
@@ -113,17 +131,22 @@ def main() -> None:
             fh, fieldnames=["item_id", "title", "description", "category", "brand", "domain", "raw_text"]
         )
         w.writeheader()
-        for iid in sorted(titles):
+        all_ids = set(titles) | set(train_seqs and {i for s in train_seqs.values() for i in s} or set())
+        for iid in sorted(all_ids):
             m = meta.get(iid, {})
+            text = m.get("candidate_text", "")
+            desc = m.get("description", "")
+            if not desc and "Description:" in text:
+                desc = text.split("Description:", 1)[1].strip()
             w.writerow(
                 {
                     "item_id": iid,
-                    "title": m.get("title") or titles[iid],
-                    "description": m.get("description", ""),
+                    "title": m.get("title") or m.get("candidate_title") or titles.get(iid, iid),
+                    "description": desc,
                     "category": m.get("categories", m.get("category", "")),
                     "brand": m.get("brand", ""),
                     "domain": args.domain,
-                    "raw_text": m.get("candidate_text", ""),
+                    "raw_text": text,
                 }
             )
 
@@ -149,19 +172,24 @@ def main() -> None:
                     )
                     + "\n"
                 )
-        # train transitions from the TEST-row history prefix. The test history is
-        # train_plus_valid; drop the user's valid target from the train sequence
-        # (it is supervised by the valid panel instead).
-        for r in test:
-            seq = [h for h in r["history_ids"] if (r["user_id"], h) not in valid_targets]
+        # train transitions: prefer the canonical uncapped train stream; fall back
+        # to deriving from the (length-capped) test histories. Either way, drop
+        # the user's valid target from the sequence (supervised by the valid
+        # panel instead) and never supervise on any held-out target.
+        if train_seqs:
+            sources = [(u, seq) for u, seq in sorted(train_seqs.items())]
+        else:
+            sources = [(r["user_id"], r["history_ids"]) for r in test]
+        for user_id, raw_seq in sources:
+            seq = [h for h in raw_seq if (user_id, h) not in valid_targets]
             for j in range(1, len(seq)):
                 if seq[j] in held_targets:
                     continue  # never supervise on a held-out target
                 fh.write(
                     json.dumps(
                         {
-                            "example_id": f"{r['user_id']}::train{j}",
-                            "user_id": r["user_id"],
+                            "example_id": f"{user_id}::train{j}",
+                            "user_id": user_id,
                             "domain": args.domain,
                             "split": "train",
                             "history": seq[:j],
