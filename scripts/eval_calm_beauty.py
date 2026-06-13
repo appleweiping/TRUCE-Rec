@@ -62,15 +62,20 @@ def signals_for_examples(
     delta: list[float],
     m_dropout: int,
     max_history: int = 20,
+    normalize: bool = False,          # FIX#1 (must match Stage-B)
+    logit_scale: float | None = None, # FIX#1
 ) -> list[dict[str, Any]]:
     """Per example: vectorized per-candidate signals from ONE set of encoder passes.
 
     Math mirrors calm_rec.per_intent_energy / mixture_score_and_responsibilities
-    exactly (parity-tested); vectorized over the 101 candidates.
+    exactly (parity-tested); vectorized over the 101 candidates. With normalize=True
+    and a logit_scale this reproduces the corrected Stage-B scorer (FIX#1/#4). NOTE:
+    item_vecs passed here is ALREADY whitened upstream so h matches the trained z space.
     """
     out = []
     dim = len(next(iter(item_vecs.values())))
     delta_v = np.asarray(delta, dtype=np.float64)
+    scale = float(logit_scale) if logit_scale is not None else float(tau)
     for n_done, ex in enumerate(examples):
         cands = [str(c) for c in (ex.get("candidates") or ex.get("candidate_items") or [])]
         tgt = str(ex.get("target"))
@@ -85,16 +90,20 @@ def signals_for_examples(
 
         H_mat = np.array(
             [item_vecs.get(c, [0.0] * dim) for c in cands], dtype=np.float64
-        )  # [N, d]
+        )  # [N, d]  (already whitened upstream)
+        if normalize:
+            H_mat = H_mat / np.clip(np.linalg.norm(H_mat, axis=1, keepdims=True), 1e-8, None)
         n_i = np.array([float(support.get(c, 0)) for c in cands])
         prior = np.array([float(s_prior.get(c, 0.0)) for c in cands])
         pop = np.log1p(np.clip(n_i, 0, None))
 
         def panel_scores(iset):
-            Z = np.array(iset.z, dtype=np.float64)               # [K, d]
+            Z = np.array(iset.z, dtype=np.float64)               # [K, d]  (z = whitened anchor + r)
             pi = np.array(iset.pi, dtype=np.float64)             # [K]
-            E = H_mat @ Z.T - pop[:, None] * delta_v[None, :]    # [N, K]
-            logits = np.log(np.clip(pi, 1e-12, None))[None, :] + tau * E
+            if normalize:
+                Z = Z / np.clip(np.linalg.norm(Z, axis=1, keepdims=True), 1e-8, None)
+            E = H_mat @ Z.T - pop[:, None] * delta_v[None, :]    # [N, K]  (cosine when normalized)
+            logits = np.log(np.clip(pi, 1e-12, None))[None, :] + scale * E
             m = logits.max(axis=1, keepdims=True)
             lse = m[:, 0] + np.log(np.exp(logits - m).sum(axis=1))
             s_pers = lse / tau                                    # [N]
@@ -227,6 +236,7 @@ def main() -> None:
         QwenBackboneRuntime,
         QwenIntentEncoderRuntime,
         QwenItemEncoderRuntime,
+        apply_whitening,
     )
 
     pd_dir = Path(args.processed_dir)
@@ -238,6 +248,13 @@ def main() -> None:
     delta = [float(x) for x in meta.get("delta_final", [])]
     n_intents = int(meta.get("n_intents", 4))
     delta = (delta + [0.0] * n_intents)[:n_intents]
+    # FIX#1-#4 scorer config persisted by the trainer (default = legacy if absent)
+    scorer = meta.get("scorer", {})
+    normalize = (scorer.get("normalize_embeddings", "none") == "l2")
+    logit_scale = scorer.get("logit_scale")            # None -> tau doubles as scale (legacy)
+    residual_eps = float(scorer.get("residual_eps", 2.0))
+    print(f"scorer cfg: normalize={normalize} logit_scale={logit_scale} "
+          f"residual_eps={residual_eps} whiten_k={scorer.get('whiten_k', 0)}", flush=True)
 
     examples = read_jsonl(pd_dir / "examples.jsonl")
     with (pd_dir / "items.csv").open(encoding="utf-8", newline="") as fh:
@@ -261,9 +278,20 @@ def main() -> None:
     item_vecs = dict(item_enc._cache)
     anchors = torch.load(sb / "anchors.pt", map_location="cpu", weights_only=True)
 
+    # FIX#3: whiten candidate vecs with the SAME mu/components persisted at train time.
+    # (anchors.pt is already whitened by the trainer, so z = anchor + r stays consistent.)
+    extras = torch.load(sb / "calm_stage_b_extras.pt", map_location="cpu", weights_only=True)
+    if "whiten_components" in extras and extras["whiten_components"].shape[0] > 0:
+        w_mu, w_comp = extras["whiten_mu"], extras["whiten_components"]
+        _ids = sorted(item_vecs)
+        _X = torch.tensor([item_vecs[i] for i in _ids], dtype=torch.float32)
+        _Xw = apply_whitening(_X, w_mu, w_comp)
+        item_vecs = {i: _Xw[j].tolist() for j, i in enumerate(_ids)}
+        print(f"whitening applied at eval: removed top-{w_comp.shape[0]} PC(s)", flush=True)
+
     def build_encoder(k: int) -> QwenIntentEncoderRuntime:
         enc = QwenIntentEncoderRuntime(
-            backbone, n_intents=k,
+            backbone, n_intents=k, residual_eps=residual_eps,
             anchors=anchors[:k] if k <= anchors.shape[0] else anchors,
             extras_path=str(sb / "calm_stage_b_extras.pt") if k == n_intents else None,
         )
@@ -281,6 +309,7 @@ def main() -> None:
             item_vecs=item_vecs, support=support, s_prior=s_prior,
             tau=tau, delta=delta if k == n_intents else delta[:1],
             m_dropout=args.m_dropout,
+            normalize=normalize, logit_scale=logit_scale,   # FIX#1/#4 parity with Stage-B
         )
         np.savez_compressed(
             out / f"signals_{key}.npz",

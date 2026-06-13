@@ -200,7 +200,8 @@ class QwenIntentEncoderRuntime:
     n_intents: int
     anchors: Any = None             # torch [K, d_item] (weak-label centroids)
     max_history: int = 20
-    residual_eps: float = 2.0       # ||r_uk|| <= eps (spec section 5)
+    residual_eps: float = 40.0      # ||r_uk|| <= eps  (FIX#2: 2.0 -> 40 ~ 0.35*||anchor||;
+                                    #   2.0 froze z to a <=1.76% perturbation of the anchor)
     lambda_sal: float = 1.0
     tau_for_E: float = 1.0
     extras_path: str | None = None  # trained heads (W_r, g, lambda, slots)
@@ -321,27 +322,77 @@ def torch_calm_scores(
     s_prior,            # [N] history-free prior scores
     delta,              # [K] per-intent popularity residual coefficients
     *,
-    tau,                # scalar tensor or float
+    tau,                # mixture (logsumexp) temperature; scalar tensor or float
     rho: float = 0.1,   # FIXED mild rho during Stage-B (spec section 4)
     rho_floor: float = 0.15,
+    normalize: bool = False,   # FIX#1: L2-normalize h AND z -> e_k(i) is a cosine in [-1,1]
+    logit_scale=None,          # FIX#1: learnable O(1-10) scale on the cosine (replaces tau*raw)
 ):
     """Differentiable replica of the calm_rec.py scoring core (parity-tested).
 
-    e_k(i) = <z_k, h_i> - delta_k log(1+n_i)
-    s_pers(i) = (1/tau) logsumexp_k(log pi_k + tau e_k(i))
+    e_k(i) = <z_k_hat, h_i_hat> - delta_k log(1+n_i)        [cosine when normalize=True]
+    logits_k(i) = log pi_k + logit_scale * e_k(i)
+    s_pers(i) = (1/tau) logsumexp_k(logits_k(i))
     s(i) = (1-rho') s_pers(i) + rho' s_prior(i)
     Returns (scores [N], s_pers [N], responsibilities [N, K]).
+
+    FIX#1 (the dominant bug): on raw mean-pooled Qwen vectors ||h||~117 the inner
+    product e~1.25e4 and the listwise CE saturated 250-900x its log(51) floor. With
+    normalize=True the energy is a bounded cosine and logit_scale (init ~10, learnable)
+    sets the softmax peakiness; tau is the *separate* mixture temperature (FIX#4: frozen 1.0).
+    Legacy behaviour (normalize=False, logit_scale=None) -> tau*raw, kept for parity tests.
     """
     torch = _require_torch()
+    if normalize:
+        h = h / h.norm(dim=-1, keepdim=True).clamp(min=1e-8)
+        z = z / z.norm(dim=-1, keepdim=True).clamp(min=1e-8)
     pop = torch.log1p(n_support.clamp(min=0))                    # [N]
     e = h @ z.T - pop.unsqueeze(1) * delta.unsqueeze(0)          # [N, K]
     tau_t = tau if torch.is_tensor(tau) else torch.tensor(float(tau), dtype=e.dtype, device=e.device)
-    logits = torch.log(pi.clamp(min=1e-12)).unsqueeze(0) + tau_t * e
+    if logit_scale is None:
+        scale = tau_t                                            # legacy: tau doubles as scale
+    else:
+        scale = logit_scale if torch.is_tensor(logit_scale) else torch.tensor(
+            float(logit_scale), dtype=e.dtype, device=e.device)
+    logits = torch.log(pi.clamp(min=1e-12)).unsqueeze(0) + scale * e
     s_pers = torch.logsumexp(logits, dim=1) / tau_t              # [N]
     resp = torch.softmax(logits, dim=1)                          # [N, K]
     rho_eff = min(max(float(rho), 0.0), 1.0 - float(rho_floor))
     scores = (1.0 - rho_eff) * s_pers + rho_eff * s_prior
     return scores, s_pers, resp
+
+
+def fit_whitening(item_vecs: dict[str, list[float]], *, k: int = 1):
+    """FIX#3: all-but-the-top. Returns (mu [d], components [k, d]) from the catalog.
+
+    The raw mean-pooled Qwen vectors are strongly anisotropic (PC1 ~26% variance,
+    pairwise cosine ~0.916); that dominant direction is a common-mode offset that
+    swamps the intent geometry. We mean-center and remove the top-k PCs from h, z
+    AND the anchors *consistently* (the same mu/components are persisted and reused
+    at eval). With k=0 this is the identity (legacy).
+    """
+    torch = _require_torch()
+    ids = sorted(item_vecs)
+    X = torch.tensor([item_vecs[i] for i in ids], dtype=torch.float32)   # [N, d]
+    mu = X.mean(dim=0)                                                   # [d]
+    if k <= 0:
+        return mu, torch.zeros(0, X.shape[1])
+    Xc = X - mu
+    # economy SVD; right-singular vectors are the principal directions
+    _, _, Vh = torch.linalg.svd(Xc, full_matrices=False)
+    return mu, Vh[:k].contiguous()                                      # [k, d]
+
+
+def apply_whitening(x, mu, components):
+    """Remove the persisted top-k directions: x' = (x - mu) - sum_j <x-mu,v_j> v_j."""
+    torch = _require_torch()
+    if components is None or components.shape[0] == 0:
+        return x
+    mu = mu.to(x.device, x.dtype)
+    comp = components.to(x.device, x.dtype)                             # [k, d]
+    xc = x - mu
+    proj = (xc @ comp.T) @ comp                                        # [..., d]
+    return xc - proj
 
 
 def anchors_from_weak_labels(

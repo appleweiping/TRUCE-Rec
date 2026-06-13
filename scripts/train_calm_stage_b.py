@@ -81,6 +81,20 @@ def main() -> None:
     ap.add_argument("--max-train", type=int, default=0, help="cap train panels (0 = all)")
     ap.add_argument("--seed", type=int, default=13)
     ap.add_argument("--device", default="cuda")
+    # ---- Stage-1 scorer fixes (diagnosis wun91fszr) ----
+    ap.add_argument("--normalize-embeddings", choices=["none", "l2"], default="l2",
+                    help="FIX#1: L2-normalize h AND z before the inner product (cosine energy)")
+    ap.add_argument("--logit-scale-init", type=float, default=10.0,
+                    help="FIX#1: learnable O(1-10) scale on the cosine (replaces tau*raw)")
+    ap.add_argument("--whiten-k", type=int, default=1,
+                    help="FIX#3: remove top-k PCs (all-but-the-top) from h,z,anchors; 0 disables")
+    ap.add_argument("--residual-eps", type=float, default=40.0,
+                    help="FIX#2: unlock z from the frozen anchor (2.0 -> ~0.35*||anchor||)")
+    ap.add_argument("--freeze-tau", type=float, default=1.0,
+                    help="FIX#4: freeze mixture temperature tau at this value (<=0 -> anneal)")
+    ap.add_argument("--w-bal", type=float, default=0.5, help="FIX#3: load-balance weight (was 0.1)")
+    ap.add_argument("--w-orth", type=float, default=0.3, help="FIX#3: orthogonality weight (was 0.05)")
+    ap.add_argument("--w-use", type=float, default=0.5, help="FIX#3: usage-floor weight (was 0.05)")
     args = ap.parse_args()
 
     import numpy as np
@@ -91,6 +105,8 @@ def main() -> None:
         QwenIntentEncoderRuntime,
         QwenItemEncoderRuntime,
         anchors_from_weak_labels,
+        apply_whitening,
+        fit_whitening,
         save_extras,
         torch_calm_scores,
     )
@@ -131,8 +147,24 @@ def main() -> None:
     print("precomputing item vectors (frozen, cached)...", flush=True)
     item_enc.encode_batch(items)
     item_enc.save_cache()
-    item_vecs = dict(item_enc._cache)
-    dim = len(next(iter(item_vecs.values())))
+    item_vecs_raw = dict(item_enc._cache)          # on-disk cache stays RAW (reused verbatim)
+    dim = len(next(iter(item_vecs_raw.values())))
+
+    # FIX#3: all-but-the-top whitening, fit on the catalog, applied in-memory to
+    # h, z, anchors AND the history-evidence vectors. mu/components are persisted so
+    # eval reproduces the exact projection.
+    whiten_mu, whiten_comp = fit_whitening(item_vecs_raw, k=max(0, int(args.whiten_k)))
+    if whiten_comp.shape[0] > 0:
+        _ids = sorted(item_vecs_raw)
+        _X = torch.tensor([item_vecs_raw[i] for i in _ids], dtype=torch.float32)
+        _Xw = apply_whitening(_X, whiten_mu, whiten_comp)
+        item_vecs = {i: _Xw[j].tolist() for j, i in enumerate(_ids)}
+        print(f"whitening: removed top-{whiten_comp.shape[0]} PC(s); "
+              f"mean ||h|| {_X.norm(dim=-1).mean():.1f} -> {_Xw.norm(dim=-1).mean():.1f}",
+              flush=True)
+    else:
+        item_vecs = item_vecs_raw
+        print("whitening: disabled (k=0)", flush=True)
 
     weak = read_jsonl(Path(args.weak_labels) / "calm_weak_labels.jsonl")
     facet_top: dict[str, list[str]] = {}
@@ -159,8 +191,11 @@ def main() -> None:
     model.enable_input_require_grads()
     backbone._model = model  # the intent runtime forwards through the PEFT model
 
-    intent_enc = QwenIntentEncoderRuntime(backbone, n_intents=args.n_intents, anchors=anchors)
-    intent_enc.set_stage_a(item_vecs, exposure_q)
+    intent_enc = QwenIntentEncoderRuntime(
+        backbone, n_intents=args.n_intents, anchors=anchors,
+        residual_eps=float(args.residual_eps),     # FIX#2
+    )
+    intent_enc.set_stage_a(item_vecs, exposure_q)  # whitened vecs for E_uk consistency
     heads = intent_enc.build_heads(seed=args.seed)
     dev = args.device
     for k in heads:
@@ -170,10 +205,17 @@ def main() -> None:
     psi_b = torch.zeros(n_facets, device=dev, requires_grad=True)
     delta = torch.zeros(args.n_intents, device=dev, requires_grad=True)     # per-intent pop residual
     theta_tau = torch.tensor(-2.565, device=dev, requires_grad=True)        # tau=1.5 at init
+    # FIX#1: learnable O(1-10) logit-scale on the cosine energy (log-param keeps it positive)
+    log_logit_scale = torch.tensor(
+        math.log(max(1e-3, float(args.logit_scale_init))), device=dev, requires_grad=True)
+    normalize = (args.normalize_embeddings == "l2")
+    freeze_tau = float(args.freeze_tau) > 0.0                                # FIX#4
 
-    spec = CALMLossSpec()
+    spec = CALMLossSpec(w_bal=float(args.w_bal), w_orth=float(args.w_orth), w_use=float(args.w_use))
     lora_params = [p for p in model.parameters() if p.requires_grad]
-    head_params = list(heads.values()) + [psi, psi_b, delta, theta_tau]
+    head_params = list(heads.values()) + [psi, psi_b, delta, log_logit_scale]
+    if not freeze_tau:
+        head_params.append(theta_tau)
     opt = torch.optim.AdamW(
         [
             {"params": lora_params, "lr": args.lr_lora},
@@ -192,6 +234,8 @@ def main() -> None:
     facet_of_intent = [k % n_facets for k in range(args.n_intents)]
 
     def tau_value():
+        if freeze_tau:                                       # FIX#4: tau frozen, non-causal here
+            return torch.tensor(float(args.freeze_tau), device=dev)
         return 1.0 + 7.0 * torch.sigmoid(theta_tau)
 
     panels = [e for e in train_all if str(e.get("target")) in id_to_row and history_ids(e)]
@@ -232,6 +276,7 @@ def main() -> None:
                 scores, _s_pers, resp = torch_calm_scores(
                     z, pi, H[idx], n_sup[idx], prior_t[idx], delta,
                     tau=tau, rho=spec.rho_fixed_during_stage_b,
+                    normalize=normalize, logit_scale=torch.exp(log_logit_scale),  # FIX#1
                 )
                 l_rank = -torch.log_softmax(scores, dim=0)[0]                # target at row 0
                 logits_psi = z @ psi.T + psi_b                               # [K, F]
@@ -246,7 +291,8 @@ def main() -> None:
                 uniform = torch.full_like(r_mean, 1.0 / args.n_intents)
                 l_bal = (r_mean * (r_mean.clamp(min=1e-8) / uniform).log()).sum()
                 l_use = torch.relu(0.05 - r_mean).pow(2).sum()
-                l_tau = (tau - tau_target) ** 2
+                # FIX#4: tau frozen -> no annealing tether (L_tau is a no-op 0)
+                l_tau = torch.zeros((), device=dev) if freeze_tau else (tau - tau_target) ** 2
 
                 loss = (
                     spec.w_rank * l_rank + spec.w_attr * l_attr + spec.w_bal * l_bal
@@ -267,6 +313,7 @@ def main() -> None:
                 row = {
                     "step": step, "epoch": epoch, "tau": float(tau.detach()),
                     "tau_target": tau_target,
+                    "logit_scale": round(float(torch.exp(log_logit_scale).detach()), 4),
                     **{f"L_{k}": round(v, 5) for k, v in losses.items()},
                     "mean_resp": [round(x, 4) for x in rm],
                     "delta": [round(float(x), 4) for x in delta.detach().tolist()],
@@ -277,7 +324,13 @@ def main() -> None:
     # ---------------- save artifacts ----------------
     model.save_pretrained(str(out / "lora"))
     heads_all = dict(heads)
-    heads_all.update({"psi": psi, "psi_b": psi_b, "delta": delta, "theta_tau": theta_tau})
+    heads_all.update({"psi": psi, "psi_b": psi_b, "delta": delta, "theta_tau": theta_tau,
+                      "log_logit_scale": log_logit_scale})
+    # FIX#3: persist whitening so eval reproduces the exact projection on candidate h
+    if whiten_comp.shape[0] > 0:
+        heads_all["whiten_mu"] = whiten_mu
+        heads_all["whiten_components"] = whiten_comp
+    final_logit_scale = float(torch.exp(log_logit_scale).detach())
     meta = {
         "n_intents": args.n_intents,
         "facets": facets,
@@ -287,6 +340,14 @@ def main() -> None:
         "gamma_D_uk": 0.0,
         "gamma_note": "panel-discriminativeness D_uk deferred (panel-free encoder contract)",
         "loss_spec": spec.as_dict(),
+        # FIX#1-#4 scorer config (eval MUST read these to reproduce the corrected scorer)
+        "scorer": {
+            "normalize_embeddings": args.normalize_embeddings,
+            "logit_scale": final_logit_scale,
+            "whiten_k": int(whiten_comp.shape[0]),
+            "residual_eps": float(args.residual_eps),
+            "freeze_tau": float(args.freeze_tau) if freeze_tau else 0.0,
+        },
         "args": {k: v for k, v in vars(args).items()},
         "n_train_panels": len(panels),
         "n_val": len(val),

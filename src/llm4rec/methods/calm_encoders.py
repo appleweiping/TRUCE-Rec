@@ -203,6 +203,7 @@ class QwenIntentEncoder:
     lora_path: str | None = None
     extras_path: str | None = None
     device: str = "cuda"
+    residual_eps: float = 40.0   # FIX#2 (diagnosis wun91fszr): unlock z from frozen anchor
     _rt: Any = field(default=None, repr=False)
 
     def runtime(self):
@@ -218,7 +219,8 @@ class QwenIntentEncoder:
             if self.lora_path:
                 backbone.attach_lora(self.lora_path)
             self._rt = QwenIntentEncoderRuntime(
-                backbone, n_intents=self.n_intents, extras_path=self.extras_path
+                backbone, n_intents=self.n_intents, extras_path=self.extras_path,
+                residual_eps=self.residual_eps,
             )
         return self._rt
 
