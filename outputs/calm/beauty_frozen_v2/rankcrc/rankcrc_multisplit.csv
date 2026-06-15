@@ -1,0 +1,6 @@
+target_coverage,mean_certified_alpha,mean_test_served_risk,test_risk_ci_lo,test_risk_ci_hi,guarantee_held_E,expectation_slack,frac_splits_held,mean_test_coverage,mean_test_served_NDCG
+0.9,0.88278,0.879718,0.861966,0.897048,True,0.003061,0.58,0.898,0.120282
+0.8,0.879315,0.876489,0.85751,0.893464,True,0.002826,0.55,0.7978,0.123511
+0.7,0.875625,0.872621,0.85182,0.89229,True,0.003004,0.53,0.6974,0.127379
+0.6,0.871074,0.86856,0.844519,0.889952,True,0.002514,0.525,0.5969,0.13144
+0.5,0.864757,0.862814,0.834518,0.885757,True,0.001943,0.54,0.4966,0.137186
