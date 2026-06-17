@@ -1,3 +1,24 @@
+Reading prompt from stdin...
+2026-06-17T20:39:42.793895Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\vipin\chrome-automation\SKILL.md: failed to read file: invalid utf-8 sequence of 2 bytes from index 1706
+2026-06-17T20:39:42.794480Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\vipin\readme-blueprint-generator\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-17T20:39:42.794570Z ERROR codex_core::session::session: failed to load skill D:\AGENT_RESOURCE\skills\ecc\skills\flox-environments\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+2026-06-17T20:39:42.796638Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\projects\companion-skill\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-17T20:39:42.796714Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\skills\icon-generator\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-17T20:39:42.796751Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\skills\obsidian-skills-integrated\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-17T20:39:42.796778Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\plugins\cache\openai-curated\heygen\4d01e8ac\skills\heygen-avatar\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+2026-06-17T20:39:42.796804Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\plugins\cache\openai-curated\heygen\4d01e8ac\skills\heygen-video\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+OpenAI Codex v0.140.0-alpha.19
+--------
+workdir: D:\Research\TRUCE-Rec
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019ed74e-0672-78d2-ae9d-6b7fde4cfe2b
+--------
+user
 You are a top-tier ML/RecSys conference reviewer acting as the ARIS research-refine GATE for the TRUCE-Rec project. Score NOVELTY and FEASIBILITY each 1-10 (gate = both ≥7) and give concrete, uncompromising blockers. Key context: TRUCE is a SEPARATE project from its sibling "pony" (which owns the plain pointwise LLM relevance posterior and is already strong on ranking). TRUCE's contribution is DISTRIBUTION-FREE RISK-CONTROLLED SELECTIVE RELIABILITY, not raw-ranking SOTA — its raw same-candidate NDCG@10 on beauty (0.1143) is below the ProEx bar (0.1506), and it openly positions itself as a reliability/guarantee contribution. Judge it on THAT framing (is a distribution-free served-slice rank-risk guarantee with a label-free confidence a novel + feasible + top-venue contribution?), not as a ranking-SOTA paper. Be skeptical of "this is just conformal risk control applied to NDCG". You have NO shell access and need none; do NOT call any tool — everything is inline.
 
 THIS IS REVISION 2. A prior ARIS research-refine review scored NOVELTY 7/10 and FEASIBILITY 6/10. Its TOP_BLOCKER was: "make the served-slice RankCRC guarantee mathematically precise and empirically verified across domains without mixing finite-sample certification with expectation-only validation." Its six concrete blockers were: (1) formal-guarantee ambiguity (mixing "certified/finite-sample" with "holds in expectation"); (2) selection validity after a label-free learned abstention threshold; (3) practical utility — non-trivial coverage at useful α across domains, not just beauty; (4) incrementality of the gain law (needs assumptions/falsification, not post-hoc fit); (5) label-free confidence robustness (AUC 0.627 modest — show transfer); (6) CALM must stay subordinate unless Stage-B proves it. The artifact below has been REVISED to address all six. Re-score the revision INDEPENDENTLY and strictly on its merits — do not anchor on the prior score. State explicitly whether each of the six blockers is now resolved, partially resolved, or still open, then give the final scores.
@@ -50,3 +71,52 @@ All full-scale (8 domains, 10k users/beauty 973, 101 cand, 8 official baselines 
 
 ## Next ARIS step
 On gate PASS (both ≥7): experiment-plan (M-ladder: GPU beauty Stage-B → Stage-2.5 reliability gate → decision → 8-domain RankCRC risk-control + coverage-Pareto + confidence-transfer results + CALM ablations + observation; ≥20-seed paper rows; compute). GPU runs queued behind pony.
+
+warning: Exceeded skills context budget of 2%. All skill descriptions were removed and 676 additional skills were not included in the model-visible skills list.
+codex
+**Gate Review**
+
+I would pass the revision on framing quality, but not as “done.” It now states the contribution in the right lane: selective reliability with a marginal distribution-free rank-risk guarantee, not ranking SOTA. That is a credible top-venue angle if the 8-domain evidence lands.
+
+Six prior blockers:
+
+1. Formal guarantee ambiguity: **resolved in wording, partially resolved mathematically.** The marginal-expectation claim is now appropriately scoped. Remaining issue: the paper must write the served-slice theorem carefully, especially random served calibration size and conditioning on frozen selector.
+2. Selection validity after label-free threshold: **mostly resolved.** The 3-fold discipline is the right answer. Need strict implementation audit proving no reuse/adaptive tuning leakage.
+3. Practical utility: **partially resolved.** It is pre-registered, not yet proven. Non-trivial coverage across 8 domains remains the main empirical gate.
+4. Incrementality of gain law: **mostly resolved.** The falsification framing is honest and avoids overclaiming. It should remain secondary unless it predicts well.
+5. Label-free confidence robustness: **partially resolved.** Beauty AUC 0.627 is acceptable but modest. Transfer/cross-ranker evidence is still missing.
+6. CALM load-bearing risk: **resolved.** CALM is now clearly subordinate and gated.
+
+Novelty: I score this **7/10**. “CRC applied to NDCG” alone would be a 5-6, but served-slice listwise rank-risk control plus label-free rank-geometry confidence and a deployable abstention protocol is a stronger and more publishable package. It is still an adaptation of known risk-control machinery, so the paper must make the recommender-specific operational value unavoidable.
+
+Feasibility: I score this **7/10**, conditionally. The revised plan is technically coherent, and beauty validation supports mechanism feasibility. But the actual feasibility proof is still future-facing: 8-domain risk control, useful coverage, and confidence transfer. If those fail, the contribution shrinks sharply.
+
+The single most important remaining blocker is empirical: prove useful served coverage at meaningful α across domains while preserving the stated marginal served-slice guarantee under the frozen-selector protocol.
+
+NOVELTY: 7/10
+FEASIBILITY: 7/10
+TOP_BLOCKER: demonstrate non-trivial cross-domain served coverage at useful alpha while preserving the formally stated frozen-selector marginal served-slice RankCRC guarantee
+tokens used
+26,328
+**Gate Review**
+
+I would pass the revision on framing quality, but not as “done.” It now states the contribution in the right lane: selective reliability with a marginal distribution-free rank-risk guarantee, not ranking SOTA. That is a credible top-venue angle if the 8-domain evidence lands.
+
+Six prior blockers:
+
+1. Formal guarantee ambiguity: **resolved in wording, partially resolved mathematically.** The marginal-expectation claim is now appropriately scoped. Remaining issue: the paper must write the served-slice theorem carefully, especially random served calibration size and conditioning on frozen selector.
+2. Selection validity after label-free threshold: **mostly resolved.** The 3-fold discipline is the right answer. Need strict implementation audit proving no reuse/adaptive tuning leakage.
+3. Practical utility: **partially resolved.** It is pre-registered, not yet proven. Non-trivial coverage across 8 domains remains the main empirical gate.
+4. Incrementality of gain law: **mostly resolved.** The falsification framing is honest and avoids overclaiming. It should remain secondary unless it predicts well.
+5. Label-free confidence robustness: **partially resolved.** Beauty AUC 0.627 is acceptable but modest. Transfer/cross-ranker evidence is still missing.
+6. CALM load-bearing risk: **resolved.** CALM is now clearly subordinate and gated.
+
+Novelty: I score this **7/10**. “CRC applied to NDCG” alone would be a 5-6, but served-slice listwise rank-risk control plus label-free rank-geometry confidence and a deployable abstention protocol is a stronger and more publishable package. It is still an adaptation of known risk-control machinery, so the paper must make the recommender-specific operational value unavoidable.
+
+Feasibility: I score this **7/10**, conditionally. The revised plan is technically coherent, and beauty validation supports mechanism feasibility. But the actual feasibility proof is still future-facing: 8-domain risk control, useful coverage, and confidence transfer. If those fail, the contribution shrinks sharply.
+
+The single most important remaining blocker is empirical: prove useful served coverage at meaningful α across domains while preserving the stated marginal served-slice guarantee under the frozen-selector protocol.
+
+NOVELTY: 7/10
+FEASIBILITY: 7/10
+TOP_BLOCKER: demonstrate non-trivial cross-domain served coverage at useful alpha while preserving the formally stated frozen-selector marginal served-slice RankCRC guarantee
