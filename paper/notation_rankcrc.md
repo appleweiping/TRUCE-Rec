@@ -18,7 +18,7 @@
 |---|---|
 | `ρ_u = 1 − NDCG@k(u) ∈ [0,1]` | per-user listwise rank-risk (fixed once base ranker + `k` are fixed) |
 | `x_u` | 24-dim label-free rank-geometry feature vector (score margins, softmax peakiness, responsibility-entropy order-stats, MC-dropout variance, popularity) |
-| `g(x_u) ∈ ℝ` | label-free confidence (logistic over `x_u`); higher ⇒ predicted-more-reliable |
+| `g(x_u) ∈ ℝ` | confidence (logistic over `x_u`), **label-free at inference**; higher ⇒ predicted-more-reliable. Fold-A training target is `ρ_u=1−NDCG@k` (derived from `y_u`); `g` reads no test-fold label at deployment |
 | AUC | discrimination of `g` for high- vs low-risk users (beauty: 0.627 vs `H_top` 0.519) |
 
 ## Selection and certification
