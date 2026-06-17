@@ -1,6 +1,6 @@
-target_coverage,mean_certified_alpha,mean_test_served_risk,test_risk_ci_lo,test_risk_ci_hi,guarantee_held_E,expectation_slack,frac_splits_held,mean_test_coverage,mean_test_served_NDCG
-0.9,0.88278,0.879718,0.861966,0.897048,True,0.003061,0.58,0.898,0.120282
-0.8,0.879315,0.876489,0.85751,0.893464,True,0.002826,0.55,0.7978,0.123511
-0.7,0.875625,0.872621,0.85182,0.89229,True,0.003004,0.53,0.6974,0.127379
-0.6,0.871074,0.86856,0.844519,0.889952,True,0.002514,0.525,0.5969,0.13144
-0.5,0.864757,0.862814,0.834518,0.885757,True,0.001943,0.54,0.4966,0.137186
+target_coverage,mean_certified_alpha,mean_test_served_risk,test_risk_ci_lo,test_risk_ci_hi,guarantee_held_E,expectation_slack,frac_splits_held,mean_test_coverage,mean_test_served_NDCG,mean_b2_served_m,frac_jitter
+0.9,0.882471,0.879578,0.861752,0.897848,True,0.002892,0.57,0.8947,0.120422,261.4,0.0
+0.8,0.878739,0.876355,0.855761,0.894263,True,0.002383,0.5,0.7958,0.123645,232.7,0.0
+0.7,0.875028,0.872779,0.851456,0.893269,True,0.002249,0.52,0.6984,0.127221,204.8,0.0
+0.6,0.869334,0.868416,0.842632,0.888844,True,0.000918,0.5,0.5958,0.131584,174.9,0.0
+0.5,0.863482,0.862705,0.832511,0.886397,True,0.000777,0.51,0.4971,0.137295,146.4,0.0
