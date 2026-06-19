@@ -1,5 +1,8 @@
 # Notation
 
+> **⚠️ SUPERSEDED — do NOT assemble into the paper.** This is the stale **CU-GR v2** notation.
+> The current TRUCE headline is **RankCRC**; use **`notation_rankcrc.md`**. Kept for history only.
+
 | Symbol | Meaning |
 | --- | --- |
 | `u` | User or evaluation instance. |

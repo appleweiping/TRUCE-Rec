@@ -1,5 +1,12 @@
 # Method
 
+> **⚠️ SUPERSEDED — do NOT assemble into the paper.** This is the stale **CU-GR v2** method
+> (candidate-panel LLM scorer + conservative fusion + harmful-swap control, a raw-ranking-improvement
+> goal). The current TRUCE headline is **RankCRC** (distribution-free risk-controlled *selective*
+> reliability) — see **`method_rankcrc.md`** (+ `notation_rankcrc.md`, `related_positioning_rankcrc.md`,
+> `introduction.md`). This file is kept for history only, mirroring the superseded `related_positioning.md`.
+> Reviewer scores and the gated theorem apply to `method_rankcrc.md`, not this file.
+
 ## 1. Problem Setup
 
 Let `I` denote the item catalog and let `H_u = (i_1, ..., i_t)` denote the chronological interaction history for user `u`. For each offline evaluation example, we are given a candidate set `C_u subset I`, a held-out target item `y_u in C_u`, and a fallback ranker `f` that scores or ranks all items in `C_u`. The target `y_u` is used only for offline evaluation and for constructing training or validation labels; it is never shown to the LLM as the target item in prompts.

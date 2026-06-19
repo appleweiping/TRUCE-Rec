@@ -1,5 +1,9 @@
 # Related Positioning
 
+> **⚠️ SUPERSEDED — do NOT assemble into the paper.** This is the stale **CU-GR v2** related-work.
+> The current TRUCE headline is **RankCRC**; use **`related_positioning_rankcrc.md`** (with the verified
+> `refs/conformal.bib`). Kept for history only.
+
 - **LLM-as-ranker.** CU-GR v2 shares the conditional candidate-ranking setting with LLM-as-ranker work [LLMRank], but its motivation differs: we start from observed free-form generation and confidence failures, then restrict the LLM to candidate-local preference estimation and calibrated fusion.
 
 - **Generative recommendation.** Generative recommendation often asks a model to produce item names, identifiers, or natural-language recommendations [GenerativeRecSurvey]. Our artifacts show that free-form title generation is brittle under strict catalog grounding in the MovieLens candidate-500 protocol. CU-GR v2 therefore uses generation only as structured preference signaling over valid candidate items, not as unconstrained final item generation.
