@@ -1,0 +1,2705 @@
+Reading prompt from stdin...
+2026-06-19T18:29:28.563286Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\vipin\chrome-automation\SKILL.md: failed to read file: invalid utf-8 sequence of 2 bytes from index 1706
+2026-06-19T18:29:28.563638Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\vipin\readme-blueprint-generator\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:29:28.563877Z ERROR codex_core::session::session: failed to load skill D:\AGENT_RESOURCE\skills\ecc\skills\flox-environments\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+2026-06-19T18:29:28.564539Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\projects\companion-skill\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:29:28.564634Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\skills\icon-generator\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:29:28.564671Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\skills\obsidian-skills-integrated\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:29:28.564698Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\plugins\cache\openai-curated\heygen\202e9242\skills\heygen-avatar\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+2026-06-19T18:29:28.564726Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\plugins\cache\openai-curated\heygen\202e9242\skills\heygen-video\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+OpenAI Codex v0.140.0-alpha.19
+--------
+workdir: D:\Research\TRUCE-Rec
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019ee123-b00b-7ec1-824b-569fede1fd6d
+--------
+user
+You are an adversarial top-conference reviewer (RecSys/SIGIR/KDD/NeurIPS level). Review ONLY the
+RankCRC RELATED-WORK / POSITIONING below for (a) the strength of its incrementality defense and
+(b) citation accuracy/appropriateness. This is results-independent positioning, not an empirical
+claim — do NOT ask for experiments. Be skeptical and specific.
+
+RankCRC in one line: a distribution-free, risk-controlled SELECTIVE recommendation method. It
+serves only a slice of users and gives a marginal-expectation Conformal-Risk-Control bound
+mu(lambda) <= E_B2[alpha] on the SERVED-SLICE listwise rank-risk E[1 - NDCG@k | served]. The
+served-slice mean is a self-normalized conditional mean with a RANDOM served count; plain CRC does
+not attach to the naive served-slice estimator (random-denominator winner's curse), repaired by a
+frozen-lambda B1/B2 split. The confidence selector g is LABEL-FREE over rank-geometry of the base
+ranker's candidate scores (held-out label forbidden as a feature).
+
+Focus your critique on these questions, each answered concretely:
+1. Is the incrementality defense vs the two CLOSEST neighbors convincing?
+   - Angelopoulos et al. 2023 (COPA, "Recommendation Systems with Distribution-Free Reliability
+     Guarantees"): controls the size/coverage of a RETURNED SET over the FULL population.
+   - Xu et al. 2025 (IJCAI, "Two-stage Risk Control with Application to Ranked Retrieval"):
+     controls STAGE-WISE retrieval losses via LTT/CRC, marginally over all queries.
+   Does "served-slice conditional listwise-NDCG risk + label-free selector + frozen-lambda split"
+   genuinely distinguish RankCRC, or could a reviewer collapse it to one of these? Name the single
+   strongest reviewer objection and whether the text already rebuts it.
+2. Are any cited works MIS-positioned or is any obvious neighbor MISSING (e.g. selective ranking,
+   conformal IR, abstention-with-guarantee work) that a reviewer would demand?
+3. Is the "to our knowledge, no prior work provides a distribution-free marginal-expectation bound
+   on top-k listwise NDCG risk among accepted users using a label-free frozen selector" claim
+   appropriately hedged, or over-/under-claimed?
+
+End with: SCORE_POSITIONING: X/10 and the single most important fix. Keep under 400 words.
+
+=== RELATED-WORK / POSITIONING TEXT UNDER REVIEW ===
+# Related Work & Positioning — RankCRC
+
+> Current positioning for the RankCRC headline (replaces the stale CU-GR `related_positioning.md`, kept for history). Locked / experiment-independent. The contribution is **distribution-free risk-controlled selective reliability** for recommendation, not raw-ranking SOTA.
+
+## Conformal prediction and conformal risk control
+Split conformal prediction \citep{vovk2005algorithmic,angelopoulos2023gentle} gives distribution-free coverage for set-valued predictors; Conformal Risk Control \citep{angelopoulos2024crc} extends this to any bounded, monotone loss, yielding `E[L(λ̂)] ≤ α` in marginal expectation. RCPS \citep{bates2021rcps} and Learn-then-Test \citep{angelopoulos2021ltt} give the high-probability (PAC) analogue via multiple-testing. **RankCRC's difference:** the controlled object is **listwise rank-risk** (`1 − NDCG@k`) on the **served slice after abstention** (a self-normalized conditional mean), not a pointwise loss over the full population. We show plain CRC does not attach to the naive served-slice estimator (random-denominator winner's curse) and repair it with a frozen-`λ` B1/B2 split so the served mean is an honest i.i.d. mean; we name LTT as the PAC upgrade and a numerator+coverage-floor route as an exact surrogate. To our knowledge, no prior work provides a distribution-free marginal-expectation bound on **top-`k` listwise NDCG risk among accepted users using a label-free frozen selector** in recommendation (we state this narrowly, "to our knowledge," not as a broad first-of-kind).
+
+## Conformal selective prediction / abstention WITH guarantees
+Beyond heuristic abstention, a line of work gives *guaranteed* selective prediction: risk-controlling prediction sets \citep{bates2021rcps}, conformalized selective classification and abstention systems built on RCPS/Learn-then-Test, distribution-free reliability guarantees applied directly to recommendation \citep{angelopoulos2023recsys}, and two-stage conformal risk control for ranked retrieval \citep{xu2025twostage}. These control pointwise, set-coverage, or stage-wise retrieval losses, typically over the full population or via prediction-set size. **RankCRC's difference (vs.\ the two closest neighbors):** \citet{angelopoulos2023recsys} attach a distribution-free guarantee to the *size/coverage of a returned candidate set* over the *full* user population; \citet{xu2025twostage} control *stage-wise retrieval losses* (e.g.\ recall at a cutoff) for a two-stage pipeline via LTT/CRC, again marginally over all queries. RankCRC instead controls a *conditional* served-slice **listwise NDCG** risk `E[1−NDCG@k | served]` — a self-normalized conditional mean with a *random* served count among users an abstention policy chose to serve — with a *label-free* rank-geometry selector and the frozen-`λ` B1/B2 discipline that makes the conditional-mean certificate valid (neither neighbor controls a post-abstention conditional listwise mean, and neither uses a label-free served-slice selector). RankCRC is best read as *transferring* this guaranteed-abstention machinery to recommendation with a recsys-specific listwise target — a protocol/application contribution, not a new conformal theorem.
+
+## Selective prediction / classification WITHOUT guarantees
+SelectiveNet \citep{geifman2019selectivenet} and the risk–coverage literature learn an abstention head trading coverage for accuracy, but provide **no distribution-free finite-sample risk guarantee** — the risk–coverage curve is empirical. **RankCRC's difference:** it adds the CRC marginal-expectation bound on top of abstention, and the selector is *label-free* over rank-geometry features rather than a jointly-trained confidence head. We include a SelectiveNet-without-guarantee baseline (trained on Fold A only, matched coverage) precisely to isolate that the *guarantee* — not merely "abstain on hard users" — is the contribution.
+
+## LLM-uncertainty calibration
+Verbalized-confidence and calibration work (ECE, temperature scaling, reliability diagrams; Kadavath et al.; Tian et al.) asks whether an LLM's stated confidence matches accuracy. **RankCRC makes no ECE / reliability-diagram claim**: the object is an operational *served-slice risk bound*, a different operational guarantee than calibration of a confidence number (different in kind — a risk bound on a served sub-population — not a strictly stronger version of ECE). Our confidence `g` is not the LLM's verbalized confidence but a logistic model over rank-geometry of the base ranker's candidate scores, with the held-out label forbidden as a feature.
+
+## Selective / reliable recommendation and LLM-for-RecSys
+Prior LLM-for-recommendation work (the 8 official baselines: ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLM-ESR, ProEx, ProMax, RLMRec) targets raw-ranking improvement on the full user population. Selective / cautious recommendation has been explored heuristically (confidence thresholds, popularity gating) without distribution-free guarantees. **RankCRC's difference:** it reframes the problem as *risk-controlled reliability* — serve the slice on which the served-slice rank-risk `E[1−NDCG@k | served]` is bounded by `α` in marginal expectation — orthogonal to raw SOTA, and demonstrates (the empirical contribution, GPU-gated) that a deployable label-free-at-inference selector holds the bound across 8 domains with non-trivial coverage and transfers across domains/rankers. The sibling pointwise-posterior method (pony) owns the raw-ranking lane; TRUCE owns the reliability lane.
+
+## Why this is not "CRC applied to NDCG"
+The strongest reviewer objection is incrementality. The novelty is the *combination*: (i) listwise rank-risk as the controlled quantity; (ii) the served-slice selective framing; (iii) a **label-free, deployable** confidence over rank-geometry (no test peek), repaired with the frozen-`λ` split so the conditional-mean certificate is valid; (iv) a *falsifiable* gain law that predicts the served-slice lift a priori; and (v) the 8-domain feasibility triad (cross-domain risk control + non-trivial coverage at useful `α` + label-free confidence transfer) — which no prior conformal-recsys work \citep{angelopoulos2023recsys,xu2025twostage} demonstrates. The value is orthogonal to raw SOTA: a "serve only when the served-slice rank-risk is bounded in marginal expectation" policy is operationally useful even when raw ranking is mid-pack.
+
+> **Citation status (citation-audit, 2026-06-20):** RESOLVED for the conformal core. The by-category prose above is now keyed to concrete, bibliographically-verified references in `refs/conformal.bib` (Vovk–Gammerman–Shafer 2005; Angelopoulos & Bates gentle intro; Conformal Risk Control, ICLR 2024; RCPS, JACM 2021; Learn-then-Test 2021; Angelopoulos et al. distribution-free recsys reliability, COPA 2023; Xu et al. two-stage risk control for ranked retrieval, IJCAI 2025; SelectiveNet, ICML 2019). Each entry's authors/year/venue were verified before inclusion — none fabricated. **Still pending (needs the experiment phase):** baseline/method citations for the 8 official LLM-for-RecSys systems and any RankCRC empirical-claim citations are added once the results block exists; verify each new entry the same way before adding.
+
+warning: Exceeded skills context budget of 2%. All skill descriptions were removed and 676 additional skills were not included in the model-visible skills list.
+codex
+I’ll verify the two closest cited neighbors and the conformal/selective framing first, then give the review in the requested reviewer style and length.
+web search: 
+web search: Angelopoulos Recommendation Systems with Distribution-Free Reliability Guarantees COPA 2023
+web search: 
+web search: conformal selective classification abstention risk control finite sample guarantee
+web search: 
+web search: Angelopoulos Bates gentle introduction conformal prediction distribution-free uncertainty quantification 2023
+codex
+I’m also loading the project-specific TRUCE instructions because this is a RankCRC/TRUCE positioning review, but I’ll keep the actual response constrained to the requested critique rather than broad project advice.
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\.codex\\skills\\truce-rec\\SKILL.md'" in D:\Research\TRUCE-Rec
+ succeeded in 2972ms:
+---
+name: truce-rec
+description: Operate safely inside the TRUCE-Rec research codebase. Use when working on TRUCE-Rec code, configs, docs, experiments, Ours/CURE/TRUCE method work, baseline implementation or audits, server handoffs, artifact validation, paper-readiness review, or any nontrivial LLM4Rec recommendation task that must preserve same-candidate fairness, Qwen3-8B-LoRA baseline policy, evidence boundaries, and publishable-research standards.
+---
+
+# TRUCE-Rec
+
+## Core Contract
+
+Treat TRUCE-Rec as a publishable LLM4Rec research system. Do not add toy demos,
+mock-only claims, pseudo-results, paper conclusions, or shortcuts that make
+baselines incomparable.
+
+Preserve the research spine:
+
+```text
+generative recommendation observation
+  -> catalog grounding and uncertainty/popularity/long-tail/echo diagnostics
+  -> original non-stitched CURE/TRUCE framework
+  -> Qwen3-8B-LoRA Ours and official/fair baselines
+  -> shared same-candidate evaluator
+  -> four-domain paper-scale experiments
+```
+
+## Startup Workflow
+
+For every nontrivial task, read the project startup packet before planning:
+
+- `AGENTS.md`
+- `docs/PROJECT_MEMORY.md`
+- `docs/RESEARCH_IDEA.md`
+- `docs/submission_roadmap.md`
+- `docs/top_conference_review_plan.md`
+- task-specific source, config, and test files before editing
+
+Read additional docs by task type:
+
+- Baselines/protocols: `docs/qwen3_lora_controlled_baselines.md` and
+  `docs/controlled_baseline_fidelity_audit.md` when present.
+- Server work: `docs/server_execution_matrix.md`,
+  `docs/server_next_commands.md`, and the exact scripts being changed.
+- Ours/method work: `docs/ours_method_plan.md`,
+  `docs/cure_truce_framework.md`, `docs/ablation_protocol.md`, and current
+  method source/tests when present.
+
+For the full decision table, read `references/task-startup.md`.
+
+## How To Work
+
+1. Inspect first with `rg`, `rg --files`, and targeted file reads.
+2. Plan before large refactors or research-method changes.
+3. Keep source changes config-driven and compatible with existing interfaces.
+4. Use the shared candidate rows, score schema, prediction schema, and evaluator
+   for every comparable method.
+5. Add or update focused tests/smoke checks when behavior changes.
+6. Run local commands that are feasible; for server-only jobs, provide exact
+   commands and wait for pasted logs/artifacts.
+7. Update stale docs when status, commands, evidence boundaries, or baseline
+   policy changes.
+8. After substantial local code/doc/config work, commit and push unless the user
+   explicitly says not to.
+
+When the environment permits and the task is complex, use separate
+implementation/explorer and reviewer/fairness passes. If subagents are
+unavailable, perform those passes explicitly in the main agent.
+
+## Research Guardrails
+
+Before changing Ours/CURE/TRUCE, read `docs/RESEARCH_IDEA.md` and
+`docs/PROJECT_MEMORY.md`.
+
+Do not turn Ours into:
+
+- a generic LLM reranker;
+- a generic RAG recommender;
+- prompt engineering as the contribution;
+- a renamed or stitched clone of TALLRec, OpenP5, DEALRec, LC-Rec, LLaRA,
+  LLM-ESR, or another reference project.
+
+The contribution must stay recommendation-specific: generated title grounding,
+catalog validity, hallucination, popularity-confounded confidence, long-tail
+under-confidence, history/echo risk, and conservative fallback-aware routing or
+policy learning.
+
+For evidence labels, paper-result rules, and method no-go checks, read
+`references/research-evidence.md`.
+
+## Baseline And Evaluation Policy
+
+Main LLM baseline comparisons must follow the shared policy:
+
+```text
+official implementation where claimed
+  + Qwen3-8B shared backbone
+  + LoRA adaptation
+  + official/default or reported-optimal baseline hyperparameters
+  + same TRUCE splits/candidates/evaluator
+  + preserved event/source IDs
+```
+
+Never tune baselines on TRUCE test outcomes. Ours may tune only through the
+declared validation protocol.
+
+Do not call TRUCE-side adapter pilots official-native baselines. Do not mix
+methods with different candidates, splits, negative sampling, backbones, or
+evaluators in one main comparison table.
+
+For baseline families, score schemas, Week8 domains, and server handoffs, read
+`references/baselines-server.md`.
+
+## Server And Evidence Discipline
+
+Assume local Codex cannot see the server unless artifacts are local or the user
+pastes logs. Provide concrete server commands, then wait for evidence before
+claiming completion.
+
+Use these evidence labels consistently:
+
+- `smoke/mock`
+- `diagnostic`
+- `controlled_adapter_pilot`
+- `official_native_controlled`
+- `paper_result`
+
+Paper writing is allowed only after real metrics, ablations, failure cases,
+statistical tests, efficiency/cost artifacts, and a top-conference-style review
+show no fatal gaps.
+
+For reviewer prompts and writing-ready gates, read
+`references/review-checklist.md`.
+
+codex
+I’ve verified the closest-neighbor papers online. Now I’m checking the local project memory/roadmap so the critique stays inside the repo’s stated evidence boundaries rather than importing an unrelated novelty frame.
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\docs\\PROJECT_MEMORY.md'" in D:\Research\TRUCE-Rec
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\docs\\submission_roadmap.md'" in D:\Research\TRUCE-Rec
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\AGENTS.md'" in D:\Research\TRUCE-Rec
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\docs\\top_conference_review_plan.md'" in D:\Research\TRUCE-Rec
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\docs\\RESEARCH_IDEA.md'" in D:\Research\TRUCE-Rec
+ succeeded in 3624ms:
+# Top-Conference Review Plan
+
+This plan records the internal review standard before paper writing. It should
+be used by future Codex agents as a reviewer checklist, not as a claim that the
+paper is ready.
+
+## Likely Rejection Reasons
+
+1. **Novelty looks like generic LLM reranking.**
+   Defense: tie every method component to the observation object: grounded
+   title uncertainty, popularity residuals, long-tail under-confidence, and
+   exposure-aware routing.
+
+2. **Novelty looks stitched from senior-recommended or recent projects.**
+   Defense: use those projects only for reproduction fidelity and inspiration.
+   The method contribution must be an original observation-to-policy framework
+   with TRUCE-specific targets, diagnostics, conservative fallback, and
+   ablations. Reject paper text that merely renames another project's training
+   objective, prompt format, or pipeline.
+
+3. **Baselines are not official or are too weak.**
+   Defense: reuse Pony/Uncertainty official-qwen3base same-candidate evidence
+   for LLM2Rec, LLM-ESR, LLMEmb, RLMRec, IRLLRec, ELMRec, ProEx, and ProMax;
+   keep legacy TRUCE controlled-adapter pilots out of final main tables.
+
+4. **Data is too toy.**
+   Defense: move from tiny/MovieLens/Beauty debugging to four-domain Week8
+   same-candidate experiments with up to 10k users and 100 negatives.
+
+5. **Candidate protocol is unfair.**
+   Defense: all methods score the exact same candidate rows and preserve event
+   IDs for paired testing.
+
+6. **Uncertainty metrics are unconvincing.**
+   Defense: report ECE, Brier, selective risk, wrong-high-confidence cases,
+   correct-low-confidence cases, and head/mid/tail reliability.
+
+7. **Long-tail or diversity benefit is unclear.**
+   Defense: include tail Recall/NDCG/MRR, coverage, novelty, diversity, and
+   popularity-stratified analysis.
+
+8. **Ablation does not isolate the proposed framework.**
+   Defense: run component ablations for grounding, uncertainty policy,
+   candidate-normalized confidence, popularity residuals, echo/history guard,
+   and fallback-only routing.
+
+9. **Cost/latency is ignored.**
+   Defense: record runtime, GPU memory where available, API tokens/cost where
+   applicable, and throughput.
+
+## Reviewer-Implementation Loop
+
+For complex method work, do not let a single implementation pass define the
+final design. Run an explicit loop:
+
+```text
+implementation agent proposes or edits method/code
+  -> reviewer agent critiques originality, fairness, leakage, and toy risk
+  -> implementation agent revises code/configs/tests
+  -> main agent updates server commands and docs
+```
+
+If subagents are unavailable, perform these as separate named passes in the
+main agent. The task is not done until the reviewer pass has a clear verdict,
+the remaining risks are documented, and the next server command is explicit.
+
+## Broad Literature Comparison Rule
+
+When judging whether TRUCE-Rec is rigorous enough, do not compare only against
+one or two convenient baselines. Search and read broadly across recent
+SIGIR/WWW/KDD/RecSys/NeurIPS/ICLR-style recommender and LLM4Rec papers,
+prioritizing official repositories or paper artifacts when available. The
+comparison should ask:
+
+- Is the method more than a prompt wrapper or generic reranker?
+- Are baselines strong, official, and protocol-compatible?
+- Are datasets large and multi-domain enough for the target venue?
+- Are ablations sufficient to isolate each claimed contribution?
+- Are statistical, efficiency, long-tail, validity, and failure analyses
+  complete enough to defend the paper?
+
+Any claim that the experiment phase is "basically done" must cite the current
+artifact gates, not intuition.
+
+## Current Method Review Note
+
+As of 2026-05-09, a reviewer/implementation pass judged that Ours should not
+stop at deterministic pairwise/listwise SFT prompts. The implemented upgrade is
+`truce_observation_residual_policy_sft_v2`: an observation-to-policy target
+layer with candidate-normalized utility, popularity-residual utility, harm
+risk, abstain risk, and conservative `promote/suppress/defer_to_fallback`
+actions. This improves technical depth relative to a prompt-only reranker, but
+it is still only a training objective scaffold until server runs and ablations
+prove utility.
+
+Reviewer risk that remains: the policy targets are deterministic scaffolds. A
+stronger final method should incorporate real observation diagnostics and
+validation-fitted calibration/residualization before claiming learned
+uncertainty behavior.
+
+## Writing-Ready Gate
+
+The experiment phase can move to paper writing only when a reviewer-style pass
+finds no fatal gap in:
+
+- four-domain same-candidate coverage;
+- base Qwen3-8B and four senior-recommended baseline observation analyses;
+- official/fair baseline training, scoring, import, and evaluation;
+- Ours full and ablation artifacts;
+- paired significance and slice metrics;
+- efficiency/cost/runtime logs;
+- case studies and limitations;
+- reproducibility manifests, configs, git/environment records, and raw score
+  or raw response preservation.
+
+If the gate is satisfied, tell the user the project has entered the
+writing-ready stage. If not, list only the concrete blockers and the shortest
+plan to close them.
+
+## Required Reviewer Tables
+
+- Main four-domain ranking table.
+- Official-native controlled baseline table.
+- Ours ablation table.
+- Observation/reliability table.
+- Long-tail/popularity-stratified table.
+- Validity/hallucination/candidate-adherence table.
+- Efficiency/cost table.
+- Statistical significance table or appendix.
+
+## Required Case Studies
+
+- wrong-high-confidence generated title;
+- correct-low-confidence tail item;
+- hallucinated title that cannot be grounded;
+- popularity-biased high-confidence recommendation;
+- Ours reroutes away from risky generated item;
+- Ours failure where uncertainty policy hurts.
+
+## Internal Reviewer Agent Prompt
+
+Use this prompt after each full experiment phase:
+
+```text
+Act as a SIGIR/WWW/RecSys/NeurIPS reviewer. Given the current metrics,
+artifacts, configs, and docs, identify fatal flaws in originality, baseline
+fairness, data scale, leakage, ablations, statistical testing, efficiency,
+long-tail analysis, and reproducibility. Do not praise the work unless the
+artifact evidence supports it. List missing experiments before paper claims.
+Also check whether the proposed method is a genuinely original TRUCE/CURE
+framework or only a stitched combination of senior-recommended papers.
+```
+
+## Literature Agent Prompt
+
+Use this prompt before freezing baselines:
+
+```text
+Act as an LLM4Rec literature auditor. Check whether each selected baseline is
+representative, official-native where claimed, and comparable under the shared
+Qwen3-8B base-model and TRUCE candidate/evaluator protocol. Flag missing
+recent baselines and classify them as main, appendix, long-tail, sequential, or
+efficiency baselines.
+```
+
+ succeeded in 4221ms:
+# Submission Roadmap
+
+This roadmap keeps the project centered on a publishable TRUCE-Rec system. It
+is a planning and execution contract, not a result table.
+
+## North Star
+
+TRUCE-Rec should become a complete recommendation framework that starts from a
+recommendation-specific observation and ends with a reproducible four-domain
+experimental system:
+
+```text
+LLM generative recommendation observation
+  -> Beauty full-domain plus books/electronics/movies 10k-user observation
+  -> base Qwen3-8B plus senior-recommended Qwen3-8B-LoRA baseline observation
+  -> grounded uncertainty and popularity/long-tail diagnostics
+  -> original non-stitched CURE/TRUCE framework
+  -> reused Pony/Uncertainty official-qwen3base baselines
+  -> unified same-candidate evaluator
+  -> four-domain paper-scale results
+```
+
+The core original contribution remains uncertainty-aware generative
+recommendation: generated title grounding, uncertainty reliability, popularity
+confounding, long-tail under-confidence, echo/history inertia risk, and
+exposure-aware routing/reranking.
+
+## Milestones
+
+### M0. Governance And Evidence Boundaries
+
+Status: mostly complete.
+
+Keep:
+
+- `AGENTS.md`, `docs/RESEARCH_IDEA.md`, and `docs/experiment_protocol.md` as
+  the source of truth for non-toy, non-fabricated research practice.
+- `docs/PROJECT_MEMORY.md` as the durable future-agent memory for big
+  direction, senior baseline advice, server workflow, update discipline, and
+  current next moves.
+- Evidence labels: smoke/mock, diagnostic, controlled adapter pilot,
+  official-native controlled baseline, paper result.
+- One shared prediction/evaluation schema for every method.
+
+Exit criteria:
+
+- README and phase handoff point to the current roadmap.
+- README, AGENTS, and phase handoff point to `docs/PROJECT_MEMORY.md`.
+- Any generated result is machine-labeled with its evidence scope.
+
+### M1. Observation Validation Across Base Qwen3 And Four Baselines
+
+Status: implemented as schema/scaffold plus prior pilots; needs four-domain
+reruns and baseline-side observation.
+
+Purpose:
+
+- Show the phenomenon, not just method performance.
+- Quantify confidence vs correctness, grounding, hallucination, popularity,
+  long-tail, history similarity, diversity, and candidate adherence.
+- Verify whether the phenomena first seen under base Qwen3-8B also appear
+  under stronger Qwen3-8B-LoRA baseline systems.
+
+Required scope:
+
+- Beauty full-domain observation.
+- Week8 books/electronics/movies 10k-user same-candidate observation.
+- Base Qwen3-8B forced-JSON/generative observation.
+- At minimum, four senior-recommended Qwen3-8B-LoRA baselines in the
+  observation analysis: TALLRec, OpenP5, DEALRec, and LC-Rec.
+- Observation size should match the later formal train/eval size whenever
+  compute allows.
+
+Required outputs:
+
+- grounded observation rows;
+- reliability and selective-risk analysis;
+- head/mid/tail slices;
+- wrong-high-confidence and correct-low-confidence cases;
+- candidate adherence and grounding diagnostics.
+
+Exit criteria:
+
+- Observation analysis runs on Beauty plus Week8 books/electronics/movies.
+- Base Qwen3-8B and the four senior-recommended baselines are analyzed through
+  the same observation report schema.
+- The report separates "base-only phenomenon" from "phenomenon also visible
+  under stronger baseline systems."
+- Claims are limited to completed runs and paired source artifacts.
+
+### M2. Original CURE/TRUCE Framework
+
+Status: scaffold exists; TRUCE-native Qwen adapter data preparation now exists;
+paper-grade learned policy/adapter training, inference, and ablation still
+need server execution and reviewer-loop refinement.
+
+Required components:
+
+- generated title and catalog grounding;
+- multiple uncertainty signals where available;
+- popularity residual/deconfounded confidence;
+- echo/history-inertia risk;
+- exposure-aware candidate routing/reranking;
+- learned observation-to-target or improve/harm/abstain policy rather than
+  only hand-written prompt/rule supervision;
+- conservative fallback-preserving fusion that blocks risky LLM promotions;
+- TRUCE-native Qwen adapter data that combines pairwise acceptance and listwise
+  target-first supervision while preserving uncertainty/risk metadata;
+- ablation switches for each component.
+
+Current implementation anchors:
+
+- `src/llm4rec/methods/ours_framework.py`: builds Ours pairwise/listwise
+  training and scoring prompts with grounding, popularity bucket, and
+  history-risk evidence. Current v2 supervision also includes
+  candidate-normalized utility, popularity-residual utility, harm/abstain risk,
+  and conservative promote/suppress/fallback policy actions.
+- `scripts/prepare_ours_qwen_adapter_training.py`: writes
+  `train_sft.jsonl`, `valid_sft.jsonl`, `test_score_plan.jsonl`, and
+  `ours_adapter_manifest.json`.
+- `scripts/import_evaluate_ours_adapter.py`: imports Ours `candidate_scores.csv`
+  through the same TRUCE evaluator path as official baselines.
+
+Required ablations:
+
+- Ours full;
+- no uncertainty policy;
+- no grounding;
+- no candidate-normalized confidence;
+- no popularity residual/adjustment;
+- no echo/history guard;
+- fallback-only;
+- LLM generative only;
+- LLM rerank only.
+
+Submilestones:
+
+- M2a: build structured observation-derived train/valid targets without using
+  test correctness. Initial v2 policy targets are implemented from
+  train/catalog evidence.
+- M2b: train a TRUCE adapter/policy for calibrated candidate preference or
+  improve/harm/abstain decisions. The current score prefix is
+  `{"policy_action": "promote"}`.
+- M2c: fuse learned policy with fallback ranking under conservative promotion
+  gates.
+- M2d: run component ablations across the four-domain same-candidate protocol.
+- M2e: pass top-conference reviewer and implementation-agent critique that the
+  method is not generic LLM reranking, prompt engineering, RAG, or a stitched
+  clone of the reference projects.
+
+Exit criteria:
+
+- Ours emits the same prediction schema as every baseline.
+- Every component has an ablation and a matching observation motivation.
+- No policy decision uses target correctness.
+- Ours adapter scores import through `candidate_scores.csv` with event/source
+  IDs preserved for paired comparison.
+- Reviewer verdict and remaining risks are recorded before paper writing.
+
+### M2.5. Formal Ours And Reused Fair Baseline Evaluation
+
+Status: planned for Ours; external baseline source switched to reused
+Pony/Uncertainty official-qwen3base evidence.
+
+Purpose:
+
+- Convert observation-stage insights into formal train/valid/test experiments.
+- Train/evaluate Ours under the declared shared protocol, then compare against
+  reused Pony official baseline rows instead of rerunning the same external
+  baseline suite inside TRUCE.
+
+Required policy:
+
+- External baselines come from Pony/Uncertainty official-qwen3base
+  same-candidate evidence, with local TRUCE evidence packages copied and
+  tracked by `configs/baselines/pony_official_external_baselines.yaml`.
+- Ours tuned only through validation.
+- Same candidates, same splits, same score schema, same evaluator.
+
+Exit criteria:
+
+- Each method has `candidate_scores.csv`, `predictions.jsonl`, `metrics.json`,
+  `metrics.csv`, manifest, environment/git info, and logs.
+- Formal tables exclude smoke/mock and controlled-adapter-pilot artifacts.
+- Any deviation from the main protocol is moved to a separated appendix lane.
+
+### M3. Baseline System
+
+Status: traditional/text/sequential interfaces exist for smoke/control. The
+paper-facing external baseline lane now reuses Pony/Uncertainty
+official-qwen3base same-candidate evidence.
+
+Baseline tiers:
+
+- Traditional and retrieval: Random, Popularity, BM25, MF/BPR where feasible.
+- Sequential/graph: SASRec, BERT4Rec, GRU4Rec, LightGCN or RecBole-compatible
+  wrappers.
+- LLM task baselines: zero-shot/few-shot generative, candidate rerank,
+  constrained candidate rerank.
+- Reused Pony official LLM4Rec families:
+  - LLM2Rec;
+  - LLM-ESR;
+  - LLMEmb;
+  - RLMRec;
+  - IRLLRec;
+  - ELMRec;
+  - ProEx;
+  - ProMax.
+
+Active baseline evidence contract:
+
+```text
+Pony/Uncertainty official-qwen3base run
+  + shared four-domain same-candidate protocol
+  + copied evidence package under TRUCE outputs
+  + source_event_id,user_id,item_id,score
+  + TRUCE manifest/table eligibility gates
+```
+
+Exit criteria:
+
+- Reused baseline rows have copied evidence tarballs, sha256, size, status, and
+  source paths in `configs/baselines/pony_official_external_baselines.yaml`.
+- Pending rows are excluded from the main comparison table.
+- Legacy TRUCE controlled-adapter pilots are not mixed into final official
+  baseline tables.
+- All paper-facing external baselines preserve the score schema:
+  `source_event_id,user_id,item_id,score`.
+
+### M4. Data Ladder
+
+Status: Beauty early pipeline exists; Week8 converter exists for large
+same-candidate tasks.
+
+Dataset ladder:
+
+- tiny fixtures: tests only;
+- MovieLens: sanity and low-cost pilot;
+- Amazon Beauty: first full-domain pipeline and debugging domain;
+- Week8 four-domain benchmark:
+  - `beauty_supplementary_smallerN_100neg`;
+  - `books_large10000_100neg`;
+  - `electronics_large10000_100neg`;
+  - `movies_large10000_100neg`.
+
+Week8 target protocol:
+
+- Beauty supplementary smaller-N plus up to 10,000 users for the three large
+  domains;
+- 1 positive + 100 popularity-sampled negatives per event;
+- same-candidate setting for all methods;
+- test history mode: `train_plus_valid`;
+- preserve `event_id`, `source_event_id`, `user_id`, `item_id`, and `split`.
+
+Exit criteria:
+
+- No user/negative/candidate resampling in TRUCE.
+- Every method scores the same candidate rows.
+- Outputs support paired tests and rank-fusion/oracle analysis.
+
+### M5. Four-Domain Experiment Suite
+
+Status: planned.
+
+For each domain:
+
+1. Convert Week8 task directories into TRUCE processed artifacts.
+2. Import/validate reused Pony official baseline evidence for eligible rows.
+3. Run traditional/retrieval/sequential baselines only as controls if needed.
+4. Rebuild Pony baseline comparison/status tables.
+5. Run Ours full and ablations.
+6. Import all scores through TRUCE.
+7. Evaluate ranking, validity, coverage, diversity, novelty, long-tail,
+   efficiency, and paired significance.
+8. Run observation diagnostics on Ours and strong baselines.
+
+Exit criteria:
+
+- Each domain has complete `predictions.jsonl`, `metrics.json`, `metrics.csv`,
+  manifests, environment, git info, logs, and raw score artifacts.
+- Missing runs are explicitly listed; no empty table cells are silently filled.
+
+### M6. Top-Conference Defense
+
+Status: planned and partially documented.
+
+Reviewer-proof requirements:
+
+- demonstrate originality beyond generic LLM reranking or RAG;
+- use official-native baselines, not weak prompt lookalikes;
+- report multiple domains and long-tail/coverage/validity metrics;
+- include ablations tied to the observation findings;
+- show paired statistical tests;
+- include cost/latency/throughput;
+- preserve failure cases and limitations.
+
+Exit criteria:
+
+- A reviewer checklist exists before paper writing.
+- Paper tables are generated only from completed metrics artifacts.
+- Limitations include grounding ambiguity, implicit-feedback incompleteness,
+  candidate-set scope, and compute/API budget constraints.
+
+## Server-First Execution Order
+
+1. Do not launch new TRUCE controlled-adapter baseline reruns by default; keep
+   that lane legacy/pilot-only unless the user explicitly reopens it.
+2. Pull latest TRUCE-Rec on the server.
+3. Verify Week8 task availability for beauty/books/electronics/movies.
+4. Convert Week8 valid/test splits into TRUCE processed artifacts.
+5. Import/copy Pony official baseline evidence packages and rebuild the TRUCE
+   Pony comparison/status tables.
+6. Run cheap traditional/retrieval/sequential baselines only as controls when
+   needed.
+7. Keep the Pony manifest current as missing/pending baseline evidence arrives.
+8. Run Ours and ablations.
+9. Run import/evaluation/analysis/export.
+10. Freeze artifacts for paper tables.
+
+## Non-Negotiable Stop Conditions
+
+- If a candidate set changes, stop and regenerate all affected comparable
+  methods.
+- If an official baseline falls back to a generic TRUCE prompt adapter, label
+  it as a pilot.
+- If a run lacks `predictions.jsonl` and TRUCE `metrics.json`, do not use it in
+  a result table.
+- If a method uses a different backbone or official checkpoint, move it to
+  reference/appendix unless the table explicitly separates protocols.
+- If a completed stage changes direction, commands, baseline policy, or status
+  but `docs/PROJECT_MEMORY.md` is not updated, stop and update the memory before
+  handing off.
+
+ succeeded in 4615ms:
+# RESEARCH_IDEA.md
+
+## 1. Purpose
+
+This document is the source of truth for the project's research idea.
+
+AGENTS.md defines engineering rules, reproducibility requirements, interfaces, baselines, metrics, and validation standards. It does not define the core research idea.
+
+This document locks the research direction so that future implementation phases do not accidentally turn the project into a generic LLM reranker, generic RAG recommender, or prompt-engineering baseline.
+
+Reference projects can be studied deeply, especially senior-recommended
+LLM4Rec papers and official top-conference implementations. They are allowed
+as inspiration for experimental fidelity, task framing, and reproduction
+discipline only. The final TRUCE/CURE method must not be a stitched, copied,
+or renamed blend of those papers' objectives, prompts, modules, or pipelines.
+
+## 2. Core Research Direction
+
+The project studies:
+
+```text
+Uncertainty-aware Generative Recommendation
+```
+
+The final task is generative recommendation:
+
+```text
+user history -> LLM generates recommended item title -> generated title is grounded to catalog item -> evaluate correctness and uncertainty
+```
+
+The central question is:
+
+```text
+When an LLM generates a recommendation title, does its uncertainty signal explain when the recommendation is correct, hallucinated, popularity-biased, long-tail, or echo-chamber reinforcing?
+```
+
+This is a recommendation-specific uncertainty problem, not generic QA calibration.
+
+## 3. Main Motivation
+
+LLMs may generate plausible recommendation titles, but plausibility is not reliability.
+
+We care about the following questions:
+
+- The LLM may generate the correct recommendation, but is it actually confident?
+- If the generated recommendation is wrong, is it wrong because the model is uncertain, or because it is confidently wrong?
+- Are high-confidence generated recommendations mostly popular items?
+- Are non-popular or long-tail items assigned lower confidence even when they are correct?
+- Does high confidence reinforce the user's past preferences too strongly, causing echo-chamber or filter-bubble effects?
+- Can uncertainty identify noisy generated pseudo-labels or unreliable training samples?
+- Can uncertainty decide when to abstain, retrieve more evidence, sample more generations, or rerank conservatively?
+- If yes/no self-verification confidence correlates with correctness but does not improve final recommendation quality, can we design a richer generative recommendation observation around title generation and grounding?
+
+## 4. Why Direct Confidence Is Not Enough
+
+There is already substantial work on LLM confidence calibration.
+
+Known issues:
+
+- verbalized confidence can be miscalibrated;
+- LLMs may be overconfident;
+- confidence depends on prompt design;
+- confidence may measure fluency or familiarity rather than correctness;
+- confidence can be biased toward frequent or familiar entities;
+- yes/no self-verification may correlate with correctness but still fail to improve recommendation quality.
+
+Therefore, this project should not claim novelty from simply asking:
+
+```text
+Are you confident? yes/no
+```
+
+or
+
+```text
+Give a confidence score from 0 to 1.
+```
+
+Instead, the project should study uncertainty in the structure of generative recommendation.
+
+## 5. Why Recommendation Is Different From Generic Calibration
+
+Generic LLM calibration usually evaluates whether confidence matches answer correctness.
+
+Generative recommendation has additional structure:
+
+- The output is a generated title, not a fixed class label.
+- The generated title must be grounded to a catalog item.
+- Exact title string match may fail even when the semantic item match is correct.
+- The ground truth next item is implicit and incomplete.
+- Multiple recommendations may be plausible.
+- Popularity is a major confounder.
+- Long-tail items may be correct but under-confident.
+- User history creates preference inertia.
+- High-confidence recommendations may reduce diversity and reinforce echo chambers.
+- Candidate-set adherence and catalog validity are separate from correctness.
+
+Therefore, the observation target is not only:
+
+```text
+confidence vs correctness
+```
+
+but also:
+
+```text
+confidence vs grounding
+confidence vs hallucination
+confidence vs popularity
+confidence vs long-tail
+confidence vs history similarity
+confidence vs diversity
+confidence vs echo-chamber risk
+```
+
+## 6. Core Observation Unit
+
+Each observation example should contain:
+
+```json
+{
+  "user_id": "u1",
+  "history_items": ["..."],
+  "history_titles": ["..."],
+  "generated_title": "...",
+  "generated_confidence": 0.0,
+  "uncertainty_signal_type": "verbalized | yes_no_verify | sample_consistency | candidate_normalized | token_probability | evidence_based",
+  "grounded_item_id": "...",
+  "grounded_title": "...",
+  "grounding_success": true,
+  "grounding_score": 0.0,
+  "target_item_id": "...",
+  "target_title": "...",
+  "is_exact_hit": false,
+  "is_grounded_hit": false,
+  "is_catalog_valid": true,
+  "is_hallucinated": false,
+  "item_popularity": 0,
+  "popularity_bucket": "head | mid | tail",
+  "history_similarity": 0.0,
+  "category_repetition": 0.0,
+  "novelty": 0.0,
+  "diversity_context": {},
+  "raw_output": "...",
+  "prompt_template_id": "...",
+  "prompt_hash": "..."
+}
+```
+
+This observation schema is more important than directly optimizing a model at this stage.
+
+## 7. Uncertainty Signals To Compare
+
+The project should compare several uncertainty signals, because direct verbalized confidence alone may be weak.
+
+### 7.1 Verbalized Confidence
+
+Prompt the LLM to generate a title and confidence:
+
+```json
+{
+  "recommendation": "generated item title",
+  "confidence": 0.0,
+  "reason": "...",
+  "uncertainty_reason": "..."
+}
+```
+
+This is easy to implement and works with API models, but it may be miscalibrated or overconfident.
+
+### 7.2 Yes/No Self-Verification
+
+After generating a title, ask:
+
+```text
+Given the user's history and the generated recommendation, is this recommendation likely to match the user's next interaction? Answer yes/no and provide confidence.
+```
+
+This should be treated as an observation signal, not a final method.
+
+### 7.3 Multi-Sample Consistency
+
+Generate multiple recommendation titles with controlled temperature and measure:
+
+- exact title agreement;
+- grounded item agreement;
+- category agreement;
+- entropy over grounded item IDs;
+- confidence variance.
+
+If many samples ground to the same item, the model may be more certain.
+
+### 7.4 Candidate-Normalized Confidence
+
+Build a small set of plausible alternatives:
+
+- generated title;
+- BM25 candidate title;
+- popularity candidate title;
+- random plausible distractor;
+- tail candidate title.
+
+Ask the LLM to assign confidence over all options.
+
+This is inspired by confidence calibration work using distractors or normalized confidence. The recommendation-specific version should normalize confidence over plausible item alternatives rather than independent absolute confidence.
+
+### 7.5 Token / Sequence Probability
+
+For local HF models, optionally compute likelihood of the generated title.
+
+This is optional because API models may not expose logits.
+
+### 7.6 Evidence-Based Confidence
+
+Estimate confidence from non-LLM evidence:
+
+- semantic similarity between generated item and user history;
+- category continuity;
+- brand continuity if available;
+- item popularity;
+- retrieval score;
+- collaborative score.
+
+This helps separate:
+
+```text
+confident because user evidence supports it
+```
+
+from:
+
+```text
+confident because the item is popular/familiar
+```
+
+## 8. Main Observation Questions
+
+The first observation paper or section should answer:
+
+### Q1. Is LLM confidence calibrated for generative recommendation?
+
+Metrics:
+
+- ECE
+- Brier score
+- reliability diagram data
+- confidence bucket accuracy
+- risk-coverage curve
+
+Correctness targets:
+
+- exact generated title hit;
+- grounded item hit;
+- catalog validity;
+- candidate adherence.
+
+### Q2. Are wrong recommendations low-confidence or high-confidence?
+
+Report four groups:
+
+- high confidence + correct
+- low confidence + correct
+- low confidence + wrong
+- high confidence + wrong
+
+The most important failure case is:
+
+```text
+high confidence + wrong / hallucinated
+```
+
+### Q3. Does confidence correlate with popularity?
+
+Measure:
+
+- correlation(confidence, log item popularity);
+- confidence by popularity bucket;
+- accuracy by popularity bucket;
+- ECE by popularity bucket;
+- overconfidence gap for head/mid/tail items.
+
+### Q4. Are correct long-tail recommendations under-confident?
+
+Measure:
+
+- confidence on correct head items;
+- confidence on correct tail items;
+- under-confidence rate for correct tail items;
+- abstention rate by popularity bucket.
+
+### Q5. Does high confidence amplify echo-chamber effects?
+
+Use proxies:
+
+- similarity between generated item and user history;
+- category repetition;
+- brand repetition;
+- popularity reinforcement;
+- confidence-weighted novelty;
+- confidence-weighted diversity.
+
+Observation:
+
+```text
+high confidence may correspond to low novelty and high history similarity
+```
+
+### Q6. Can uncertainty prune noisy generated labels?
+
+Possible later experiment:
+
+- train on all generated pseudo-labels;
+- train after removing low-confidence generated labels;
+- train after removing high-confidence hallucinated labels;
+- train with confidence weighting.
+
+This is not Phase 3 yet, but Phase 3 should log the necessary metadata.
+
+## 9. Expected Contribution Shape
+
+The expected contribution is not:
+
+```text
+We ask LLM for confidence.
+```
+
+The expected contribution is:
+
+```text
+We introduce a generative recommendation uncertainty observation framework that grounds generated titles to a catalog and analyzes how uncertainty interacts with correctness, hallucination, popularity bias, long-tail recommendation, and echo-chamber risk.
+```
+
+A later method may use these findings to design uncertainty-aware training, filtering, abstention, or reranking.
+
+## 10. OursMethod Status
+
+Phase 6 implemented a minimal smoke-capable OursMethod integration after the
+user confirmed the mechanism. The implemented method direction is:
+
+```text
+Calibrated Uncertainty-Guided Generative Recommendation
+```
+
+Implemented Phase 6 mechanisms include:
+
+- uncertainty-aware abstention;
+- confidence-normalized candidate comparison;
+- popularity-bias-adjusted confidence;
+- high-confidence hallucination filtering;
+- confidence-diversity tradeoff reranking.
+
+This integration is not a paper result. It is a config-driven smoke pipeline
+for real-experiment planning. No effectiveness, calibration, popularity-bias
+mitigation, or echo-risk mitigation claim is allowed until approved real
+experiments produce metrics.
+
+## 11. Phase 3 Implication
+
+Phase 3 should implement LLM baseline infrastructure and uncertainty observation hooks.
+
+It should include:
+
+- prompt templates for generative title recommendation;
+- prompt templates for verbalized confidence;
+- prompt templates for yes/no self-verification;
+- prompt templates for candidate-normalized confidence;
+- parser for generated title + confidence;
+- grounding from generated title to catalog item;
+- confidence metrics;
+- calibration metrics;
+- popularity metadata hooks;
+- echo-chamber proxy hooks;
+- mock provider tests;
+- API provider interface;
+- HF provider interface.
+
+Phase 3 must not implement OursMethod. Phase 6 is the first phase where the
+user-approved OursMethod integration exists.
+
+## 12. Literature Inspiration
+
+This project should be informed by existing LLM confidence calibration work, especially Bryan Hooi group's work:
+
+- "Can LLMs Express Their Uncertainty? An Empirical Evaluation of Confidence Elicitation in LLMs"
+  - This work studies black-box confidence elicitation for LLMs.
+  - It decomposes confidence elicitation into prompting strategies, sampling multiple responses, and aggregation/consistency methods.
+  - It evaluates both confidence calibration and failure prediction.
+  - It finds that LLMs often show overconfidence when verbalizing confidence.
+  - It also suggests that human-inspired prompts, multi-sample consistency, and aggregation strategies can mitigate overconfidence, but no method is universally reliable.
+
+Our project should not simply copy verbalized confidence. Instead, we adapt the motivation to generative recommendation:
+
+- QA answer confidence -> generated item title confidence
+- answer correctness -> generated title grounding + next-item hit
+- sampling consistency -> multi-sample grounded-item consistency
+- failure prediction -> hallucination / invalid title / wrong grounded item prediction
+- distractor-normalized confidence -> candidate-normalized item confidence
+- overconfidence -> high-confidence wrong recommendation / high-confidence hallucination
+- task difficulty -> user-history ambiguity and long-tail uncertainty
+
+Other related directions to keep in mind:
+
+- LLM confidence estimation and calibration surveys
+- verbalized confidence scores
+- self-consistency / sample consistency
+- self-generated distractors and normalized confidence
+- calibration for generative structured prediction
+- uncertainty decomposition
+- generative recommendation studies
+
+These are inspiration only. The novelty must come from recommendation-specific generative uncertainty observation.
+
+Important: Bryan Hooi group's confidence calibration work is literature inspiration only.
+
+Do not copy their problem setting, experiments, code, writing, claims, or method as our contribution.
+
+Use it only to understand useful uncertainty-estimation ideas such as:
+
+- verbalized confidence;
+- prompting strategies for eliciting confidence;
+- multi-sample consistency;
+- aggregation-based confidence;
+- calibration metrics;
+- failure prediction.
+
+Our project must adapt these ideas to a different task:
+
+```text
+generative recommendation -> generated item title -> catalog grounding -> recommendation-specific uncertainty observation
+```
+
+The novelty must come from recommendation-specific structure:
+
+- generated title grounding;
+- catalog validity;
+- hallucination of non-existing items;
+- popularity-confounded confidence;
+- long-tail under-confidence;
+- confidence-driven echo-chamber risk;
+- uncertainty-aware filtering or abstention in recommendation.
+
+Do not present Bryan Hooi group's confidence elicitation framework as our own method.
+
+Do not claim novelty for generic confidence elicitation.
+
+Do not reuse paper text.
+
+Do not implement their method as OursMethod.
+
+## 13. Non-Negotiable Safeguards
+
+Codex must not:
+
+- treat LLM reranking alone as our contribution;
+- treat verbalized confidence alone as sufficient novelty;
+- claim calibration improvement before metrics exist;
+- claim echo-chamber mitigation before measuring it;
+- use target item title in the prompt;
+- use future interactions as evidence;
+- evaluate only exact title match and ignore catalog grounding;
+- ignore item popularity as a confounder;
+- compare OursMethod against baselines using different candidate sets;
+- write paper claims before real metrics exist.
+
+## 14. Open Questions For Later
+
+Before paper-grade Ours finalization and large-scale runs, the user and agents
+must decide:
+
+- Which uncertainty signal is primary?
+- Which correctness target is primary: exact title, grounded item hit, candidate adherence, or semantic match?
+- Whether the final method uses abstention, reranking, filtering, or training-time pruning.
+- How to control popularity bias.
+- How to define echo-chamber risk.
+- Which datasets are appropriate for generative title recommendation.
+- Whether observation alone is enough for a paper, or whether a method is required.
+
+ succeeded in 4737ms:
+# TRUCE-Rec Project Memory
+
+This document is the durable memory for future Codex/agent sessions. Read it
+before planning nontrivial work. Keep it current after each completed stage so
+new agents do not have to reconstruct the project from stale fragments.
+
+Last major update: 2026-06-07.
+
+> **Authoritative setting reference:** `docs/experimental_setting_and_baselines.md`
+> (8 domains, 101-candidate protocol, Qwen3-8B, the 8 official baselines, frozen evidence in
+> `data/official_baselines/`, per-domain SOTA bar). Read it before any experiment/method/paper work.
+>
+> **Standing procedure for any future agent:** `docs/CALM_REC_RUNBOOK.md` 鈥?how to run experiments and
+> write the paper, end to end. The method is designed + implemented; follow the runbook, don't
+> re-derive rules.
+
+## Status Snapshot (2026-06-07)
+
+- **Setting:** 8 domains (beauty 973 + books/electronics/movies/sports/toys/home/tools 10k each),
+  same-candidate 101 (1 pos + 100 neg), Qwen3-8B backbone, schema
+  `source_event_id,user_id,item_id,score`.
+- **Official baselines: DONE & FROZEN.** 8 official LLM4Rec methods 脳 8 domains = 64 pairs,
+  lightweight evidence committed at `data/official_baselines/` (master table + per-pair
+  metrics/coverage/provenance + sha256 manifest). These are reused as a shared reference and are
+  **never re-run**. Beauty SOTA bar = **ProEx NDCG@10 0.1506 / HR@10 0.2528 / MRR 0.1429**;
+  the other 7 domains are led by LLMEmb.
+- **Ours method: CALM-Rec (LOCKED, ARIS 9.0/10).** The prior `ours_uncertainty_guided` /
+  conservative-gate route did **not** beat fallback-only in the R3 formal run
+  (`docs/r3_ours_error_decomposition.md`) 鈥?retired. A first tri-agent redesign produced SCALR
+  (`docs/method_redesign_decision.md`); a follow-up **鈮?0-iteration** tri-agent upgrade found SCALR
+  was only rank-1 personalization (matches but can't beat baselines) and evolved it into **CALM-Rec**
+  (Calibrated trust over Attribute-anchored Latent Multi-intent) 鈥?see **`docs/method_calm_rec_spec.md`**.
+  Headline = endogenous per-user-item *calibrated trust* between an LLM multi-intent personalized
+  score and a history-free prior (multi-intent is the vehicle). Scoring core implemented + tested
+  (no GPU); real Qwen3-8B encoders + trainer are the remaining no-GPU TODO.
+- **Server:** pony-rec-gpu `~/projects/TRUCE-Rec`. **BUSY with another project 鈥?run NO experiments
+  until the user gives the go-ahead.** First run when unblocked = beauty-first formal Ours run.
+- **Follow-up (after the 8-domain performance table):** observation, ablation, hyper-parameter
+  analysis + overview figure 鈥?planned in `docs/followup_experiment_plan.md`.
+
+## One-Sentence Direction
+
+TRUCE-Rec is a fully independent publishable LLM4Rec research system: it starts
+from recommendation-specific uncertainty observations, builds an original
+CURE/TRUCE method with its own data pipeline, baselines, and evaluation, and
+scales to multiple Amazon domains with same-candidate protocols.
+
+## CRITICAL: Project Independence
+
+TRUCE-Rec 鍜?Pony/TGL-Rec 鐨勫叧绯伙細
+- 鍏卞悓鐐癸細閮芥槸鎺ㄨ崘绯荤粺璁烘枃锛屽叡浜?8 涓閮?baseline锛圠LM2Rec, LLM-ESR,
+  LLMEmb, RLMRec, IRLLRec, ELMRec, ProEx, ProMax锛夛紝鏁版嵁 setting 涓€鏍?  锛圓mazon 鍥涘煙銆乻ame-candidate 鍗忚锛?- 涓嶅悓鐐癸細鏂规硶/framework 瀹屽叏涓嶅悓銆俆RUCE 鍋?uncertainty-aware generative
+  recommendation锛坱itle grounding + confidence decomposition + exposure-aware
+  calibration锛夛紝Pony 鍋?task-grounded uncertainty锛孴GL-Rec 鍋?temporal graph
+
+鍥犱负 baseline 鍜屾暟鎹?setting 鐩稿悓锛宐aseline 鍒嗘暟鍙互澶嶇敤锛堝悓涓€涓?baseline 鍦?鍚屼竴涓暟鎹笂璺戝嚭鏉ョ殑鍒嗘暟鏄竴鏍风殑锛夈€備絾 TRUCE 鐨勬柟娉曚唬鐮併€乫ramework銆佸疄楠?pipeline 蹇呴』瀹屽叏鐙珛銆?
+TRUCE-Rec 鍦ㄦ湇鍔″櫒涓婂簲璇ユ湁鑷繁鐨勭嫭绔嬮儴缃诧紝涓嶄緷璧?Pony 鐨勭洰褰曠粨鏋勬潵鐢熸垚鏁版嵁銆?鏁版嵁鍙互浠?Amazon Reviews 2023 鍘熷鏁版嵁鐙珛鍑嗗锛屾垨鑰呭鏋?Pony 宸茬粡鐢熸垚浜?鐩稿悓 setting 鐨?same-candidate tasks锛屽彲浠ョ洿鎺ュ鍒朵娇鐢紙鍥犱负鏁版嵁 setting 瀹屽叏
+鐩稿悓锛屼笉鏄?渚濊禆"鑰屾槸"鍏变韩鍏叡璧勬簮"锛夈€?
+## Required Startup Reading
+
+Before a nontrivial task, read at least:
+
+- `AGENTS.md`: engineering and done criteria.
+- `docs/PROJECT_MEMORY.md`: current project memory and workflow contract.
+- `docs/RESEARCH_IDEA.md`: core research idea; do not replace it with generic
+  LLM reranking, RAG, or prompt engineering.
+- `docs/submission_roadmap.md`: milestone ladder.
+- `docs/qwen3_lora_controlled_baselines.md`: baseline fairness protocol.
+- `docs/server_execution_matrix.md` and `docs/server_next_commands.md` when
+  the task touches server execution.
+- The relevant source/config/test files before editing.
+
+Project-local skill: `.codex/skills/truce-rec/SKILL.md` now summarizes the
+startup workflow, research guardrails, baseline/server discipline, evidence
+labels, and reviewer gates for future Codex sessions. Use it as the compact
+operating entrypoint, then load the canonical docs above as needed.
+
+Do not work from memory alone. If a paper/repo/API/detail is current or
+uncertain, look it up and prefer official sources.
+
+Default startup packet by task type:
+
+- Any roadmap/method/baseline/server task: `AGENTS.md`,
+  `docs/PROJECT_MEMORY.md`, `docs/RESEARCH_IDEA.md`,
+  `docs/submission_roadmap.md`, and `docs/top_conference_review_plan.md`.
+- Baseline or fairness task: also read
+  `docs/qwen3_lora_controlled_baselines.md`,
+  `docs/controlled_baseline_fidelity_audit.md`, and relevant official packet
+  docs/configs.
+- Server task: also read `docs/server_execution_matrix.md`,
+  `docs/server_next_commands.md`, and the exact server scripts being changed.
+- Ours/method task: also read `docs/ours_method_plan.md`,
+  `docs/cure_truce_framework.md`, `docs/ablation_protocol.md`, and current
+  method source/tests.
+
+If the task touches literature, novelty, or baseline selection, search broadly
+across multiple recent top-conference papers and official repositories instead
+of relying on a few convenient examples. Prefer official sources for factual
+claims.
+
+## User Workflow Assumptions
+
+- **鏈湴鏄富寮€鍙戠幆澧?*锛氭墍鏈変唬鐮佺紪杈戙€佹枃妗ｆ洿鏂般€乬it commit/push 閮藉湪鏈湴瀹屾垚銆?- **鏈嶅姟鍣ㄥ彧浣滀负瀹為獙鍦烘墍**锛氬彧鍋?git pull 鈫?璺?GPU 瀹為獙 鈫?浜у嚭缁撴灉銆?  鏈嶅姟鍣ㄤ笂涓嶆敼浠ｇ爜銆佷笉 commit銆佷笉 push銆?- **GitHub 鏇存柊浠庢湰鍦版彁浜?*锛氭案杩滀笉浠庢湇鍔″櫒 push銆?
+## Local 鈫?Server Alignment Discipline (HARD RULE, 2026-06-07)
+
+1. **鏈湴鍜屾湇鍔″櫒蹇呴』瀵归綈銆?* 浠ｇ爜 / configs / docs 涓よ竟涓€鑷淬€傛湇鍔″櫒浜у嚭缁撴灉鍚庯紝鎶?*杞婚噺閲嶈
+   璇佹嵁鎵撳寘鍥炴湰鍦?*锛坢etrics CSV/JSON銆乸rovenance銆乻ummaries銆乵anifests 鈥斺€?涓嶆槸澶?GB 鐨?   scores/checkpoints/predictions锛岄偅浜涚暀鍦ㄦ湇鍔″櫒锛夈€傚弬鐓?`data/official_baselines/` 鐨?   import 妯″紡銆?2. **瀹為獙鍦ㄦ湇鍔″櫒璺戯紝commit/push 浠庢湰鍦般€?* 缁濅笉浠庢湇鍔″櫒 `git push`锛涙湇鍔″櫒鍙?git pull + 鎵ц銆?   鏇存柊 GitHub锛氬厛鎶婅交閲忚瘉鎹悓姝ュ洖鏈湴锛屾湰鍦?commit锛屾湰鍦?push銆?3. **涓嶈鍋溿€?* 鑷富璺戝畬鏁翠釜浠诲姟锛屽彧鏈夐亣鍒扮湡姝ｇ殑 blocker 鎵嶅仠锛?*鏈嶅姟鍣ㄧ鐩樻弧**銆?   **API/endpoint 鏁呴殰**銆佹棤娉曚慨澶嶇殑 review 椹冲洖锛屾垨**鐢ㄦ埛璁╀綘鏆傚仠**锛堝"GPU 琚埆浜哄崰鐫€鍏堝埆璺?
+   鈥斺€?褰撳墠姝ｆ槸姝ょ姸鎬侊級銆傚惁鍒欐楠や箣闂翠笉瑕佸仠涓嬫潵闂€?4. **鍛ㄦ湡鎬ф寔涔呭寲銆?* 姣忓畬鎴愪竴娈垫湁鎰忎箟鐨勫伐浣?鈫?鍐?鏇存柊 agentmemory銆佹洿鏂版湰鍦伴噸瑕佹枃妗ｃ€佹洿鏂?   README銆傝竟鍋氳竟鍐欙紝涓嶈鏀掑埌鏈€鍚庛€?- The user has the server; Codex usually cannot directly inspect server files
+  unless the user pastes logs/results or a local mount exists.
+- Give concrete server commands for the user to run. The user will paste
+  outputs or errors back into chat.
+- Do not claim a server result unless the user provides logs/artifacts or the
+  repo contains tracked evidence.
+- After substantial local code/doc/config work, commit and push to
+  `origin/main` unless the user explicitly says not to.
+- Keep responses and handoffs in Chinese when reporting to the user, unless a
+  generated artifact has an existing English style.
+
+## Multi-Agent Collaboration Rule
+
+The user explicitly wants multi-agent collaboration for nontrivial tasks.
+
+Use multiple agents by default when the active tool policy permits and the task
+is not a small one-command/simple-answer job. Typical roles:
+
+- Explorer for codebase/protocol audit.
+- Explorer for literature/official-repo/fairness review.
+- Worker for bounded implementation slices with disjoint files.
+- Reviewer for top-conference-style critique, novelty risk, and baseline
+  fairness.
+- Main agent integrates, verifies, commits, pushes, and gives the final server
+  commands.
+
+If subagents are unavailable in a future environment, simulate the same checks
+explicitly as separate audit passes. Do not skip the review/audit layer just
+because the task feels familiar.
+
+For method-building tasks, the expected loop is:
+
+```text
+implementation proposal
+  -> top-conference reviewer critique
+  -> fairness/protocol audit
+  -> implementation revision
+  -> runnable server command/update
+```
+
+Record the reviewer verdict honestly. If the current Ours design is still a
+heuristic scaffold, say so and improve it rather than writing paper-ready
+claims.
+
+The reviewer pass should compare TRUCE-Rec against recent top-conference
+LLM4Rec/recommender work on:
+
+- rigor of experimental protocol;
+- originality rather than stitched components;
+- technical depth and model/algorithm complexity;
+- strength and officialness of baselines;
+- data scale and multi-domain coverage;
+- ablation completeness;
+- leakage and fairness controls;
+- statistical testing, efficiency, and reproducibility.
+
+## Non-Toy Standard
+
+Never add toy demos, pseudo-results, mock-only claims, or notebook-only paths
+unless the user explicitly asks for a small test fixture.
+
+Real progress means:
+
+- source code or executable scripts exist;
+- configs/manifests exist;
+- tests or smoke checks exist;
+- commands have been run locally when possible;
+- server-only commands are documented for the user;
+- evidence boundaries are labeled;
+- stale docs are updated or deleted;
+- the change is committed and pushed.
+
+Documentation alone is acceptable only for governance/planning tasks. For
+framework or experiment tasks, prefer runnable code, validators, importers,
+or orchestration scripts plus docs.
+
+## Research Spine
+
+The project must stay on this spine:
+
+```text
+LLM generative recommendation observation
+  -> Beauty full-domain and books/electronics/movies 10k-user observations
+  -> base Qwen3-8B plus four senior-recommended Qwen3-8B-LoRA baseline observations
+  -> catalog grounding and uncertainty/popularity/long-tail/echo diagnostics
+  -> original non-stitched CURE/TRUCE framework
+  -> Qwen3-8B-LoRA Ours adapter and ablations
+  -> reused Pony official-qwen3base baseline evidence
+  -> shared same-candidate evaluator
+  -> four-domain paper-scale experiments
+  -> top-conference review and artifact export
+```
+
+The contribution should not be stated as "we ask an LLM for confidence." The
+contribution is recommendation-specific uncertainty: generated title grounding,
+catalog validity, hallucination, popularity-confounded confidence, long-tail
+under-confidence, history/echo risk, and uncertainty-aware routing/reranking or
+training.
+
+When reference papers or official repos are needed, future agents may carefully
+read senior-recommended or top-conference projects to understand task
+formulation, official training flow, and fair reproduction details. Those works
+are inspiration and fidelity guidance only. The actual TRUCE/CURE method must
+not be stitched, copied, or renamed from their objectives, prompts, or system
+pipelines.
+
+## Ours Framework Memory
+
+The stronger Ours direction is:
+
+```text
+observation signals
+  + catalog grounding
+  + candidate-normalized diagnostic panels
+  + popularity residual/deconfounding
+  + history/echo risk
+  + learned or structured improve/harm/risk targets
+  + conservative promotion/fusion over a shared fallback ranking
+```
+
+Current anchors:
+
+- `src/llm4rec/methods/ours_framework.py`
+- `scripts/prepare_ours_qwen_adapter_training.py`
+- `scripts/import_evaluate_ours_adapter.py`
+- `src/llm4rec/methods/cu_gr.py`
+- `src/llm4rec/methods/preference_fusion.py`
+- `src/llm4rec/methods/override_calibrator.py`
+
+Do not pitch the older smoke `OursMethodRanker` as the final research method.
+It is infrastructure. The paper-grade path should emphasize CURE/TRUCE,
+structured uncertainty targets, ablations, and observation-motivated design.
+
+Ours may tune hyperparameters only with a declared validation protocol. Never
+tune on test.
+
+Reviewer audit as of 2026-05-09: the current Ours scaffold is promising but not
+yet enough for a strong submission. Its weak point is that pairwise/listwise SFT
+prompts and conservative gates can look like hand-written heuristics. The next
+method upgrade must add a learned observation-to-target layer, candidate-
+normalized uncertainty, popularity residual/deconfounding, echo/history guard,
+learned improve/harm/abstain policy, fallback-preserving fusion, and ablations
+tied directly to the observation findings.
+
+Implementation update as of 2026-05-09: `src/llm4rec/methods/ours_framework.py`
+now adds an observation-residual policy target layer. Ours adapter supervision
+includes candidate-normalized utility, popularity-residual utility, harm risk,
+abstain risk, and conservative `promote/suppress/defer_to_fallback` policy
+actions. Server scoring now estimates the likelihood of
+`{"policy_action": "promote"}` for each candidate, while preserving the same
+`candidate_scores.csv` schema. This is still not a paper result; it is a
+stronger trainable objective for the next server runs and ablations.
+
+Core method milestones:
+
+- M2a: derive structured train/valid targets from observation rows without
+  using test correctness. Current v2 scaffold derives deterministic
+  observation-residual policy targets from train/catalog evidence.
+- M2b: train a TRUCE adapter/policy that predicts improve/harm/abstain or
+  calibrated candidate preference from diagnostic evidence. Current v2 scoring
+  target is promote-action likelihood.
+- M2c: combine the learned policy with conservative fallback ranking so bad
+  LLM generations can be blocked rather than blindly promoted.
+- M2d: run ablations for grounding, uncertainty, candidate normalization,
+  popularity residuals, echo/history guard, and fallback-only routing.
+- M2e: pass a reviewer novelty check confirming the method is not a generic
+  LLM reranker, prompt-engineering baseline, RAG wrapper, or stitched clone of
+  the reference projects.
+
+## Baseline Policy
+
+TRUCE-Rec compares against **8 official LLM4Rec baselines** under a fixed same-candidate setting it
+shares with sibling recommendation projects in the group. Because the same official baseline, run
+on the same data under the same protocol and backbone, yields identical scores regardless of which
+paper consumes them, the baseline numbers are **imported once as a shared frozen reference and
+never re-run**. TRUCE-Rec's Ours method is implemented and trained **independently** 鈥?no other
+project's method code is reused.
+
+- Frozen evidence: `data/official_baselines/` (64 pairs, master table, sha256 manifest, frontier).
+- Ours may tune hyper-parameters only via the declared validation protocol; never on test.
+
+The 8 official baselines:
+ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLM-ESR, ProEx, ProMax, RLMRec.
+
+Data setting (8-domain same-candidate):
+- Domains: beauty (973), books, electronics, movies, sports, toys, home, tools (10k each).
+- 1 positive + 100 popularity-sampled negatives per event (101 candidates).
+- Same-candidate evaluation and the same evaluator for all methods.
+- Qwen3-8B + LoRA as the shared backbone.
+
+## Senior Baseline Advice To Preserve
+
+The user's senior colleague gave the following practical academic advice:
+
+1. Fair baseline comparison has several accepted modes:
+   - run original code with original backbone/hyperparameters and only adapt the
+     input dataset;
+   - reuse a prior work's dataset and its reported baselines;
+   - adapt every LLM baseline to the same backbone, such as Qwen3-8B;
+   - tune both baselines and Ours, though this is expensive.
+2. The recommended route for this project is:
+   - use official source code;
+   - use Qwen3-8B as the shared backbone;
+   - use LoRA for all compared LLM methods;
+   - use each baseline's official default or reported optimal hyperparameters;
+   - do not spend time exhaustively tuning every baseline;
+   - Ours may tune hyperparameters under the validation protocol.
+3. In the experimental setting, write clearly:
+   "We obtain source code from official implementations, use Qwen3-8B as the
+   shared backbone, train with LoRA, use official/default hyperparameters for
+   baselines, and evaluate all methods on the same TRUCE candidate protocol."
+4. Full fine-tuning versus LoRA must not be mixed silently. If full fine-tuning
+   is used, it needs a separated protocol/table.
+5. Reviewers may still challenge fairness, but this Qwen3-8B-LoRA controlled
+   setup is a common academic compromise.
+
+This advice explains why the Pony/Uncertainty reused official-qwen3base lane is
+acceptable. It is no longer an instruction to rerun the local TRUCE controlled
+adapter suite; the active implementation policy is the Pony evidence reuse
+policy above.
+
+## Legacy Baseline Contract
+
+Historical TRUCE-side compared LLM baselines:
+
+```text
+official project implementation
+  + Qwen3-8B base model
+  + LoRA adaptation
+  + official default or reported-optimal baseline hyperparameters
+  + shared TRUCE split/candidates/evaluator
+  + example_id,user_id,item_id,score
+```
+
+Legacy official baseline families:
+
+- TALLRec
+- OpenP5
+- DEALRec
+- LC-Rec
+- LLaRA
+- LLM-ESR
+
+Current TRUCE-side controlled adapters are legacy pilots. Do not call them the
+current paper-facing baseline source. The active source is Pony/Uncertainty
+official-qwen3base evidence described above. CoLLM, SLMRec, BIGRec, and other
+methods may be follow-up or appendix candidates only if the user explicitly
+reopens that lane.
+
+If the legacy lane is explicitly reopened, every local official baseline must
+record:
+
+- official repo and commit;
+- official config/hyperparameter source;
+- official modules/objective reused;
+- Qwen3-8B-LoRA compatibility changes;
+- score export shim;
+- TRUCE import/evaluation artifacts;
+- evidence label.
+
+## Data And Experiment Scale
+
+TRUCE-Rec 浣跨敤涓?Pony 鐩稿悓鐨勬暟鎹?setting锛堝洜涓烘槸鍚屼竴涓爺绌剁粍鐨勮鏂囷級銆?
+Already prepared datasets (local):
+- MovieLens 1M (sanity, pilot, full)
+- Amazon Reviews 2023: Beauty (sample_5k, full, cu_gr_v2), Digital Music,
+  Handmade, Health, Video Games
+
+Target paper-scale evaluation (鍥涘煙 same-candidate):
+- Domains: Beauty, Books, Electronics, Movies
+- Protocol: same-candidate, 1 positive + 100 popularity-sampled negatives
+- Scale: up to 10,000 users per domain
+- Test history mode: train_plus_valid
+
+鏁版嵁鏉ユ簮锛氬鏋?Pony 椤圭洰宸茬粡鐢熸垚浜嗗洓鍩?same-candidate tasks锛堝洜涓?setting
+瀹屽叏鐩稿悓锛夛紝鍙互鐩存帴澶嶅埗浣跨敤銆傚惁鍒?TRUCE 鐢ㄨ嚜宸辩殑 preprocess 鑴氭湰浠?Amazon
+Reviews 2023 鍘熷鏁版嵁鐢熸垚銆?
+Score export schema for all methods:
+```text
+source_event_id,user_id,item_id,score
+```
+
+Never use `test` split for hyperparameter selection.
+
+## Server Operating Model
+
+Server: pony-rec-gpu (125.71.97.70:15302), user ajifang, GPU RTX 4090.
+Server repo path: `~/projects/TRUCE-Rec` (to be deployed).
+
+TRUCE-Rec deploys independently on the server. It does NOT share environments,
+data directories, or scripts with any other project.
+
+Deployment steps:
+1. `git clone git@github.com:appleweiping/TRUCE-Rec.git ~/projects/TRUCE-Rec`
+2. Create venv: `python3 -m venv .venv_truce && source .venv_truce/bin/activate`
+3. Install: `pip install -e .`
+4. For GPU work (observation, LoRA training): use TALLRec's venv which has
+   torch/transformers/peft, or install them into .venv_truce
+
+Local Codex does not automatically see server state. Treat server work as a
+command-and-log loop:
+1. Update/push repo locally.
+2. Give user exact server commands.
+3. User runs commands on `~/projects/TRUCE-Rec`.
+4. User pastes logs/status/errors.
+5. Agent diagnoses and updates code/docs if needed.
+
+## Evidence Boundaries
+
+Use these labels consistently:
+
+- `smoke/mock`: code path only.
+- `diagnostic`: useful QA or observation, not paper evidence.
+- `controlled_adapter_pilot`: TRUCE-side adapter under shared protocol, not yet
+  official-native.
+- `official_native_controlled`: official implementation adapted to Qwen3-8B-
+  LoRA and TRUCE protocol, eligible only after full train/score/import/eval.
+- `paper_result`: completed approved real run with tracked code, manifests,
+  logs, raw scores/responses where applicable, predictions, metrics, and
+  artifact checklist.
+
+Never fabricate metrics, tables, paper conclusions, or server status. Paper
+writing comes after real metrics and ablations exist.
+
+## Update Discipline
+
+After any completed stage, update every file whose status would otherwise be
+stale. At minimum consider:
+
+- `docs/PROJECT_MEMORY.md`: big direction, policies, current status, next
+  commands.
+- `docs/PHASE_HANDOFF.md`: latest completed stage and server status.
+- `README.md`: high-level status, important docs, commands.
+- `docs/submission_roadmap.md`: milestone status and exit criteria.
+- `docs/server_next_commands.md`: exact server commands after code changes.
+- `docs/server_execution_matrix.md`: artifact gates and new entrypoints.
+- baseline docs/configs when fairness/provenance changes.
+- tests when behavior changes.
+
+Prefer updating or deleting stale statements over appending contradictory new
+sections. The next agent should not have to guess which paragraph is current.
+
+## CRUD And Review Expectations
+
+Future agents should perform real maintenance:
+
+- Create missing modules, scripts, configs, tests, and docs.
+- Read and review relevant existing files before editing.
+- Update stale policies/status and command sheets.
+- Delete or rename obsolete paths when a name misleads future work.
+- Validate with tests or clear dry-run commands.
+- Search official docs/repos/papers when baseline details are uncertain.
+- Run a reviewer-style critique for novelty, fairness, leakage, and toy-risk
+  before declaring a stage complete.
+
+## Current Next Moves
+
+1. **CALM-Rec implementation (mostly DONE, no GPU):** scoring core + ranker + encoders (hashed CPU +
+   gated Qwen) + weak-labels + 3-stage trainer scaffold + stage-2.5 gate + runner wiring + configs +
+   `scripts/run_calm_rec.py` + `scripts/build_calm_weak_labels.py` + 27 tests 鈥?all green, runs
+   end-to-end through the official runner/evaluator on CPU. **Only remaining work:** the real Qwen3-8B
+   forward in `QwenItemEncoder` + the Qwen+LoRA Stage-B gradient loop (the contract is already
+   exercised by the hashed encoders). Procedure: `docs/CALM_REC_RUNBOOK.md` 搂2.2-2.3.
+2. **Beauty-first formal run** (BLOCKED on server availability 鈥?user will say when): run CALM-Rec on
+   beauty under the frozen protocol, target SOTA (beat ProEx NDCG@10 0.1506). **Priority-1 experiment
+   = real 蟻 vs variance-matched placebo** + the stage-2.5 reliability AUC gate. If not SOTA, re-run
+   the tri-agent discussion and iterate on beauty until it is.
+3. **Roll out** the validated method to the other 7 domains (same protocol).
+4. **Follow-up experiments** (`docs/followup_experiment_plan.md`): observation, ablation,
+   hyper-parameter analysis; draw the overview figure.
+5. **Paper:** fill the 8-domain main table, run the top-conference reviewer gate, prep submission.
+
+Do NOT re-run any official baseline, re-prepare baseline data, or re-deploy 鈥?those are done. The
+only open experimental work is TRUCE-Rec's own method.
+
+## Literature Status (updated 2026-05-21)
+
+Novelty confirmed safe. Key competitors and differentiation:
+- UGR (2602.11719): uncertainty-weighted reward for Semantic-ID GenRec. TRUCE
+  does title grounding + confidence decomposition + exposure-aware calibration.
+- Echoes in the Loop (2602.07442): diagnoses feedback-loop risks in LLM RecSys.
+  Pure diagnostic, no method. TRUCE provides the solution.
+- Uncertainty & Fairness (2602.02582): entropy-based uncertainty + fairness for
+  zero-shot LLM rec. Small scale, no title grounding.
+- ConfTuner (NeurIPS 2025): tokenized Brier score for LLM verbal confidence.
+  Generic QA, not recommendation. TRUCE adapts this idea as RecBrier.
+
+TRUCE's unique position remains:
+1. Title-level generative recommendation + catalog grounding
+2. Confidence-popularity causal disentanglement
+3. Exposure-counterfactual confidence target
+4. Uncertainty-guided data triage (not naive pruning)
+
+## Endgame And Stop Rule
+
+Agents must know when the project/experiment phase can end. Do not keep
+inventing vague next steps after the required evidence exists.
+
+Experiment phase can be considered basically complete only when:
+
+- Beauty/books/electronics/movies same-candidate runs are complete at the
+  declared scale.
+- Base Qwen3-8B and the four senior-recommended Qwen3-8B-LoRA baselines have
+  observation analyses, or missing runs are explicitly justified.
+- Official-native or clearly labeled controlled baselines have complete
+  score/import/evaluation artifacts.
+- Ours full and required ablations have complete artifacts under the same
+  protocol.
+- Metrics include ranking, validity/hallucination/candidate adherence,
+  coverage/diversity/novelty, long-tail/popularity slices, efficiency/cost, and
+  paired significance where applicable.
+- Failure cases and limitations are documented.
+- A top-conference-style reviewer pass finds no fatal gaps in novelty,
+  fairness, scale, leakage, ablations, or reproducibility.
+
+When these are satisfied, tell the user that the project has reached the
+writing-ready stage and the next phase is paper writing/export/positioning,
+not more open-ended experimentation. If any item is missing, state exactly
+which gate remains and the shortest concrete command or implementation step to
+close it.
+
+## 2026-06-12 鈥?Qwen encoders + Stage-B implemented; frozen panels converted; queued on GPU
+
+- Branch `feat/calm-qwen-stage-b`: `methods/calm_qwen.py` (frozen Qwen3-8B item encoder
+  with fp16 npz cache; intent encoder with K attribute-anchored soft slots, z = c_k +
+  clip(W_r u), pi = softmax(g + lambda*E_hist); D_uk deferred gamma=0 recorded in
+  artifacts; `torch_calm_scores` differentiable scorer at 1e-9 parity with calm_rec.py).
+  `scripts/train_calm_stage_b.py` = full CALMLossSpec loop (L_rank on fixed-rho-0.1 mixed
+  score + attr/bal/orth/use/tau; tau annealed 1.5->4; popularity-matched negatives;
+  leakage-clean Stage-A stats; artifacts lora/ + extras + anchors + item cache + meta).
+- Formal evaluator `scripts/eval_calm_beauty.py`: per-user signals computed ONCE
+  (vectorized), Stage-C rho grid + stage-2.5 AUC gate + ladder (raw/full/K1/placebo) +
+  paired bootstrap all derived from the cache. (Naive grid = 81x model reruns; pure-python
+  scoring at d=4096 was 30h+ CPU 鈥?both fixed.) Parity tests green (40 CALM tests total).
+- Frozen-protocol data: `convert_frozen_task.py` ran on server ->
+  `data/processed/frozen_week8_beauty` (973 test + 973 valid 101-cand panels from the pony
+  external_tasks exports + canonical item_metadata.csv/train_interactions.csv; 3578 train
+  transitions; 1184 items). Weak labels rebuilt: outputs/calm/beauty_frozen (672/1184
+  dominant facets). CRITICAL: uncertainty-llm4rec panels share users/positives but NOT
+  candidate sets (verified 0/973) 鈥?never evaluate on them.
+- Server copy converted from tarball to git checkout (data/ preserved). Python env reused:
+  `~/miniconda3/envs/tglrec-lora/bin/python` (runtime only; method code fully independent).
+  Sync = git bundle over scp (server cannot reach GitHub).
+- QUEUED on GPU (after TGL-Rec's zero-shot pair; `~/projects/gpu_queue_20260612.sh`):
+  Stage-B smoke (--max-train 32) -> Stage-B full -> then run eval_calm_beauty.py
+  (--sota-ndcg10 0.1506). Release needs all four falsifiability checks; stage-2.5
+  AUC <= ~0.55 -> drop the trust headline automatically (spec section 9).
+- agentmemory MCP unavailable in this session; durable state recorded here + CONTEXT.md +
+  local auto-memory. Store a digest into agentmemory in the next session that has it.
+
+## 2026-06-20 鈥?HEADLINE PIVOT to RankCRC + ARIS citation-audit (conformal core)
+
+- **Headline correction (the "Status Snapshot (2026-06-07)" above is now PARTIALLY STALE):** the
+  paper headline is **RankCRC** 鈥?distribution-free **risk-controlled selective reliability** for
+  recommendation (marginal-expectation CRC bound `渭(位) 鈮?E_B2[伪(B2)]` on the served-slice listwise
+  rank-risk `E[1鈭扤DCG@k | served]`; frozen-位 B1/B2 split; label-free-at-inference rank-geometry
+  selector `g`; falsifiable gain-law). **CALM-Rec is now strictly subordinate** (calibrated-trust
+  ablation/supplementary lane), NOT the headline. The contribution is the *reliability* lane, not raw
+  ranking SOTA 鈥?orthogonal to pony. Canonical RankCRC docs: `refine-logs/RESEARCH_REFINE_TRUCE_*.md`
+  (gate PASSED Codex 7/7), `refine-logs/EXPERIMENT_PLAN_TRUCE.md` + `rankcrc_formalization_verified.md`
+  (frozen-位 theorem adversarially verified), `paper/{method_rankcrc,related_positioning_rankcrc,
+  notation_rankcrc,introduction}.md` (method+theorem dual-reviewed 鈮?: Codex 8 + Opus 8).
+  beauty CPU validation: guarantee HOLDS 5/5 (`scripts/rankcrc_validate.py`, A/B1/B2/C 4-fold).
+- **ARIS citation-audit (conformal core) RESOLVED.** `paper/refs/conformal.bib` = 8 bibliographically-
+  VERIFIED entries (Conformal Risk Control ICLR'24; RCPS JACM'21; Learn-then-Test'21; distribution-free
+  recsys reliability COPA'23; two-stage risk control for ranked retrieval IJCAI'25; SelectiveNet ICML'19;
+  Vovk-Gammerman-Shafer'05; Angelopoulos&Bates gentle intro). Each author/year/venue web-verified 鈥?none
+  fabricated. `related_positioning_rankcrc.md` keyed to \citep + explicit incrementality defense vs the
+  two closest neighbors (Angelopoulos2023 set-coverage recsys; Xu2025 stage-wise ranked-retrieval).
+  Committed+pushed branch `design/rankcrc` @433d4d0. PENDING (results phase, after GPU): 8 official-baseline
+  + RankCRC empirical-claim cites 鈥?verify each, don't fabricate.
+- **GPU status:** TRUCE GPU runs (beauty Stage-B 鈫?Stage-2.5 gate 鈫?8-domain) remain QUEUED behind
+  pony's priority 3-backbone sweep on the shared RTX 4090. All CPU-frontloadable RankCRC work
+  (theory, validation, method/related/intro sections, citations) is done.
+
+ succeeded in 4876ms:
+# AGENTS.md
+
+This repository is a research-grade LLM4Rec codebase. Codex must treat it as a publishable research system, not a toy demo.
+
+## 0. Non-Negotiable Rules
+
+- Do not implement toy demos, mocks, pseudo-code, or notebook-only experiments unless explicitly requested.
+- Do not fabricate experimental results, tables, logs, metrics, or paper claims.
+- Do not write paper conclusions before actual experiments are run.
+- Do not silently skip failed tests, missing dependencies, missing data, or broken commands.
+- Do not make different baselines incomparable through different splits, metrics, negative sampling, candidate construction, or evaluation code.
+- Do not hard-code dataset paths, model names, seeds, metrics, or prompt templates inside source files.
+- Do not design only for one dataset or one model.
+- Do not implement only our method; strong baselines must be supported with the same evaluator.
+- Do not overwrite existing user work without first identifying the files and explaining the intended change.
+- Do not perform large refactors before producing an implementation plan.
+- When consulting senior-recommended papers/projects or other top-conference
+  implementations, study them carefully as inspiration and fidelity guidance
+  only. The TRUCE/CURE method must not become a stitched-together clone,
+  copied objective, copied pipeline, or renamed combination of existing
+  baselines.
+- **瀹炴椂鏇存柊纭鍒?*锛氭瘡瀹屾垚涓€涓樁娈点€佷竴涓?step銆佷竴娆￠敊璇帓闄ゃ€佷竴娆¤础鐚紝
+  蹇呴』绔嬪嵆鏇存柊鍏变韩 memory锛坄D:\research\Vipin's Knowledgebase\memory\`锛夊拰
+  椤圭洰鏂囨。锛圥ROJECT_MEMORY.md, PHASE_HANDOFF.md 绛夛級銆備笉鏀掔潃锛屼笉璺宠繃銆?  杩濆弽姝よ鍒欑瓑浜庡伐浣滄病鍋氥€?- **椤圭洰鐙珛鎬?*锛歍RUCE-Rec 涓?Pony/TGL-Rec 鍏变韩 8 涓閮?baseline 鍜屾暟鎹?  setting锛屼絾鏂规硶/framework 瀹屽叏鐙珛銆侭aseline 鍒嗘暟鍙鐢紝鏂规硶浠ｇ爜缁濅笉娣风敤銆?
+## 1. Research Goal
+
+The repository must support a submission-level LLM4Rec experimental pipeline.
+
+The final system should support:
+
+- multi-domain recommendation datasets;
+- traditional recommendation baselines;
+- sequential recommendation baselines;
+- text retrieval baselines;
+- LLM zero-shot / few-shot / reranking baselines;
+- API-based LLM experiments;
+- local small-LLM LoRA / QLoRA fine-tuning;
+- our original LLM4Rec method;
+- ablation studies;
+- cold-start analysis;
+- long-tail analysis;
+- hallucination and validity evaluation;
+- diversity, coverage, novelty metrics;
+- latency, token, and cost statistics;
+- reproducible result export for paper tables and plots.
+
+The implementation must make it possible to start real experiments after the core modules are completed.
+
+Before implementing or changing OursMethod, Codex must read
+`docs/RESEARCH_IDEA.md` and `docs/PROJECT_MEMORY.md`. `AGENTS.md` defines
+engineering standards, not the core research idea. Codex must not replace
+OursMethod with a generic LLM reranker, generic RAG recommender,
+prompt-engineering baseline, or known-paper clone.
+
+## 1A. Durable Project Memory
+
+Future agents must preserve the project direction recorded in
+`docs/PROJECT_MEMORY.md`. For any nontrivial task, read that file before
+planning and update it when the task changes the roadmap, baseline policy,
+server commands, evidence boundaries, or current status.
+
+For every complex task, default to multi-agent collaboration when tools permit
+it. Use at least one implementation/explorer pass and one reviewer/fairness
+pass. The reviewer pass must compare TRUCE-Rec against the rigor, originality,
+technical depth, experimental completeness, and artifact standards expected in
+recent top-conference recommender/LLM4Rec papers. When literature context is
+needed, search broadly across multiple relevant SIGIR/WWW/KDD/RecSys/NeurIPS/
+ICLR-style papers and official projects, not only one or two convenient
+references. If subagents are unavailable, perform these passes explicitly in
+the main agent and say so.
+
+At the start of a nontrivial task, read the default startup packet unless the
+task is clearly unrelated:
+
+- `AGENTS.md`
+- `docs/PROJECT_MEMORY.md`
+- `docs/RESEARCH_IDEA.md`
+- `docs/submission_roadmap.md`
+- `docs/top_conference_review_plan.md`
+- `docs/qwen3_lora_controlled_baselines.md` for baseline/protocol work
+- `docs/server_execution_matrix.md` and `docs/server_next_commands.md` for
+  server-facing work
+- relevant source, config, and test files before editing
+
+At the end of a nontrivial task, report what was completed, commands/tests run,
+remaining risks, and the next concrete plan. Also state whether the current
+project/experiment stage is still open or can be considered complete. Do not
+create an endless "next step" loop: the project can move from experiments to
+paper writing only after four-domain runs, official/fair baselines, Ours
+ablations, statistical tests, efficiency/cost artifacts, failure cases, and a
+top-conference-style reviewer pass show no fatal gaps.
+
+The current strategic spine is:
+
+```text
+generative recommendation observation
+  -> Beauty full-domain plus books/electronics/movies 10k-user observation
+  -> base Qwen3-8B and senior-recommended Qwen3-8B-LoRA baseline observation
+  -> catalog grounding and uncertainty/popularity/long-tail/echo diagnostics
+  -> original, non-stitched CURE/TRUCE framework
+  -> Qwen3-8B-LoRA Ours adapter and ablations
+  -> official Qwen3-8B-LoRA baseline families
+  -> shared same-candidate evaluator
+  -> four-domain paper-scale experiments
+```
+
+Main LLM baseline policy follows the senior collaborator's recommended
+academic setup: obtain official source implementations, use Qwen3-8B as the
+shared backbone, train all compared LLM methods with LoRA, use official default
+or reported-optimal baseline hyperparameters, do not tune baselines on TRUCE
+test outcomes, and evaluate all methods through the same TRUCE candidate rows
+and evaluator. Ours may tune hyperparameters only under the declared validation
+protocol.
+
+Use multi-agent collaboration for nontrivial tasks when the environment
+permits it. At minimum, separate implementation from protocol/fairness review
+and top-conference-style critique. If subagents are unavailable, perform those
+passes explicitly yourself.
+
+Server `pony-rec-gpu` is now directly accessible via SSH: `ssh pony-rec-gpu "<command>"`.
+Host: `125.71.97.70:15302`, User: `ajifang`, GPU: RTX 4090 (49GB).
+Server project path: `~/projects/pony-rec-rescue-shadow-v6`.
+Do not guess server state 鈥?run a command to verify. After substantial local
+work, commit and push to `origin/main` unless the user explicitly asks not to.
+
+Do not let docs become stale. After a completed stage, update the artifact
+truth, narrative truth, and comparability truth: manifests/metrics/logs,
+roadmap/status/limitations, and candidate/evaluator/baseline status.
+
+## 2. Expected Repository Structure
+
+Prefer the following structure unless the existing repo already has a better compatible layout:
+
+```text
+.
+鈹溾攢鈹€ AGENTS.md
+鈹溾攢鈹€ README.md
+鈹溾攢鈹€ requirements.txt / pyproject.toml
+鈹溾攢鈹€ configs/
+鈹?  鈹溾攢鈹€ datasets/
+鈹?  鈹溾攢鈹€ models/
+鈹?  鈹溾攢鈹€ retrievers/
+鈹?  鈹溾攢鈹€ baselines/
+鈹?  鈹溾攢鈹€ llm/
+鈹?  鈹溾攢鈹€ training/
+鈹?  鈹溾攢鈹€ evaluation/
+鈹?  鈹斺攢鈹€ experiments/
+鈹溾攢鈹€ data/
+鈹?  鈹溾攢鈹€ raw/
+鈹?  鈹溾攢鈹€ processed/
+鈹?  鈹溾攢鈹€ tiny/
+鈹?  鈹斺攢鈹€ README.md
+鈹溾攢鈹€ src/
+鈹?  鈹斺攢鈹€ llm4rec/
+鈹?      鈹溾攢鈹€ __init__.py
+鈹?      鈹溾攢鈹€ data/
+鈹?      鈹溾攢鈹€ prompts/
+鈹?      鈹溾攢鈹€ retrievers/
+鈹?      鈹溾攢鈹€ rankers/
+鈹?      鈹溾攢鈹€ generators/
+鈹?      鈹溾攢鈹€ llm/
+鈹?      鈹溾攢鈹€ models/
+鈹?      鈹溾攢鈹€ trainers/
+鈹?      鈹溾攢鈹€ evaluation/
+鈹?      鈹溾攢鈹€ metrics/
+鈹?      鈹溾攢鈹€ experiments/
+鈹?      鈹溾攢鈹€ utils/
+鈹?      鈹斺攢鈹€ io/
+鈹溾攢鈹€ scripts/
+鈹?  鈹溾攢鈹€ preprocess.py
+鈹?  鈹溾攢鈹€ train.py
+鈹?  鈹溾攢鈹€ evaluate.py
+鈹?  鈹溾攢鈹€ rerank.py
+鈹?  鈹溾攢鈹€ run_experiment.py
+鈹?  鈹溾攢鈹€ run_all.py
+鈹?  鈹斺攢鈹€ export_tables.py
+鈹溾攢鈹€ tests/
+鈹?  鈹溾攢鈹€ unit/
+鈹?  鈹溾攢鈹€ smoke/
+鈹?  鈹斺攢鈹€ fixtures/
+鈹溾攢鈹€ outputs/
+鈹?  鈹溾攢鈹€ logs/
+鈹?  鈹溾攢鈹€ metrics/
+鈹?  鈹溾攢鈹€ checkpoints/
+鈹?  鈹溾攢鈹€ predictions/
+鈹?  鈹溾攢鈹€ tables/
+鈹?  鈹斺攢鈹€ runs/
+鈹斺攢鈹€ docs/
+    鈹溾攢鈹€ experiment_protocol.md
+    鈹溾攢鈹€ data_format.md
+    鈹溾攢鈹€ baselines.md
+    鈹斺攢鈹€ paper_plan.md
+```
+
+If the current repo uses a different layout, preserve compatibility where reasonable and document deviations.
+
+3. Required Core Interfaces
+
+All implementations must use unified interfaces. Do not create one-off scripts that bypass these interfaces.
+
+3.1 Dataset / DataModule
+
+Required responsibilities:
+
+load raw interactions;
+map raw user/item IDs to internal IDs;
+load or build item metadata;
+build user histories;
+create train/valid/test splits;
+support temporal split and leave-one-out split;
+support sampled ranking and full ranking;
+construct candidate sets;
+expose item text for LLM prompts and retrieval;
+save processed artifacts.
+
+Expected records:
+
+Interaction = {
+    "user_id": str,
+    "item_id": str,
+    "timestamp": int | float | None,
+    "rating": float | None,
+    "domain": str | None,
+}
+
+ItemRecord = {
+    "item_id": str,
+    "title": str,
+    "description": str | None,
+    "category": str | None,
+    "brand": str | None,
+    "domain": str | None,
+    "raw_text": str | None,
+}
+
+UserExample = {
+    "user_id": str,
+    "history": list[str],
+    "target": str,
+    "candidates": list[str] | None,
+    "domain": str | None,
+}
+
+Required files or equivalent:
+
+src/llm4rec/data/base.py
+src/llm4rec/data/registry.py
+src/llm4rec/data/preprocess.py
+src/llm4rec/data/splits.py
+src/llm4rec/data/candidates.py
+src/llm4rec/data/text_fields.py
+3.2 Retriever
+
+A retriever returns candidate items.
+
+Required retrievers:
+
+PopularityRetriever
+BM25Retriever
+DenseRetriever interface
+SequentialModelRetriever interface
+HybridRetriever
+
+Required output:
+
+RetrievalResult = {
+    "user_id": str,
+    "items": list[str],
+    "scores": list[float],
+    "metadata": dict,
+}
+
+Required files or equivalent:
+
+src/llm4rec/retrievers/base.py
+src/llm4rec/retrievers/popularity.py
+src/llm4rec/retrievers/bm25.py
+src/llm4rec/retrievers/dense.py
+src/llm4rec/retrievers/hybrid.py
+3.3 Ranker
+
+A ranker scores or reorders a candidate set.
+
+Required rankers:
+
+RandomRanker
+PopularityRanker
+BM25Ranker
+MatrixFactorization/BPR ranker if feasible
+Sequential ranker interface
+LLMReranker
+
+Required output:
+
+RankingResult = {
+    "user_id": str,
+    "items": list[str],
+    "scores": list[float],
+    "raw_output": str | None,
+    "metadata": dict,
+}
+
+Required files or equivalent:
+
+src/llm4rec/rankers/base.py
+src/llm4rec/rankers/popularity.py
+src/llm4rec/rankers/bm25.py
+src/llm4rec/rankers/mf.py
+src/llm4rec/rankers/sequential.py
+src/llm4rec/rankers/llm_reranker.py
+3.4 Generator
+
+A generator produces recommendation outputs, item IDs, explanations, or structured responses.
+
+Required responsibilities:
+
+constrained generation over candidate item IDs;
+parse generated recommendation lists;
+detect invalid items;
+optionally generate explanations;
+preserve raw LLM output for auditing.
+
+Required files or equivalent:
+
+src/llm4rec/generators/base.py
+src/llm4rec/generators/constrained.py
+src/llm4rec/generators/parser.py
+src/llm4rec/generators/explanation.py
+3.5 LLM Provider
+
+Required providers:
+
+Mock provider only for tests, not experiments;
+OpenAI-compatible API provider;
+local Hugging Face causal LM provider;
+local LoRA / QLoRA inference provider.
+
+Required features:
+
+temperature, top_p, max_tokens, seed if supported;
+retry and timeout handling;
+token usage logging when available;
+latency logging;
+raw request/response persistence;
+deterministic test mode.
+
+Required files or equivalent:
+
+src/llm4rec/llm/base.py
+src/llm4rec/llm/openai_provider.py
+src/llm4rec/llm/hf_provider.py
+src/llm4rec/llm/mock_provider.py
+src/llm4rec/llm/cost_tracker.py
+src/llm4rec/llm/response_cache.py
+3.6 Prompt Builder
+
+Required prompt types:
+
+zero-shot recommendation;
+few-shot recommendation;
+candidate reranking;
+constrained item-ID generation;
+explanation generation;
+preference summarization;
+self-verification / grounding check.
+
+Required files or equivalent:
+
+src/llm4rec/prompts/base.py
+src/llm4rec/prompts/templates.py
+src/llm4rec/prompts/builder.py
+src/llm4rec/prompts/formatters.py
+src/llm4rec/prompts/parsers.py
+3.7 Trainer
+
+Required training support:
+
+traditional baseline training;
+sequential baseline training;
+local small-LLM LoRA / QLoRA training interface;
+checkpoint save/load;
+resume;
+eval-only mode;
+gradient accumulation;
+mixed precision where applicable;
+seed control.
+
+Required files or equivalent:
+
+src/llm4rec/trainers/base.py
+src/llm4rec/trainers/traditional.py
+src/llm4rec/trainers/sequential.py
+src/llm4rec/trainers/lora.py
+src/llm4rec/trainers/checkpointing.py
+3.8 Evaluator
+
+One evaluator must be shared by all methods.
+
+Required responsibilities:
+
+load predictions;
+validate prediction schema;
+compute ranking metrics;
+compute validity / hallucination metrics;
+compute coverage / diversity / novelty / long-tail metrics;
+compute latency / token / cost metrics;
+support per-domain and aggregate metrics;
+export JSON, CSV, and LaTeX-ready tables.
+
+Required files or equivalent:
+
+src/llm4rec/evaluation/evaluator.py
+src/llm4rec/evaluation/prediction_schema.py
+src/llm4rec/evaluation/export.py
+src/llm4rec/evaluation/significance.py
+3.9 Metrics
+
+Required ranking metrics:
+
+Recall@K
+NDCG@K
+HitRate@K
+MRR@K
+MAP@K if feasible
+
+Required LLM/grounding metrics:
+
+validity rate
+hallucination rate
+parse success rate
+candidate adherence rate
+explanation groundedness placeholder or interface
+
+Required beyond-accuracy metrics:
+
+item coverage
+catalog coverage
+intra-list diversity
+novelty
+long-tail ratio
+popularity-stratified metrics
+
+Required efficiency metrics:
+
+latency mean / p50 / p95
+token count
+API cost if applicable
+GPU memory if available
+throughput
+
+Required files or equivalent:
+
+src/llm4rec/metrics/ranking.py
+src/llm4rec/metrics/validity.py
+src/llm4rec/metrics/diversity.py
+src/llm4rec/metrics/long_tail.py
+src/llm4rec/metrics/efficiency.py
+3.10 Experiment Runner
+
+Required responsibilities:
+
+read YAML config;
+instantiate dataset, retriever, ranker/generator, evaluator;
+save resolved config;
+save logs;
+save predictions;
+save metrics;
+support dry-run;
+support smoke-run;
+support multi-seed runs;
+support multi-domain runs.
+
+Required files or equivalent:
+
+src/llm4rec/experiments/config.py
+src/llm4rec/experiments/runner.py
+src/llm4rec/experiments/registry.py
+src/llm4rec/experiments/seeding.py
+src/llm4rec/experiments/logging.py
+4. Required Baselines
+
+The codebase must support at least the following baseline families.
+
+4.1 Non-personalized
+Random
+Popularity
+4.2 Traditional Collaborative Filtering
+Matrix Factorization or BPR-MF
+LightGCN or compatible graph recommender if feasible
+4.3 Sequential Recommendation
+
+At least one implemented or wrapped:
+
+GRU4Rec
+SASRec
+BERT4Rec
+4.4 Text Retrieval / Text Ranking
+BM25
+dense retrieval interface
+sentence-transformer retrieval if dependency is acceptable
+4.5 LLM Baselines
+zero-shot direct recommendation;
+few-shot direct recommendation;
+candidate reranking;
+constrained candidate reranking;
+explanation generation baseline.
+
+All baselines must output the same prediction schema and must be evaluated by the same evaluator.
+
+5. Required Data Support
+
+The system should be dataset-agnostic.
+
+At minimum:
+
+tiny fixture dataset for smoke tests;
+one MovieLens-style dataset adapter;
+one Amazon Reviews-style multi-domain adapter or interface;
+generic CSV/JSONL adapter.
+
+Required split strategies:
+
+leave-one-out;
+temporal split;
+user-stratified split if applicable.
+
+Required candidate protocols:
+
+full ranking when feasible;
+sampled negatives with fixed seed;
+candidate set loaded from file;
+retriever-generated candidate set.
+
+All protocols must be recorded in config and saved with outputs.
+
+6. Required Configs
+
+Use YAML configs. Do not rely on manual source edits.
+
+Expected config categories:
+
+configs/datasets/tiny.yaml
+configs/datasets/movielens.yaml
+configs/datasets/amazon_books.yaml
+configs/retrievers/popularity.yaml
+configs/retrievers/bm25.yaml
+configs/baselines/popularity.yaml
+configs/baselines/bpr.yaml
+configs/baselines/sasrec.yaml
+configs/baselines/llm_rerank.yaml
+configs/llm/openai_compatible.yaml
+configs/llm/hf_local.yaml
+configs/training/lora.yaml
+configs/evaluation/default.yaml
+configs/experiments/smoke.yaml
+configs/experiments/main_movielens.yaml
+configs/experiments/main_multidomain.yaml
+configs/experiments/ablation.yaml
+configs/experiments/cold_start.yaml
+configs/experiments/long_tail.yaml
+
+Each experiment config must specify:
+
+dataset;
+split strategy;
+candidate strategy;
+model or baseline;
+prompt template if applicable;
+metrics;
+seeds;
+output directory;
+logging level;
+device;
+run mode.
+7. Required Scripts
+
+Scripts must be thin wrappers around source modules.
+
+Required commands:
+
+python scripts/preprocess.py --config configs/datasets/tiny.yaml
+python scripts/train.py --config configs/experiments/smoke.yaml
+python scripts/evaluate.py --config configs/experiments/smoke.yaml
+python scripts/run_experiment.py --config configs/experiments/smoke.yaml
+python scripts/run_all.py --config configs/experiments/smoke.yaml
+python scripts/export_tables.py --input outputs/metrics --output outputs/tables
+pytest tests/
+
+If commands differ, document the actual commands in README and in the audit report.
+
+8. Required Output Artifacts
+
+Each run must save:
+
+outputs/runs/<run_id>/
+鈹溾攢鈹€ resolved_config.yaml
+鈹溾攢鈹€ environment.json
+鈹溾攢鈹€ git_info.json
+鈹溾攢鈹€ logs.txt
+鈹溾攢鈹€ predictions.jsonl
+鈹溾攢鈹€ metrics.json
+鈹溾攢鈹€ metrics.csv
+鈹溾攢鈹€ cost_latency.json
+鈹溾攢鈹€ checkpoints/
+鈹斺攢鈹€ artifacts/
+
+Prediction JSONL schema:
+
+{
+  "user_id": "u1",
+  "target_item": "i9",
+  "candidate_items": ["i1", "i2", "i9"],
+  "predicted_items": ["i9", "i2", "i1"],
+  "scores": [0.9, 0.5, 0.1],
+  "method": "llm_rerank",
+  "domain": "movies",
+  "raw_output": null,
+  "metadata": {}
+}
+9. Testing Requirements
+
+Minimum tests:
+
+dataset loading smoke test;
+split determinism test;
+candidate generation test;
+ranking metrics correctness test;
+validity/hallucination metric test;
+prompt formatting test;
+LLM response parser test;
+experiment runner smoke test;
+export table smoke test.
+
+Tests must use tiny fixture data and must not require API keys or large downloads.
+
+10. Done Criteria
+
+A stage is not complete unless:
+
+source code exists;
+config exists;
+script entrypoint exists if needed;
+smoke test or unit test exists;
+command has been run;
+result is reported;
+remaining risks are documented.
+
+For every stage, report:
+
+Files changed:
+Commands run:
+Tests run:
+Observed results:
+Design rationale:
+Remaining risks:
+Next step:
+11. Paper-Writing Rule
+
+Paper writing is allowed only after the experiment pipeline can produce real metrics.
+
+The paper draft must be grounded in:
+
+actual implemented modules;
+actual experiment protocol;
+actual metrics files;
+actual ablation outputs;
+actual failure cases or limitations.
+
+Do not invent results.
+
+codex
+The local memory confirms RankCRC is already the current headline, so I’m treating this as a positioning audit rather than a request to re-open the empirical plan. I’m doing the reviewer/fairness pass explicitly in the main thread; no code or claims will be changed.
+codex
+One useful finding: the local memory says the RankCRC citation audit was already recorded as resolved on 2026-06-20, but I’m still checking the positioning text against external sources because the user asked for citation appropriateness, not just internal consistency.
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\paper\\related_positioning_rankcrc.md'" in D:\Research\TRUCE-Rec
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\paper\\refs\\conformal.bib'" in D:\Research\TRUCE-Rec
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'D:\\Research\\TRUCE-Rec\\paper\\method_rankcrc.md'" in D:\Research\TRUCE-Rec
+ succeeded in 3306ms:
+# Related Work & Positioning 鈥?RankCRC
+
+> Current positioning for the RankCRC headline (replaces the stale CU-GR `related_positioning.md`, kept for history). Locked / experiment-independent. The contribution is **distribution-free risk-controlled selective reliability** for recommendation, not raw-ranking SOTA.
+
+## Conformal prediction and conformal risk control
+Split conformal prediction \citep{vovk2005algorithmic,angelopoulos2023gentle} gives distribution-free coverage for set-valued predictors; Conformal Risk Control \citep{angelopoulos2024crc} extends this to any bounded, monotone loss, yielding `E[L(位虃)] 鈮?伪` in marginal expectation. RCPS \citep{bates2021rcps} and Learn-then-Test \citep{angelopoulos2021ltt} give the high-probability (PAC) analogue via multiple-testing. **RankCRC's difference:** the controlled object is **listwise rank-risk** (`1 鈭?NDCG@k`) on the **served slice after abstention** (a self-normalized conditional mean), not a pointwise loss over the full population. We show plain CRC does not attach to the naive served-slice estimator (random-denominator winner's curse) and repair it with a frozen-`位` B1/B2 split so the served mean is an honest i.i.d. mean; we name LTT as the PAC upgrade and a numerator+coverage-floor route as an exact surrogate. To our knowledge, no prior work provides a distribution-free marginal-expectation bound on **top-`k` listwise NDCG risk among accepted users using a label-free frozen selector** in recommendation (we state this narrowly, "to our knowledge," not as a broad first-of-kind).
+
+## Conformal selective prediction / abstention WITH guarantees
+Beyond heuristic abstention, a line of work gives *guaranteed* selective prediction: risk-controlling prediction sets \citep{bates2021rcps}, conformalized selective classification and abstention systems built on RCPS/Learn-then-Test, distribution-free reliability guarantees applied directly to recommendation \citep{angelopoulos2023recsys}, and two-stage conformal risk control for ranked retrieval \citep{xu2025twostage}. These control pointwise, set-coverage, or stage-wise retrieval losses, typically over the full population or via prediction-set size. **RankCRC's difference (vs.\ the two closest neighbors):** \citet{angelopoulos2023recsys} attach a distribution-free guarantee to the *size/coverage of a returned candidate set* over the *full* user population; \citet{xu2025twostage} control *stage-wise retrieval losses* (e.g.\ recall at a cutoff) for a two-stage pipeline via LTT/CRC, again marginally over all queries. RankCRC instead controls a *conditional* served-slice **listwise NDCG** risk `E[1鈭扤DCG@k | served]` 鈥?a self-normalized conditional mean with a *random* served count among users an abstention policy chose to serve 鈥?with a *label-free* rank-geometry selector and the frozen-`位` B1/B2 discipline that makes the conditional-mean certificate valid (neither neighbor controls a post-abstention conditional listwise mean, and neither uses a label-free served-slice selector). RankCRC is best read as *transferring* this guaranteed-abstention machinery to recommendation with a recsys-specific listwise target 鈥?a protocol/application contribution, not a new conformal theorem.
+
+## Selective prediction / classification WITHOUT guarantees
+SelectiveNet \citep{geifman2019selectivenet} and the risk鈥揷overage literature learn an abstention head trading coverage for accuracy, but provide **no distribution-free finite-sample risk guarantee** 鈥?the risk鈥揷overage curve is empirical. **RankCRC's difference:** it adds the CRC marginal-expectation bound on top of abstention, and the selector is *label-free* over rank-geometry features rather than a jointly-trained confidence head. We include a SelectiveNet-without-guarantee baseline (trained on Fold A only, matched coverage) precisely to isolate that the *guarantee* 鈥?not merely "abstain on hard users" 鈥?is the contribution.
+
+## LLM-uncertainty calibration
+Verbalized-confidence and calibration work (ECE, temperature scaling, reliability diagrams; Kadavath et al.; Tian et al.) asks whether an LLM's stated confidence matches accuracy. **RankCRC makes no ECE / reliability-diagram claim**: the object is an operational *served-slice risk bound*, a different operational guarantee than calibration of a confidence number (different in kind 鈥?a risk bound on a served sub-population 鈥?not a strictly stronger version of ECE). Our confidence `g` is not the LLM's verbalized confidence but a logistic model over rank-geometry of the base ranker's candidate scores, with the held-out label forbidden as a feature.
+
+## Selective / reliable recommendation and LLM-for-RecSys
+Prior LLM-for-recommendation work (the 8 official baselines: ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLM-ESR, ProEx, ProMax, RLMRec) targets raw-ranking improvement on the full user population. Selective / cautious recommendation has been explored heuristically (confidence thresholds, popularity gating) without distribution-free guarantees. **RankCRC's difference:** it reframes the problem as *risk-controlled reliability* 鈥?serve the slice on which the served-slice rank-risk `E[1鈭扤DCG@k | served]` is bounded by `伪` in marginal expectation 鈥?orthogonal to raw SOTA, and demonstrates (the empirical contribution, GPU-gated) that a deployable label-free-at-inference selector holds the bound across 8 domains with non-trivial coverage and transfers across domains/rankers. The sibling pointwise-posterior method (pony) owns the raw-ranking lane; TRUCE owns the reliability lane.
+
+## Why this is not "CRC applied to NDCG"
+The strongest reviewer objection is incrementality. The novelty is the *combination*: (i) listwise rank-risk as the controlled quantity; (ii) the served-slice selective framing; (iii) a **label-free, deployable** confidence over rank-geometry (no test peek), repaired with the frozen-`位` split so the conditional-mean certificate is valid; (iv) a *falsifiable* gain law that predicts the served-slice lift a priori; and (v) the 8-domain feasibility triad (cross-domain risk control + non-trivial coverage at useful `伪` + label-free confidence transfer) 鈥?which no prior conformal-recsys work \citep{angelopoulos2023recsys,xu2025twostage} demonstrates. The value is orthogonal to raw SOTA: a "serve only when the served-slice rank-risk is bounded in marginal expectation" policy is operationally useful even when raw ranking is mid-pack.
+
+> **Citation status (citation-audit, 2026-06-20):** RESOLVED for the conformal core. The by-category prose above is now keyed to concrete, bibliographically-verified references in `refs/conformal.bib` (Vovk鈥揋ammerman鈥揝hafer 2005; Angelopoulos & Bates gentle intro; Conformal Risk Control, ICLR 2024; RCPS, JACM 2021; Learn-then-Test 2021; Angelopoulos et al. distribution-free recsys reliability, COPA 2023; Xu et al. two-stage risk control for ranked retrieval, IJCAI 2025; SelectiveNet, ICML 2019). Each entry's authors/year/venue were verified before inclusion 鈥?none fabricated. **Still pending (needs the experiment phase):** baseline/method citations for the 8 official LLM-for-RecSys systems and any RankCRC empirical-claim citations are added once the results block exists; verify each new entry the same way before adding.
+
+ succeeded in 3708ms:
+% ============================================================================
+% TRUCE-Rec / RankCRC 鈥?verified conformal-prediction & risk-control references
+% ----------------------------------------------------------------------------
+% Assembled during the ARIS citation-audit phase. EVERY entry below was
+% bibliographically verified against the official venue / arXiv listing
+% (authors, year, venue) before being added 鈥?none are fabricated. The
+% by-category prose in related_positioning_rankcrc.md is keyed to these.
+% Verification date: 2026-06-20.
+% ============================================================================
+
+% --- Foundational conformal prediction ---
+@book{vovk2005algorithmic,
+  title     = {Algorithmic Learning in a Random World},
+  author    = {Vovk, Vladimir and Gammerman, Alexander and Shafer, Glenn},
+  year      = {2005},
+  publisher = {Springer},
+  address   = {New York}
+}
+
+@article{angelopoulos2023gentle,
+  title   = {A Gentle Introduction to Conformal Prediction and
+             Distribution-Free Uncertainty Quantification},
+  author  = {Angelopoulos, Anastasios N. and Bates, Stephen},
+  journal = {Foundations and Trends in Machine Learning},
+  year    = {2023},
+  note    = {arXiv:2107.07511}
+}
+
+% --- Risk control (the families RankCRC builds on / upgrades to) ---
+@article{bates2021rcps,
+  title   = {Distribution-Free, Risk-Controlling Prediction Sets},
+  author  = {Bates, Stephen and Angelopoulos, Anastasios and Lei, Lihua and
+             Malik, Jitendra and Jordan, Michael I.},
+  journal = {Journal of the ACM},
+  volume  = {68},
+  number  = {6},
+  pages   = {1--34},
+  year    = {2021},
+  doi     = {10.1145/3478535},
+  note    = {Article 43; arXiv:2101.02703}
+}
+
+@inproceedings{angelopoulos2024crc,
+  title     = {Conformal Risk Control},
+  author    = {Angelopoulos, Anastasios N. and Bates, Stephen and
+               Fisch, Adam and Lei, Lihua and Schuster, Tal},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@article{angelopoulos2021ltt,
+  title   = {Learn then Test: Calibrating Predictive Algorithms to
+             Achieve Risk Control},
+  author  = {Angelopoulos, Anastasios N. and Bates, Stephen and
+             Cand{\`e}s, Emmanuel J. and Jordan, Michael I. and Lei, Lihua},
+  journal = {arXiv preprint arXiv:2110.01052},
+  year    = {2021}
+}
+
+% --- Conformal / distribution-free guarantees IN recommendation & ranking ---
+% (the concrete conformal-recsys / conformal-ranking neighbors the TODO required)
+@inproceedings{angelopoulos2023recsys,
+  title     = {Recommendation Systems with Distribution-Free Reliability
+               Guarantees},
+  author    = {Angelopoulos, Anastasios N. and Krauth, Karl and
+               Bates, Stephen and Wang, Yixin and Jordan, Michael I.},
+  booktitle = {Proceedings of the Twelfth Symposium on Conformal and
+               Probabilistic Prediction with Applications (COPA)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {204},
+  pages     = {175--193},
+  year      = {2023},
+  note      = {arXiv:2207.01609}
+}
+
+@inproceedings{xu2025twostage,
+  title     = {Two-stage Risk Control with Application to Ranked Retrieval},
+  author    = {Xu, Yunpeng and Ying, Mufang and Guo, Wenge and Wei, Zhi},
+  booktitle = {Proceedings of the Thirty-Fourth International Joint
+               Conference on Artificial Intelligence (IJCAI)},
+  year      = {2025},
+  note      = {arXiv:2404.17769}
+}
+
+% --- Selective prediction WITHOUT distribution-free guarantees (contrast) ---
+@inproceedings{geifman2019selectivenet,
+  title     = {SelectiveNet: A Deep Neural Network with an Integrated
+               Reject Option},
+  author    = {Geifman, Yonatan and El-Yaniv, Ran},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {97},
+  pages     = {2151--2159},
+  year      = {2019}
+}
+
+ succeeded in 3733ms:
+# Method 鈥?RankCRC (Risk-Controlled Selective Recommendation)
+
+> **Status / provenance.** This is the CURRENT headline method, replacing the stale CU-GR v2 draft in `method.md` (pre-pivot, May 4 鈥?kept for history). The served-slice guarantee below is adversarially verified (`refine-logs/rankcrc_formalization_verified.md`, verdict `breaks=false`) and matches the implemented validation harness (`scripts/rankcrc_validate.py`, beauty re-validated end-to-end). Experiment-independent: the theorem and procedure are LOCKED; only the empirical tables (8-domain rollout) remain GPU-gated. Frozen protocol: 8 Amazon domains, 10k users (beauty 973), 101 same-candidates/event (1 positive + 100 popularity-matched negatives), Qwen3-8B base, metrics HR/NDCG@{5,10,20} + MRR, paired Holm-corrected bootstrap.
+
+## 1. Problem setup 鈥?selective recommendation
+
+For each user `u`, a **frozen** base ranker scores a fixed candidate set and emits a top-`k` list; recommendation quality is the listwise rank-risk
+```
+蟻_u = 1 鈭?NDCG@k(u) 鈭?[0, 1],
+```
+fixed once the base ranker and `k` are fixed. Standard recommenders serve *every* user. We instead allow **abstention**: a deployable system may decline to serve a user (route to a fallback channel) when it cannot vouch for the recommendation. The object of study is the **served-slice risk** 鈥?the expected rank-risk *among the users we choose to serve* 鈥?and the goal is a distribution-free guarantee that this served-slice risk stays below a target `伪`, using only signals available at deployment time (no peek at the held-out relevance).
+
+This is a *reliability* contribution, deliberately orthogonal to raw-ranking SOTA: on beauty the base raw NDCG@10 (0.1143) is below the strongest baseline bar (ProEx 0.1506). RankCRC does not claim to out-rank; it aims to *bound, in marginal expectation, the rank-risk on the users it chooses to serve*. The lane of raw-ranking improvement belongs to the sibling pointwise-posterior method (pony); TRUCE owns calibrated served-slice reliability.
+
+**Contribution framing (honest).** We do not claim a new conformal *theorem* 鈥?once the selector is frozen, the served-slice control is standard holdout/CRC-style risk estimation on the accepted sub-population. The contribution is a *protocol + application*: (i) the served-slice, recommendation-specific **listwise** rank-risk formulation; (ii) a **leakage-safe, label-free selector** over rank-geometry with the frozen-`位` B1/B2 discipline that makes the conditional-mean control valid; (iii) a falsifiable served-slice gain law; and (iv) the empirical feasibility across 8 domains (the GPU-gated result). A skeptic's "this is CRC on accepted examples" is *correct* and is exactly the foundation we build the deployable selective-recommendation protocol on.
+
+## 2. The label-free confidence `g`
+
+We score each user's recommendation reliability with a confidence `g(x_u) 鈭?鈩漙 that is **label-free at inference**: a logistic model over 24 **rank-geometry** features computed entirely from the base ranker's candidate scores and side information 鈥?score margins (top-1 vs top-2, top-1 vs median), softmax peakiness/temperature, responsibility-entropy order statistics, MC-dropout score variance, and candidate-popularity statistics. The held-out relevance `H_target` is **forbidden as a feature** (enforced by a column-allowlist audit, 搂6), so at deployment `g` reads no test-fold label and the feature map is fully deployable. (To be precise about training: `g`'s logistic *target* on Fold A is the per-user rank-risk `蟻_u = 1鈭扤DCG@k`, which is derived from the relevance `y_u`; so `g` is *trained* on relevance labels on the disjoint Fold A, but is label-free as a *feature map at inference* 鈥?the only property validity requires, since A is disjoint from B1/B2/C.) On beauty, `g` attains test AUC 0.627 for separating high- from low-risk users, versus 0.519 for the raw top-margin baseline `H_top`. On beauty, `g` attains test AUC 0.627 for separating high- from low-risk users, versus 0.519 for the raw top-margin baseline `H_top`.
+
+`g` is the *only* learned component, and it is a pure scoring function 鈥?it ranks users by reliability but sets no threshold. Thresholding and certification are handled by the conformal layer (搂3), which is where the distribution-free guarantee enters.
+
+## 3. The RankCRC procedure (A / B1 / B2 / C fold discipline)
+
+The single decision RankCRC makes is **whom to serve**: serve `u` iff `g(x_u) 鈮?位`, abstain otherwise. The acceptance sets are nested (`S(位鈥? 鈯?S(位)` for `位鈥?> 位`), so raising `位` serves fewer, higher-confidence users. Because the base ranker is frozen and `k` is fixed, `位` changes *only which users are served*, never the contents of any list 鈥?so for a fixed-`k` NDCG objective the abstention threshold `位` **is** the coverage threshold (there is no within-slice risk knob; we write `位 鈮?蟿`). A genuinely distinct `位 鈮?蟿` arises only under a *changed* objective (a charged abstention price, or numerator-control with a coverage floor; 搂4).
+
+Partition users into four disjoint folds (committed manifest, seed 20260506):
+
+- **Fold A 鈥?fit `g`** (freeze #1). Fit the 24-feature logistic `g`; `H_target` forbidden. `g` is frozen and never refit.
+- **Fold B = B1 鈭?B2 鈥?calibrate** (freeze #2, the load-bearing discipline). On a *pre-registered* coverage grid, set the threshold on **B1 only**: `位 := Quantile_{1鈭抍}(g over B1)`. Then on the **disjoint B2**, compute the served count `m = |{u 鈭?B2 : g(x_u) 鈮?位}|`, the served mean `R虃_m = (1/m) 危_{u鈭圔2: g鈮ノ粆 蟻_u`, and the conformal-risk-control certificate
+  ```
+  伪(c) = R虃_m 路 m/(m+1) + 1/(m+1).
+  ```
+  Crucially, **`位` is chosen on B1 and never optimized against the B2 losses it averages.** The coverage grid, the deployed operating point, and the minimum-served-count `m_min` are **pre-registered before B2 is inspected**: an operating point whose B2 served count falls below `m_min` is declared invalid by the pre-registered rule, *not* dropped by looking at its B2 risk. (Selecting the operating point by inspecting B2 certificates/risks/valid-`m` across the grid would void the theorem unless that selection rule is itself pre-registered and loss-independent, or upgraded to LTT/RCPS 鈥?搂4.) The deployed operating point and grid are frozen here, before any test data is touched.
+- **Fold C 鈥?test** (scored once). Apply the frozen `(g, 位)`; report achieved coverage `|S_C|/|C|`, served NDCG@k, and the served-risk alongside the certificate. A single Fold-C split is one draw of an expectation guarantee, so the *headline* validation is the mean over 鈮?00 resplits (mean test served-risk 鈮?mean `伪`), not a single-split pass/fail. Fold C performs no selection or tuning.
+
+**Why the split is load-bearing.** The naive served mean `R虃(位) = (1/m) 危_{g鈮ノ粆 蟻` is a *self-normalized ratio* with a random denominator `m`; its per-example contribution is not monotone in `位`, so plain Conformal Risk Control (CRC, Angelopoulos & Bates 2024) does not attach to it *if `位` is chosen on the same fold whose losses are averaged* (a winner's-curse / post-selection bias on the ratio). Choosing `位` on a disjoint B1 dissolves this: conditional on the B1-frozen `位`, the served-B2 users are i.i.d. draws from the fixed conditional law `P(路|g鈮ノ?`, so the served-B2 mean is an ordinary bounded i.i.d. mean and the CRC correction applies. (The split is a *provably-never-worse* safeguard: under the coverage-quantile parameterization the served count `m鈮坈路n` is near-deterministic, so the same-fold estimator merely *appears* benign for a continuous `g`; the split makes validity unconditional rather than data-dependent.)
+
+## 3.1 Theorem (served-slice selective-risk certificate 鈥?frozen-selector marginal expectation)
+
+*Let users be exchangeable with label-free features `x_u` and bounded rank-risk `蟻_u = 1 鈭?NDCG@k(u) 鈭?[0,1]` (fixed `k`, frozen base scorer). Let `g` be fit and frozen on Fold A, and assume `g` is continuous at the operating quantile (no atom at `位`; otherwise apply `U(0,蔚)` tie-break jitter). Set `位 := Quantile_{1鈭抍}(g)` on B1, and on the disjoint B2 form the served count `m = |{u鈭圔2: g鈮ノ粆|`, the served mean `R虃_m`, and the per-sample value `伪(B2) := R虃_m路m/(m+1) + 1/(m+1)` when `m 鈮?1` (and `伪(B2) := 1` when `m = 0`; we additionally require a pre-registered minimum served count `m_min`, with invalidity declared by the `m_min` rule **before any B2 risk is inspected**, never by reading B2 losses). Write `渭(位) := E[1 鈭?NDCG@k(U*) | g(x_{U*}) 鈮?位]` for the true served-slice risk of a fresh exchangeable user `U*`. Then, conditional on the frozen selector `(g, 位)`,*
+```
+   渭(位)  鈮? E_{B2}[ 伪(B2) | g, 位 ],
+```
+*i.e. the EXPECTATION of the certificate over B2 draws upper-bounds the true served-slice risk (distribution-free, finite-sample).*
+
+**Realized vs expected (the precise reading 鈥?do not overclaim).** The bound is on `E_{B2}[伪]`, NOT on any single realized `伪(B2)`: since `E[伪(B2) | m] = (m路渭 + 1)/(m+1) 鈮?渭`, the certificate is upward-biased in expectation, but a *single* B2 can yield `伪(B2) < 渭`. So `伪(B2)` reported from one calibration draw is an estimate of an upper bound, not a realized guarantee. The headline empirical claim is the **expectation check over 鈮?00 resplits** (mean test served-risk 鈮?mean `伪`), never a single split.
+
+**Guarantee class (no overclaim).** Marginal-expectation, conditional on the frozen selector `(g, 位)`: (a) marginal over the served sub-population, **not** per-user; (b) an expectation bound 鈥?**not** PAC/high-probability (a single deployment may exceed `渭`); (c) conditional on this frozen selector, **not** integrated over the randomness of fitting `(g,位)`; (d) **not** a fixed-served-size bound (`m` random, integrated in expectation). Choosing `位` on the same fold whose losses are averaged voids even this expectation bound.
+
+**Proof sketch.** Conditional on `(g, 位)` frozen on A鈭狟1, the indicator `1{g(x_u) 鈮?位}` and the loss `蟻_u` are deterministic transforms of the exchangeable draw, so 鈥?*conditional on the served count `m`* 鈥?the accepted B2 observations are an exchangeable sample from the fixed accepted law `P(路|g鈮ノ?` and hence `E[R虃_m | m] = 渭` **for every `m`**. Thus `E[伪(B2) | m] = (m渭+1)/(m+1) = 渭 + (1鈭捨?/(m+1) 鈮?渭` for every `m`. Because *each* mixture component already exceeds `渭`, any pre-registered, loss-independent reweighting over `m` 鈥?in particular the `m 鈮?m_min` exclusion (and the `m=0 鈬?伪=1` convention) 鈥?preserves the inequality: `E[伪 | m 鈮?m_min] = 危_m P(m | m 鈮?m_min)路E[伪|m] 鈮?渭`. The load-bearing condition is therefore **conditional-mean-unbiasedness given `m`** (`E[R虃_m|m]=渭`), which holds under exchangeability; it is *not* merely "i.i.d." in passing. **Where this can break:** if there is *population-level* dependence that couples `m` with the served risk (the popularity-coupling / temporal-drift threat in 搂6 / the limitations), `E[R虃_m|m] 鈮?渭` and a pre-registered `m`-reweighting can select adversarially 鈥?so the exclusion's safety is exactly as strong as the exchangeability assumption, no stronger. (After freezing `位`, monotonicity in `位` plays no role 鈥?this is bounded-loss risk estimation on a fixed accepted distribution, with `1/(m+1)` the finite-sample slack; monotonicity matters only when searching over thresholds, the LTT route of 搂4.) 鈭?
+## 4. Optional upgrades (named, not headline)
+
+- **`(1鈭捨?` high-probability variant.** Replace the coverage-fixed CRC step by **fixed-sequence Learn-then-Test** (FWER-controlled one-sided Hoeffding鈥揃entkus or betting p-values) over the pre-registered coverage grid 鈫?`P(E[1鈭扤DCG | g鈮ハ勌俔 鈮?伪) 鈮?1鈭捨碻, valid for a *data-chosen* operating point and robust to ties, at a coverage cost. (The same machinery is the only valid route if one insists on selecting `位` to hit a *target* `伪`; selecting `位` by minimizing the B2 certificate would re-introduce the post-selection bias.)
+- **Exact belt-and-suspenders surrogate.** CRC-control the *unconditional* numerator `N(位) = E[蟻路1{g鈮ノ粆] 鈮?尾` (a genuine monotone per-example CRC family) together with a certified coverage floor `C(位) 鈮?c鈧€` 鉄?`E[1鈭扤DCG | served] 鈮?尾/c鈧€` (cost `1/c鈧€`).
+
+## 5. Selective-gain decomposition (Prop 3) 鈥?a falsifiable predictive law
+
+Under stated assumptions (per-user NDCG and `g` coupled only through a monotone link; served-slice lift factorizing into ranking-quality-separation 脳 score-dispersion 脳 coverage), the served-slice lift admits the closed form
+```
+   螖NDCG@k(c) 鈮?(2路AUC 鈭?1) 路 Gini 路 魏(c),
+```
+predicting the lift *a priori* from the confidence AUC, the score-dispersion Gini, and a coverage factor `魏` 鈥?all measurable on the calibration folds. It is pre-registered with a **falsification test**: predicted vs observed 螖NDCG across all domains 脳 coverage levels; if out-of-sample R虏 is below a pre-set bar, the law is demoted to a heuristic. No coefficients are fit to test risk. This is a *secondary* contribution; the headline guarantee does not rest on it.
+
+## 6. No-leakage audit
+
+Validity rests on three assumptions, each enforced in code: (i) `H_target` forbidden as a `g` feature 鈥?a column-allowlist audit that we verify *has teeth* via a negative control (injecting any of {`H_target`, `target_rank`, `target_ndcg`, `is_correct`, `rank_risk`} must raise); (ii) the fold index sets A/B1/B2/C are asserted pairwise-disjoint, with `位` provenance restricted to B1 and loss-averaging to B2; (iii) `g` is asserted (near-)continuous at the operating quantile, else `U(0,蔚)` jitter is applied. The achieved B2 served count `m` is reported per operating point (the B1/B2 split costs sample 鈥?a power, not a validity, cost).
+
+## 7. Relationship to CALM-Rec (strictly subordinate)
+
+CALM-Rec 鈥?calibrated trust over attribute-anchored latent multi-intent 鈥?is an *optional base-ranker upgrade*, not a load-bearing claim. RankCRC wraps **any** base ranker; the headline guarantee holds whether the base ranker is CALM, the fixed-blend scorer, or the pony pointwise posterior. CALM is elevated to a co-headline only if the pre-registered Stage-2.5 reliability gate passes (real Qwen3-8B encoders, K=4 intents, reliability AUC > 0.6 鈥?the K=2 CPU proxy was weak); otherwise CALM is demoted to a diagnostic/ablation and the base ranker reverts to the fixed-blend scorer. RankCRC is the standalone headline either way.
+
+web search: 
+web search: Conformal prediction information retrieval ranked retrieval guarantee set retrieval paper
+web search: 
+web search: 
+web search: 
+web search: https://dl.acm.org/doi/10.1145/3705328.3748054
+web search: 
+web search: "Mitigating Unwanted Recommendations Through Conformal Risk"
+web search: 
+web search: "Fair Learning to Rank with Distribution-free Risk Control"
+codex
+The defense is **partly convincing**, but too dependent on a narrow phrasing. I would not collapse RankCRC to Angelopoulos et al. COPA 2023: that work is about returned recommendation sets with FDR-style reliability over the full population, not conditional served-user listwise risk. The Xu et al. IJCAI 2025 comparison is weaker: Xu explicitly handles ranked retrieval and nDCG-like ranking risk, so “listwise NDCG” alone is not enough. The real distinction must be the **post-abstention conditional target with random served count plus frozen B1/B2 threshold discipline**.
+
+The strongest reviewer objection: “This is just CRC/LTT or holdout risk estimation applied after a selective filter; label-free scores at inference are standard.” The text partially rebuts this by admitting it is a protocol/application contribution, not a new conformal theorem. But it should more directly say why Xu-style all-query/stagewise risk does **not** certify `E[loss | served]` when the served set is data-selected.
+
+Citation issues: Angelopoulos 2023 is slightly misdescribed as “size/coverage”; it is more accurately FDR / “mostly good returned items” with diversity optimization. Xu 2025 is under-described as recall-stage control; it includes ranking-risk formulations inspired by nDCG. More importantly, the positioning is missing obvious neighbors: De Toni et al., **“You Don’t Bring Me Flowers”**, RecSys 2025 CRC for unwanted recommendations; Fair Learning to Rank with Distribution-Free Risk Control; conformal IR / retrieval-set work such as score-refinement for conformal information retrieval; and newer selective conformal risk-control / reject-option work. These do not kill the claim, but omitting them makes the novelty audit look cherry-picked.
+
+The “to our knowledge” claim is appropriately hedged only if the exact conjunction is preserved: **top-k listwise NDCG risk, among accepted users, marginal-expectation bound, label-free frozen selector, recommendation setting**. It is over-engineered and fragile if used as the main novelty sentence. Make the novelty conceptual, not a qualifier stack.
+
+Sources checked: [Angelopoulos et al. 2023](https://proceedings.mlr.press/v204/angelopoulos23a.html), [Xu et al. 2025](https://www.ijcai.org/proceedings/2025/1012), [CRC ICLR 2024](https://openreview.net/forum?id=33XGfHLtZg), [De Toni et al. 2025](https://arxiv.org/abs/2507.16829).
+
+SCORE_POSITIONING: 6.5/10. Single most important fix: add the missing CRC-in-recommender/ranking neighbors and sharpen the claim around conditional served-slice risk, not “CRC applied to NDCG.”
+tokens used
+115,887
+The defense is **partly convincing**, but too dependent on a narrow phrasing. I would not collapse RankCRC to Angelopoulos et al. COPA 2023: that work is about returned recommendation sets with FDR-style reliability over the full population, not conditional served-user listwise risk. The Xu et al. IJCAI 2025 comparison is weaker: Xu explicitly handles ranked retrieval and nDCG-like ranking risk, so “listwise NDCG” alone is not enough. The real distinction must be the **post-abstention conditional target with random served count plus frozen B1/B2 threshold discipline**.
+
+The strongest reviewer objection: “This is just CRC/LTT or holdout risk estimation applied after a selective filter; label-free scores at inference are standard.” The text partially rebuts this by admitting it is a protocol/application contribution, not a new conformal theorem. But it should more directly say why Xu-style all-query/stagewise risk does **not** certify `E[loss | served]` when the served set is data-selected.
+
+Citation issues: Angelopoulos 2023 is slightly misdescribed as “size/coverage”; it is more accurately FDR / “mostly good returned items” with diversity optimization. Xu 2025 is under-described as recall-stage control; it includes ranking-risk formulations inspired by nDCG. More importantly, the positioning is missing obvious neighbors: De Toni et al., **“You Don’t Bring Me Flowers”**, RecSys 2025 CRC for unwanted recommendations; Fair Learning to Rank with Distribution-Free Risk Control; conformal IR / retrieval-set work such as score-refinement for conformal information retrieval; and newer selective conformal risk-control / reject-option work. These do not kill the claim, but omitting them makes the novelty audit look cherry-picked.
+
+The “to our knowledge” claim is appropriately hedged only if the exact conjunction is preserved: **top-k listwise NDCG risk, among accepted users, marginal-expectation bound, label-free frozen selector, recommendation setting**. It is over-engineered and fragile if used as the main novelty sentence. Make the novelty conceptual, not a qualifier stack.
+
+Sources checked: [Angelopoulos et al. 2023](https://proceedings.mlr.press/v204/angelopoulos23a.html), [Xu et al. 2025](https://www.ijcai.org/proceedings/2025/1012), [CRC ICLR 2024](https://openreview.net/forum?id=33XGfHLtZg), [De Toni et al. 2025](https://arxiv.org/abs/2507.16829).
+
+SCORE_POSITIONING: 6.5/10. Single most important fix: add the missing CRC-in-recommender/ranking neighbors and sharpen the claim around conditional served-slice risk, not “CRC applied to NDCG.”
