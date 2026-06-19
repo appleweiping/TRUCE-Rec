@@ -577,3 +577,28 @@ close it.
   AUC <= ~0.55 -> drop the trust headline automatically (spec section 9).
 - agentmemory MCP unavailable in this session; durable state recorded here + CONTEXT.md +
   local auto-memory. Store a digest into agentmemory in the next session that has it.
+
+## 2026-06-20 — HEADLINE PIVOT to RankCRC + ARIS citation-audit (conformal core)
+
+- **Headline correction (the "Status Snapshot (2026-06-07)" above is now PARTIALLY STALE):** the
+  paper headline is **RankCRC** — distribution-free **risk-controlled selective reliability** for
+  recommendation (marginal-expectation CRC bound `μ(λ) ≤ E_B2[α(B2)]` on the served-slice listwise
+  rank-risk `E[1−NDCG@k | served]`; frozen-λ B1/B2 split; label-free-at-inference rank-geometry
+  selector `g`; falsifiable gain-law). **CALM-Rec is now strictly subordinate** (calibrated-trust
+  ablation/supplementary lane), NOT the headline. The contribution is the *reliability* lane, not raw
+  ranking SOTA — orthogonal to pony. Canonical RankCRC docs: `refine-logs/RESEARCH_REFINE_TRUCE_*.md`
+  (gate PASSED Codex 7/7), `refine-logs/EXPERIMENT_PLAN_TRUCE.md` + `rankcrc_formalization_verified.md`
+  (frozen-λ theorem adversarially verified), `paper/{method_rankcrc,related_positioning_rankcrc,
+  notation_rankcrc,introduction}.md` (method+theorem dual-reviewed ≥8: Codex 8 + Opus 8).
+  beauty CPU validation: guarantee HOLDS 5/5 (`scripts/rankcrc_validate.py`, A/B1/B2/C 4-fold).
+- **ARIS citation-audit (conformal core) RESOLVED.** `paper/refs/conformal.bib` = 8 bibliographically-
+  VERIFIED entries (Conformal Risk Control ICLR'24; RCPS JACM'21; Learn-then-Test'21; distribution-free
+  recsys reliability COPA'23; two-stage risk control for ranked retrieval IJCAI'25; SelectiveNet ICML'19;
+  Vovk-Gammerman-Shafer'05; Angelopoulos&Bates gentle intro). Each author/year/venue web-verified — none
+  fabricated. `related_positioning_rankcrc.md` keyed to \citep + explicit incrementality defense vs the
+  two closest neighbors (Angelopoulos2023 set-coverage recsys; Xu2025 stage-wise ranked-retrieval).
+  Committed+pushed branch `design/rankcrc` @433d4d0. PENDING (results phase, after GPU): 8 official-baseline
+  + RankCRC empirical-claim cites — verify each, don't fabricate.
+- **GPU status:** TRUCE GPU runs (beauty Stage-B → Stage-2.5 gate → 8-domain) remain QUEUED behind
+  pony's priority 3-backbone sweep on the shared RTX 4090. All CPU-frontloadable RankCRC work
+  (theory, validation, method/related/intro sections, citations) is done.
