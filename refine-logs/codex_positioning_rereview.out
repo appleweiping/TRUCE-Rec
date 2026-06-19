@@ -1,0 +1,116 @@
+Reading prompt from stdin...
+2026-06-19T18:47:18.096592Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\vipin\chrome-automation\SKILL.md: failed to read file: invalid utf-8 sequence of 2 bytes from index 1706
+2026-06-19T18:47:18.096921Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\vipin\readme-blueprint-generator\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:47:18.097031Z ERROR codex_core::session::session: failed to load skill D:\AGENT_RESOURCE\skills\ecc\skills\flox-environments\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+2026-06-19T18:47:18.099755Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\projects\companion-skill\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:47:18.099865Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\skills\icon-generator\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:47:18.099913Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\skills\standalone\anbeime-skill\skills\obsidian-skills-integrated\SKILL.md: missing YAML frontmatter delimited by ---
+2026-06-19T18:47:18.099954Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\plugins\cache\openai-curated\heygen\202e9242\skills\heygen-avatar\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+2026-06-19T18:47:18.099999Z ERROR codex_core::session::session: failed to load skill D:\devtools\codex\home\plugins\cache\openai-curated\heygen\202e9242\skills\heygen-video\SKILL.md: invalid description: exceeds maximum length of 1024 characters
+OpenAI Codex v0.140.0-alpha.19
+--------
+workdir: D:\Research\TRUCE-Rec
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019ee134-8523-7341-8d67-8487622a9c4a
+--------
+user
+You are the SAME adversarial top-conference reviewer who scored an EARLIER version of this RankCRC
+related-work/positioning at 6.5/10. The authors have REVISED it to address your four points:
+(1) added the missing CRC-in-recsys/ranking neighbors (De Toni et al. RecSys 2025 CRC for unwanted
+recommendations; Guo et al. fair LTR with distribution-free risk control; Intrator et al. conformal
+IR via score refinement); (2) corrected the Angelopoulos-2023 description from "size/coverage" to
+FDR/"mostly-good returned set" + diversity; (3) sharpened the distinction away from "listwise NDCG"
+(since Xu 2025 also controls nDCG-like risk) to the post-abstention CONDITIONAL served-slice mean
+(random served count) + frozen-lambda B1/B2 split that marginal all-query/stage-wise bounds cannot
+certify under data-selected serving + label-free selector; (4) de-stacked the "to our knowledge"
+qualifier into a conceptual novelty statement.
+
+Re-review ONLY the REVISED positioning below. Be skeptical. Verify the fixes actually landed and
+the new neighbors are correctly positioned (not mis-cited). Do NOT ask for experiments (positioning
+is results-independent). State whether each of the 4 points is now adequately addressed, name any
+REMAINING reviewer objection, and end with: SCORE_POSITIONING: X/10. Keep under 350 words.
+
+=== REVISED RELATED-WORK / POSITIONING TEXT ===
+# Related Work & Positioning — RankCRC
+
+> Current positioning for the RankCRC headline (replaces the stale CU-GR `related_positioning.md`, kept for history). Locked / experiment-independent. The contribution is **distribution-free risk-controlled selective reliability** for recommendation, not raw-ranking SOTA.
+
+## Conformal prediction and conformal risk control
+Split conformal prediction \citep{vovk2005algorithmic,angelopoulos2023gentle} gives distribution-free coverage for set-valued predictors; Conformal Risk Control \citep{angelopoulos2024crc} extends this to any bounded, monotone loss, yielding `E[L(λ̂)] ≤ α` in marginal expectation. RCPS \citep{bates2021rcps} and Learn-then-Test \citep{angelopoulos2021ltt} give the high-probability (PAC) analogue via multiple-testing. **RankCRC's difference:** the controlled object is **listwise rank-risk** (`1 − NDCG@k`) on the **served slice after abstention** (a self-normalized conditional mean), not a pointwise loss over the full population. We show plain CRC does not attach to the naive served-slice estimator (random-denominator winner's curse) and repair it with a frozen-`λ` B1/B2 split so the served mean is an honest i.i.d. mean; we name LTT as the PAC upgrade and a numerator+coverage-floor route as an exact surrogate. Conceptually, the novel object is **risk-controlled reliability of ranking quality on a self-selected served slice** — a guarantee on a conditional mean over the users a label-free policy chooses to serve, rather than a marginal full-population loss. (We phrase the precedence claim narrowly and only "to our knowledge," and we do not lean on it as the contribution: the contribution is the conditional-served-slice framing and the split discipline it requires, not a qualifier-stacked first-of-kind.)
+
+## Conformal selective prediction / abstention WITH guarantees
+Beyond heuristic abstention, a line of work gives *guaranteed* selective prediction. The closest neighbors are distribution-free **risk control applied to recommendation and ranking**: \citet{detoni2025flowers} use CRC to bound the expected fraction of *unwanted* items in a returned recommendation set (a per-example monotone loss controlled marginally over the full user population, with filtered items back-filled by safe ones); \citet{angelopoulos2023recsys} give a distribution-free reliability guarantee that a returned set is "mostly good" (an FDR-style / false-positive-rate control on the returned set, with a diversity objective), again over the full population; \citet{guo2023fairltr} apply distribution-free risk control post-hoc to a *stochastic* learning-to-rank model for a user-specified fairness/utility loss; \citet{xu2025twostage} control *stage-wise* retrieval losses — including nDCG-like ranking risk — for a two-stage pipeline via LTT/CRC, marginally over all queries; and conformal information retrieval returns calibrated retrieval *sets* with coverage guarantees \citep{intrator2024conformalir}. The general machinery (RCPS/CRC/LTT) is shared \citep{bates2021rcps}.
+
+**RankCRC's difference — the distinction is the *post-abstention conditional* target, not the word "NDCG".** Because \citet{xu2025twostage} already control an nDCG-like ranking risk, "listwise NDCG" alone does *not* separate us; nor does "uses CRC", "operates on a ranker", or "label-free scores at inference" (all standard). The genuine separation is threefold and none of these neighbors has it: (i) the controlled quantity is a **conditional served-slice mean** `E[1−NDCG@k \mid \text{served}]` over the sub-population an abstention policy chose to serve — a self-normalized mean with a **random** served count `m` — whereas De Toni, Angelopoulos, Guo, and Xu all control a loss *marginally over the full population / all queries*; (ii) crucially, **a marginal all-query/stage-wise bound does not certify the served-slice mean when the served set is data-selected**: conditioning on $\{g\le\lambda\}$ creates a random-denominator winner's-curse, so the naive served estimator is *not* an honest mean of the accepted law — we repair this with the **frozen-`λ` B1/B2 split** (threshold fit on B1, losses averaged on disjoint B2) so the conditional-mean certificate is valid; (iii) the selector `g` is **label-free over rank-geometry of the base ranker's own scores** (held-out label forbidden as a feature), making the policy deployable at inference with no oracle. RankCRC thus *transfers* guaranteed-abstention machinery to recommendation with a recsys-specific **conditional** listwise target and the split discipline that conditional control requires — a protocol/application contribution, not a new conformal theorem.
+
+## Selective prediction / classification WITHOUT guarantees
+SelectiveNet \citep{geifman2019selectivenet} and the risk–coverage literature learn an abstention head trading coverage for accuracy, but provide **no distribution-free finite-sample risk guarantee** — the risk–coverage curve is empirical. **RankCRC's difference:** it adds the CRC marginal-expectation bound on top of abstention, and the selector is *label-free* over rank-geometry features rather than a jointly-trained confidence head. We include a SelectiveNet-without-guarantee baseline (trained on Fold A only, matched coverage) precisely to isolate that the *guarantee* — not merely "abstain on hard users" — is the contribution.
+
+## LLM-uncertainty calibration
+Verbalized-confidence and calibration work (ECE, temperature scaling, reliability diagrams; Kadavath et al.; Tian et al.) asks whether an LLM's stated confidence matches accuracy. **RankCRC makes no ECE / reliability-diagram claim**: the object is an operational *served-slice risk bound*, a different operational guarantee than calibration of a confidence number (different in kind — a risk bound on a served sub-population — not a strictly stronger version of ECE). Our confidence `g` is not the LLM's verbalized confidence but a logistic model over rank-geometry of the base ranker's candidate scores, with the held-out label forbidden as a feature.
+
+## Selective / reliable recommendation and LLM-for-RecSys
+Prior LLM-for-recommendation work (the 8 official baselines: ELMRec, IRLLRec, LLM2Rec, LLMEmb, LLM-ESR, ProEx, ProMax, RLMRec) targets raw-ranking improvement on the full user population. Selective / cautious recommendation has mostly been explored *heuristically* (confidence thresholds, popularity gating) without guarantees; the one distribution-free-guaranteed precedent in recommendation, \citet{detoni2025flowers}, controls the *full-population* expected fraction of unwanted items in a returned set, not a per-user-conditional ranking-quality risk on a *served slice*. **RankCRC's difference:** it reframes the problem as *risk-controlled reliability of ranking quality* — serve the slice on which the served-slice rank-risk `E[1−NDCG@k | served]` is bounded by `α` in marginal expectation — orthogonal to raw SOTA, and demonstrates (the empirical contribution, GPU-gated) that a deployable label-free-at-inference selector holds the bound across 8 domains with non-trivial coverage and transfers across domains/rankers. The sibling pointwise-posterior method (pony) owns the raw-ranking lane; TRUCE owns the reliability lane.
+
+## Why this is not "CRC applied to NDCG"
+The strongest reviewer objection is incrementality. The novelty is the *combination*: (i) listwise rank-risk as the controlled quantity; (ii) the served-slice selective framing; (iii) a **label-free, deployable** confidence over rank-geometry (no test peek), repaired with the frozen-`λ` split so the conditional-mean certificate is valid; (iv) a *falsifiable* gain law that predicts the served-slice lift a priori; and (v) the 8-domain feasibility triad (cross-domain risk control + non-trivial coverage at useful `α` + label-free confidence transfer) — which no prior conformal-recsys / conformal-ranking work \citep{detoni2025flowers,angelopoulos2023recsys,guo2023fairltr,xu2025twostage,intrator2024conformalir} demonstrates. The value is orthogonal to raw SOTA: a "serve only when the served-slice rank-risk is bounded in marginal expectation" policy is operationally useful even when raw ranking is mid-pack.
+
+> **Citation status (citation-audit, 2026-06-20; revised after Codex GPT-5.5 xhigh positioning review):** RESOLVED for the conformal core + the recsys/ranking risk-control neighbors. `refs/conformal.bib` (11 entries, all authors/year/venue web-verified — none fabricated): Vovk–Gammerman–Shafer 2005; Angelopoulos & Bates gentle intro; Conformal Risk Control ICLR 2024; RCPS JACM 2021; Learn-then-Test 2021; Angelopoulos et al. distribution-free recsys reliability COPA 2023; Xu et al. two-stage risk control for ranked retrieval IJCAI 2025; SelectiveNet ICML 2019; **De Toni et al. "You Don't Bring Me Flowers" RecSys 2025 (CRC for unwanted recs, Best Paper); Guo et al. fair LTR with distribution-free risk control 2023; Intrator et al. conformal IR via score refinement FEVER 2024** (the three added per the review's "missing neighbors" finding). The Codex review (6.5→ addressed: refine-logs/codex_positioning_review.out) flagged (a) cherry-picked neighbor set [fixed], (b) Angelopoulos2023 mis-described as "size/coverage" → corrected to FDR/"mostly-good-set"+diversity, (c) Xu also controls nDCG-like risk so the distinction must be the post-abstention *conditional* served-slice target + frozen B1/B2 [rewritten], (d) de-stack the "to our knowledge" qualifier [made conceptual]. **Still pending (needs the experiment phase):** 8 official LLM-for-RecSys baseline citations + RankCRC empirical-claim citations, added once the results block exists; verify each the same way.
+
+warning: Exceeded skills context budget of 2%. All skill descriptions were removed and 676 additional skills were not included in the model-visible skills list.
+codex
+I’ll verify the cited neighbor claims against public paper/project records, then answer only on the positioning text and the four requested fixes.
+web search: 
+web search: De Toni You Don't Bring Me Flowers conformal risk control unwanted recommendations RecSys 2025
+web search: 
+web search: Angelopoulos 2023 distribution-free risk control recommendation mostly good FDR diversity returned set
+web search: 
+web search: https://dl.acm.org/doi/10.1145/3705328.3748054
+web search: 
+web search: https://arxiv.org/abs/2306.07188
+web search: 
+web search: https://arxiv.org/abs/2507.16829
+web search: 
+web search: https://arxiv.org/html/2306.07188v3
+web search: 
+web search: 'NDCG' in https://arxiv.org/html/2404.17769v2
+web search: 
+web search: https://arxiv.org/abs/2507.16829
+web search: 
+web search: https://arxiv.org/html/2507.16829
+web search: 
+web search: "You Don't Bring Me Flowers" "safe" "replace" "back-fill"
+codex
+I checked the added neighbors against public records. The revised positioning is substantially fixed.
+
+1. **Missing CRC/recsys/ranking neighbors:** Adequately addressed. De Toni et al. are correctly positioned as CRC for unwanted recommendations, not rank-quality selective reliability; their abstract explicitly frames bounding unwanted content in personalized recommendation ([arXiv](https://arxiv.org/abs/2507.16829)). Guo et al. are fairly described as stochastic LTR with finite-sample utility/fairness risk control ([arXiv](https://arxiv.org/abs/2306.07188)). Intrator et al. are correctly conformal IR / score-refinement retrieval sets ([ACL](https://aclanthology.org/2024.fever-1.22/)). Xu et al. are correctly elevated as the serious nDCG-like ranked-retrieval risk-control neighbor ([IJCAI](https://www.ijcai.org/proceedings/2025/1012)).
+
+2. **Angelopoulos 2023 correction:** Adequately addressed. The text now says FDR / “mostly good” returned sets plus diversity, matching the paper’s abstract and not the earlier size/coverage mischaracterization ([arXiv](https://arxiv.org/abs/2207.01609)).
+
+3. **Distinction from listwise NDCG / Xu 2025:** Adequately addressed. The revision explicitly concedes that “NDCG” is not the novelty and moves the claim to post-abstention conditional served-slice risk with random served count plus frozen-lambda B1/B2 discipline. That is the right separation from Xu’s all-query/stage-wise control.
+
+4. **“To our knowledge” de-stacking:** Mostly addressed. The novelty is now stated conceptually, not as a fragile priority claim. I would still delete the meta “citation-audit / Codex review” paragraph from paper-facing text.
+
+**Remaining reviewer objection:** the guarantee wording still needs mathematical tightening. “`E[1−NDCG@k | served]` is bounded by α in marginal expectation” is easy to misread: specify the randomness, zero/low-served-count handling, coverage floor, and whether the certificate is over the accepted-law mean, B2 empirical mean, or a numerator-plus-coverage surrogate. This is a formal-positioning issue, not an experiment request.
+
+SCORE_POSITIONING: 8.2/10.
+tokens used
+67,775
+I checked the added neighbors against public records. The revised positioning is substantially fixed.
+
+1. **Missing CRC/recsys/ranking neighbors:** Adequately addressed. De Toni et al. are correctly positioned as CRC for unwanted recommendations, not rank-quality selective reliability; their abstract explicitly frames bounding unwanted content in personalized recommendation ([arXiv](https://arxiv.org/abs/2507.16829)). Guo et al. are fairly described as stochastic LTR with finite-sample utility/fairness risk control ([arXiv](https://arxiv.org/abs/2306.07188)). Intrator et al. are correctly conformal IR / score-refinement retrieval sets ([ACL](https://aclanthology.org/2024.fever-1.22/)). Xu et al. are correctly elevated as the serious nDCG-like ranked-retrieval risk-control neighbor ([IJCAI](https://www.ijcai.org/proceedings/2025/1012)).
+
+2. **Angelopoulos 2023 correction:** Adequately addressed. The text now says FDR / “mostly good” returned sets plus diversity, matching the paper’s abstract and not the earlier size/coverage mischaracterization ([arXiv](https://arxiv.org/abs/2207.01609)).
+
+3. **Distinction from listwise NDCG / Xu 2025:** Adequately addressed. The revision explicitly concedes that “NDCG” is not the novelty and moves the claim to post-abstention conditional served-slice risk with random served count plus frozen-lambda B1/B2 discipline. That is the right separation from Xu’s all-query/stage-wise control.
+
+4. **“To our knowledge” de-stacking:** Mostly addressed. The novelty is now stated conceptually, not as a fragile priority claim. I would still delete the meta “citation-audit / Codex review” paragraph from paper-facing text.
+
+**Remaining reviewer objection:** the guarantee wording still needs mathematical tightening. “`E[1−NDCG@k | served]` is bounded by α in marginal expectation” is easy to misread: specify the randomness, zero/low-served-count handling, coverage floor, and whether the certificate is over the accepted-law mean, B2 empirical mean, or a numerator-plus-coverage surrogate. This is a formal-positioning issue, not an experiment request.
+
+SCORE_POSITIONING: 8.2/10.
