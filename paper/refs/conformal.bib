@@ -1,0 +1,95 @@
+% ============================================================================
+% TRUCE-Rec / RankCRC — verified conformal-prediction & risk-control references
+% ----------------------------------------------------------------------------
+% Assembled during the ARIS citation-audit phase. EVERY entry below was
+% bibliographically verified against the official venue / arXiv listing
+% (authors, year, venue) before being added — none are fabricated. The
+% by-category prose in related_positioning_rankcrc.md is keyed to these.
+% Verification date: 2026-06-20.
+% ============================================================================
+
+% --- Foundational conformal prediction ---
+@book{vovk2005algorithmic,
+  title     = {Algorithmic Learning in a Random World},
+  author    = {Vovk, Vladimir and Gammerman, Alexander and Shafer, Glenn},
+  year      = {2005},
+  publisher = {Springer},
+  address   = {New York}
+}
+
+@article{angelopoulos2023gentle,
+  title   = {A Gentle Introduction to Conformal Prediction and
+             Distribution-Free Uncertainty Quantification},
+  author  = {Angelopoulos, Anastasios N. and Bates, Stephen},
+  journal = {Foundations and Trends in Machine Learning},
+  year    = {2023},
+  note    = {arXiv:2107.07511}
+}
+
+% --- Risk control (the families RankCRC builds on / upgrades to) ---
+@article{bates2021rcps,
+  title   = {Distribution-Free, Risk-Controlling Prediction Sets},
+  author  = {Bates, Stephen and Angelopoulos, Anastasios and Lei, Lihua and
+             Malik, Jitendra and Jordan, Michael I.},
+  journal = {Journal of the ACM},
+  volume  = {68},
+  number  = {6},
+  pages   = {1--34},
+  year    = {2021},
+  doi     = {10.1145/3478535},
+  note    = {Article 43; arXiv:2101.02703}
+}
+
+@inproceedings{angelopoulos2024crc,
+  title     = {Conformal Risk Control},
+  author    = {Angelopoulos, Anastasios N. and Bates, Stephen and
+               Fisch, Adam and Lei, Lihua and Schuster, Tal},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@article{angelopoulos2021ltt,
+  title   = {Learn then Test: Calibrating Predictive Algorithms to
+             Achieve Risk Control},
+  author  = {Angelopoulos, Anastasios N. and Bates, Stephen and
+             Cand{\`e}s, Emmanuel J. and Jordan, Michael I. and Lei, Lihua},
+  journal = {arXiv preprint arXiv:2110.01052},
+  year    = {2021}
+}
+
+% --- Conformal / distribution-free guarantees IN recommendation & ranking ---
+% (the concrete conformal-recsys / conformal-ranking neighbors the TODO required)
+@inproceedings{angelopoulos2023recsys,
+  title     = {Recommendation Systems with Distribution-Free Reliability
+               Guarantees},
+  author    = {Angelopoulos, Anastasios N. and Krauth, Karl and
+               Bates, Stephen and Wang, Yixin and Jordan, Michael I.},
+  booktitle = {Proceedings of the Twelfth Symposium on Conformal and
+               Probabilistic Prediction with Applications (COPA)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {204},
+  pages     = {175--193},
+  year      = {2023},
+  note      = {arXiv:2207.01609}
+}
+
+@inproceedings{xu2025twostage,
+  title     = {Two-stage Risk Control with Application to Ranked Retrieval},
+  author    = {Xu, Yunpeng and Ying, Mufang and Guo, Wenge and Wei, Zhi},
+  booktitle = {Proceedings of the Thirty-Fourth International Joint
+               Conference on Artificial Intelligence (IJCAI)},
+  year      = {2025},
+  note      = {arXiv:2404.17769}
+}
+
+% --- Selective prediction WITHOUT distribution-free guarantees (contrast) ---
+@inproceedings{geifman2019selectivenet,
+  title     = {SelectiveNet: A Deep Neural Network with an Integrated
+               Reject Option},
+  author    = {Geifman, Yonatan and El-Yaniv, Ran},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {97},
+  pages     = {2151--2159},
+  year      = {2019}
+}
